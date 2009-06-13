@@ -5,7 +5,6 @@ Feature: Kanban Page
 
   Scenario: Kanban top menu item
     Given I am logged in
-    And I am on the Homepage
-
+    And I am on the homepage
     Then I should see a "top" menu item called "Kanban"
 

@@ -2,6 +2,10 @@ Before do
   Sham.reset
 end
 
+Given /^I am on the (.*)$/ do |page_name|
+  visit path_to(page_name)
+end
+
 Given /^there is a user$/ do
   @user = User.make
 end
@@ -9,10 +13,6 @@ end
 Given /^I am logged in$/ do
   @current_user = User.make
   User.stubs(:current).returns(@current_user)
-end
-
-Given /^I am on the Homepage$/ do
-  visit url_for(:controller => 'welcome')
 end
 
 Then /^I should see a "top" menu item called "(.*)"$/ do |name|
