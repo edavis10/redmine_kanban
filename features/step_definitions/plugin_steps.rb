@@ -66,7 +66,11 @@ Then /^I should see a "Configure" link for "Kanban"$/ do
 end
 
 Then /^there should be a select field to pick the status for the "(.*)" pane$/ do |pane_name|
-  assert_select("select[name=?]","settings[panes][#{div_name_to_css(pane_name)}]")
+  assert_select("select[name=?]","settings[panes][#{div_name_to_css(pane_name)}][status]")
+end
+
+Then /^there should be a text field to enter the item limit for the "(.*)" pane$/ do |pane_name|
+  assert_select("input[type=text][name=?]","settings[panes][#{div_name_to_css(pane_name)}][limit]")
 end
 
 Then /^there should be a user$/ do

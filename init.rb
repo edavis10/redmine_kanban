@@ -12,7 +12,13 @@ Redmine::Plugin.register :redmine_kanban do
 
   settings(:partial => 'settings/kanban_settings',
            :default => {
-             'panes' => { }
+             'panes' => {
+               'incoming' => { 'status' => nil, 'limit' => 5},
+               'backlog' => { 'status' => nil, 'limit' => 15},
+               'selected-requests' => { 'status' => nil, 'limit' => 8},
+               'active' => { 'status' => nil, 'limit' => 5},
+               'testing' => { 'status' => nil, 'limit' => 5}
+             }
            })
   
   menu(:top_menu,

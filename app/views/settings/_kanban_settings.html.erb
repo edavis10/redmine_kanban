@@ -2,10 +2,14 @@
 # Define some "helpers" here
 
 def issue_status_pane(pane_name)
-  return content_tag(:p,
-    content_tag(:label, l("kanban_label_#{pane_name}_pane".to_sym)) + 
-    select_tag("settings[panes][#{pane_name}]",
-      content_tag(:option, '') + options_from_collection_for_select(IssueStatus.all, :id, :name, @settings['panes'][pane_name].to_i)))
+    status = content_tag(:p,
+      content_tag(:label, l("kanban_label_#{pane_name}_pane".to_sym)) + 
+      select_tag("settings[panes][#{pane_name}][status]",
+        content_tag(:option, '') + options_from_collection_for_select(IssueStatus.all, :id, :name, @settings['panes'][pane_name]['status'].to_i)) + 
+
+      content_tag(:span, l(:kanban_label_limit), :style => "padding: 0 0.5em 0 3em;") + 
+      text_field_tag("settings[panes][#{pane_name}][limit]", @settings['panes'][pane_name]['limit']))
+      return status
 
 end
 %>

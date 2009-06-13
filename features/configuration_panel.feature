@@ -26,6 +26,12 @@ Feature: Configuration Panel
     And there should be a select field to pick the status for the "Active" pane
     And there should be a select field to pick the status for the "Testing" pane
 
+    And there should be a text field to enter the item limit for the "Incoming" pane
+    And there should be a text field to enter the item limit for the "Backlog" pane
+    And there should be a text field to enter the item limit for the "Selected Requests" pane
+    And there should be a text field to enter the item limit for the "Active" pane
+    And there should be a text field to enter the item limit for the "Testing" pane
+    
     And I should see a select for Role for staffed requests
     And I should see a select for the incoming project
     And I should see "5" project names in the incoming project selector
