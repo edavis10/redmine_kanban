@@ -44,6 +44,11 @@ Given /^the plugin is configured$/ do
     
 end
 
+def reconfigure_plugin(configuration_change)
+  Setting.plugin_redmine_kanban = Setting.plugin_redmine_kanban.merge(configuration_change)
+end
+
+
 Given /^the Incoming project is not configured$/ do
   Setting.plugin_redmine_kanban = Setting.plugin_redmine_kanban.merge({'incoming_project' => ''})
 end
@@ -66,11 +71,33 @@ Given /^there are "(\d*)" active projects$/ do |count|
   count.to_i.times do
     Project.make
   end
+
+  @feature_tracker = Tracker.make(:name => 'Feature')
+
+  Project.find(:all).each do |project|
+    assign_tracker_to_project @feature_tracker, project
+  end
+end
+
+Given /^there is a project named "(.*)"$/ do |project_name|
+  project = Project.make(:name => 'Incoming')
+  @feature_tracker ||= Tracker.make(:name => 'Feature')
+  assign_tracker_to_project @feature_tracker, project
 end
 
 Given /^there are "(\d*)" roles$/ do |count|
   count.to_i.times do
     Role.make
+  end
+end
+
+Given /^there are "(\d*)" issues in the "(.*)" project with the "(.*)" status$/ do |count, project_name, status_name|
+  project = Project.find_by_name(project_name)
+  issue_status = IssueStatus.find_by_name(status_name)
+  tracker = project.trackers.first
+
+  count.to_i.times do
+    Issue.make(:project => project, :status => issue_status, :tracker => tracker)
   end
 end
 
@@ -82,6 +109,11 @@ Given /^there are the default issue statuses$/ do
   IssueStatus.make(:name => 'Closed', :is_closed => true)
   IssueStatus.make(:name => 'Rejected', :is_closed => true)
 end
+
+Given /^"(.*)" is configured as the "Incoming" project$/ do |project_name|
+  reconfigure_plugin({'incoming_project' => Project.find_by_name(project_name)})
+end
+
 
 When /^I select the role for "staff_role"$/ do
   role = Role.find(:last)
@@ -194,6 +226,11 @@ Then /^the plugin shoud save my settings$/ do
   assert_equal("15", settings['panes']['testing']['limit'])
 end
 
+Then /^I should see "(\d*)" issues in the "(.*)" pane$/ do |count, pane_name|
+  assert_select("div##{div_name_to_css(pane_name)}.pane") do
+    assert_select("li.issue", :count => count.to_i)
+  end
+end
 
 Then /^there should be a user$/ do
   assert_equal 1, User.count(:conditions => {:login => @user.login})
