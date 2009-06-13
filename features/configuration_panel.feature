@@ -18,7 +18,12 @@ Feature: Configuration Panel
     When I follow "Configure"
     Then I am on the Kanban configuration page
     And I should see "Settings: Kanban"
+
     And I should see "General Settings"
+    And there should be a select field to pick the role for the "Staff Requests" pane
+    And there should be a select field to pick the project for the "Incoming" pane
+    And I should see "5" project names in the incoming project selector
+
     And I should see "Pane Settings"
     And there should be a select field to pick the status for the "Incoming" pane
     And there should be a select field to pick the status for the "Backlog" pane
@@ -32,7 +37,4 @@ Feature: Configuration Panel
     And there should be a text field to enter the item limit for the "Active" pane
     And there should be a text field to enter the item limit for the "Testing" pane
     
-    And I should see a select for Role for staffed requests
-    And I should see a select for the incoming project
-    And I should see "5" project names in the incoming project selector
     

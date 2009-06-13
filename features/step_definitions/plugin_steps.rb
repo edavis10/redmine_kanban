@@ -73,6 +73,21 @@ Then /^there should be a text field to enter the item limit for the "(.*)" pane$
   assert_select("input[type=text][name=?]","settings[panes][#{div_name_to_css(pane_name)}][limit]")
 end
 
+Then /^there should be a select field to pick the role for the "Staff Requests" pane$/ do
+  assert_select("select[name=?]","settings[staff_role]")
+end
+
+Then /^there should be a select field to pick the project for the "Incoming" pane$/ do
+  assert_select("select[name=?]","settings[incoming_project]")
+end
+
+Then /^I should see "(\d*)" project names in the incoming project selector$/ do |count|
+  assert_select("select[name=?]","settings[incoming_project]") do
+    # +1 because there is a blank option to disable incoming
+    assert_select("option", :count => (count.to_i + 1))
+  end
+end
+
 Then /^there should be a user$/ do
   assert_equal 1, User.count(:conditions => {:login => @user.login})
 end

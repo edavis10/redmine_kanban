@@ -16,6 +16,20 @@ end
 
 <fieldset>
   <%= content_tag(:legend, l(:kanban_text_general_settings)) %>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_staff_role)) %>
+    <%= select_tag("settings[staff_role]",
+          content_tag(:option, '') +
+          options_from_collection_for_select(Role.all, :id, :name, @settings['staff_role'].to_i)) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_project)) %>
+    <%= select_tag("settings[incoming_project]",
+          content_tag(:option, '') +
+          options_from_collection_for_select(Project.find(:all, :conditions => {:status => Project::STATUS_ACTIVE}), :id, :name, @settings['incoming_project'].to_i)) %>
+  </p>
 </fieldset>
 
 <fieldset>

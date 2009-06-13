@@ -16,3 +16,5 @@ kanban_label_active_pane: Active
 kanban_label_testing_pane: Testing
 kanban_label_limit: Maximum number of items
 
+kanban_label_staff_role: Role to use for Staffed Requests
+kanban_label_incoming_project: Project to use for the Incoming pane
