@@ -38,3 +38,26 @@ Feature: Configuration Panel
     And there should be a text field to enter the item limit for the "Testing" pane
     
     
+  Scenario: Changing the configuration
+    Given I am an Administrator
+    And there are the default issue statuses
+    And there are "5" active projects
+    And there are "3" roles
+    And I am logged in
+    And I am on the Kanban configuration page
+
+    When I select the role for "staff_role"
+    And I select the project for "incoming_project"
+    And I select the "Unstaffed" issue status for "Incoming"
+    And I fill in the "Incoming" limit with "10"
+    And I select the "Selected" issue status for "Selected Requests"
+    And I fill in the "Selected Requests" limit with "20"
+    And I select the "Active" issue status for "Active"
+    And I fill in the "Active" limit with "10"
+    And I select the "Test-N-Doc" issue status for "Testing"
+    And I fill in the "Testing" limit with "15"
+    And I press "Apply"
+
+    Then I am on the Kanban configuration page
+    And the plugin shoud save my settings
+

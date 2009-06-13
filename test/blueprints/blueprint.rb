@@ -61,3 +61,10 @@ Role.blueprint do
   position
   permissions
 end
+
+IssueStatus.blueprint do
+  name
+  is_closed { false }
+  is_default { false }
+  position
+end
