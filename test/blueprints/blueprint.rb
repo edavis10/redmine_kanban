@@ -23,6 +23,14 @@ User.blueprint do
   login
 end
 
+User.blueprint(:administrator) do
+  mail
+  firstname
+  lastname
+  login
+  admin { true }
+end
+
 Project.blueprint do
   name { Sham.project_name }
   identifier

@@ -1,0 +1,27 @@
+<% 
+# Define some "helpers" here
+
+def issue_status_pane(pane_name)
+  return content_tag(:p,
+    content_tag(:label, l("kanban_label_#{pane_name}_pane".to_sym)) + 
+    select_tag("settings[panes][#{pane_name}]",
+      content_tag(:option, '') + options_from_collection_for_select(IssueStatus.all, :id, :name, @settings['panes'][pane_name].to_i)))
+
+end
+%>
+
+<fieldset>
+  <%= content_tag(:legend, l(:kanban_text_general_settings)) %>
+</fieldset>
+
+<fieldset>
+  <%= content_tag(:legend, l(:kanban_text_pane_settings)) %>
+
+  <%= content_tag(:p, l(:kanban_text_pane_settings_description)) %>
+
+  <%= issue_status_pane('incoming') %>
+  <%= issue_status_pane('backlog') %>
+  <%= issue_status_pane('selected-requests') %>
+  <%= issue_status_pane('active') %>
+  <%= issue_status_pane('testing') %>
+</fieldset>

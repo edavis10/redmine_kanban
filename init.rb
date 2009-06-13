@@ -10,6 +10,11 @@ Redmine::Plugin.register :redmine_kanban do
 
   requires_redmine :version_or_higher => '0.8.0'
 
+  settings(:partial => 'settings/kanban_settings',
+           :default => {
+             'panes' => { }
+           })
+  
   menu(:top_menu,
        :kanban,
        {:controller => 'kanbans', :action => 'show'},

@@ -15,9 +15,21 @@ Given /^there is a user$/ do
 end
 
 Given /^I am logged in$/ do
-  @current_user = User.make
+  @current_user ||= User.make
   User.stubs(:current).returns(@current_user)
 end
+
+Given /^I am an Administrator$/ do
+  @current_user = User.make(:administrator)
+  Given "I am logged in"
+end
+
+Given /^there are "(\d*)" active projects$/ do |count|
+  count.to_i.times do
+    Project.make
+  end
+end
+
 
 Then /^I should see a "top" menu item called "(.*)"$/ do |name|
   assert_select("div#top-menu") do
@@ -45,6 +57,16 @@ Then /^I should see an? "(.*)" column in "(.*)"$/ do |inner_column_name, column_
       assert_select("div##{div_name_to_css(inner_column_name)}.column")
     end
   end
+end
+
+Then /^I should see a "Configure" link for "Kanban"$/ do
+  assert_select("a[href=?]",
+               url_for(:controller => 'settings', :action => 'plugin', :id => 'redmine_kanban', :only_path => true),
+                "Configure")
+end
+
+Then /^there should be a select field to pick the status for the "(.*)" pane$/ do |pane_name|
+  assert_select("select[name=?]","settings[panes][#{div_name_to_css(pane_name)}]")
 end
 
 Then /^there should be a user$/ do
