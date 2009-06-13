@@ -8,7 +8,7 @@ TODO:
 
 == Getting the plugin
 
-A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-stuff-to-do/files] or from {GitHub}[http://github.com/edavis10/redmine-kanban]
+A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-kanban/files] or from {GitHub}[http://github.com/edavis10/redmine-kanban]
 
 
 == Installation and Setup
