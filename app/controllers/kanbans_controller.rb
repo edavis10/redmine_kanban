@@ -1,5 +1,5 @@
 class KanbansController < ApplicationController
   unloadable
-  def index
+  def show
   end
 end

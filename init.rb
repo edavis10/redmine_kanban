@@ -12,6 +12,6 @@ Redmine::Plugin.register :redmine_kanban do
 
   menu(:top_menu,
        :kanban,
-       {:controller => 'kanbans', :action => 'index'},
+       {:controller => 'kanbans', :action => 'show'},
        :caption => :kanban_title)
 end
