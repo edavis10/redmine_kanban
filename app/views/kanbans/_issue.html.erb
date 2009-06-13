@@ -1,0 +1,6 @@
+<li id="issue_<%= issue.id %>" class="kanban-issue issue">
+  <div class="issue-details">
+    <%= link_to(image_tag('ticket.png'), :controller => 'issues', :action => 'show', :id => issue) %>
+    #<%= h(issue.id) %> - <%= h(issue.project.name) %> - <%= h(issue.subject) %>
+  </div>
+</li>
