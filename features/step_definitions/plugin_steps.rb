@@ -1,3 +1,7 @@
+def div_name_to_css(name)
+  name.gsub(' ','-').downcase
+end
+
 Before do
   Sham.reset
 end
@@ -23,7 +27,23 @@ end
 
 Then /^I should see an? "(.*)" column$/ do |column_name|
   assert_select("#kanban") do
-    assert_select("div##{column_name.gsub(' ','-').downcase}")
+    assert_select("div##{div_name_to_css(column_name)}.column")
+  end
+end
+
+Then /^I should see an? "(.*)" pane in "(.*)"$/ do |pane_name, column_name|
+  assert_select("#kanban") do
+    assert_select("div##{div_name_to_css(column_name)}.column") do
+      assert_select("div##{div_name_to_css(pane_name)}.pane")
+    end
+  end
+end
+
+Then /^I should see an? "(.*)" column in "(.*)"$/ do |inner_column_name, column_name|
+  assert_select("#kanban") do
+    assert_select("div##{div_name_to_css(column_name)}.column") do
+      assert_select("div##{div_name_to_css(inner_column_name)}.column")
+    end
   end
 end
 

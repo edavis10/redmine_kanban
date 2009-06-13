@@ -1,8 +1,19 @@
 <h2><%= l(:kanban_title) %></h2>
 
 <div id="kanban">
-  <div id="unstaffed-requests"></div>
-  <div id="selected-requests"></div>
-  <div id="staffed-requests"></div>
-  <div id="finished-requests"></div>
+  <div id="unstaffed-requests" class="column">
+    <div id="incoming" class="pane"></div>
+    <div id="backlog" class="pane"></div>
+  </div>
+  <div id="selected-requests" class="column">
+
+  </div>
+  <div id="staffed-requests" class="column">
+    <div id="user" class="column"></div>
+    <div id="active" class="column"></div>
+    <div id="testing" class="column"></div>
+  </div>
+  <div id="finished-requests" class="column">
+
+  </div>
 </div>
