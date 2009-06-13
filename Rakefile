@@ -5,7 +5,8 @@ Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each
 
 RedminePluginSupport::Base.setup do |plugin|
   plugin.project_name = 'redmine_kanban'
-  plugin.default_task = [:spec, :features]
+  plugin.default_task = [:test, :features]
+  plugin.tasks = [:doc, :cucumber, :release, :clean] # no spec
 end
 
 
