@@ -3,7 +3,8 @@ def path_to(page_name)
   
   when /homepage/i
     url_for(:controller => 'welcome')
-  
+  when /kanban page/i
+    kanban_url
   else
     raise "Can't find mapping from \"#{page_name}\" to a path."
   end

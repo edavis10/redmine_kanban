@@ -21,6 +21,12 @@ Then /^I should see a "top" menu item called "(.*)"$/ do |name|
   end
 end
 
+Then /^I should see an? "(.*)" column$/ do |column_name|
+  assert_select("#kanban") do
+    assert_select("div##{column_name.gsub(' ','-').downcase}")
+  end
+end
+
 Then /^there should be a user$/ do
   assert_equal 1, User.count(:conditions => {:login => @user.login})
 end
