@@ -2,18 +2,32 @@
 
 <div id="kanban">
   <div id="unstaffed-requests" class="column">
-    <div id="incoming" class="pane"></div>
-    <div id="backlog" class="pane"></div>
+    <div id="incoming" class="pane">
+      <%= content_tag(:h3, l(:kanban_text_incoming)) %>
+    </div>
+    <div id="backlog" class="pane">
+      <%= content_tag(:h3, l(:kanban_text_backlog)) %>
+    </div>
   </div>
   <div id="selected-requests" class="column">
-
+    <%= content_tag(:h3, l(:kanban_text_selected_requests)) %>
   </div>
   <div id="staffed-requests" class="column">
-    <div id="user" class="column"></div>
-    <div id="active" class="column"></div>
-    <div id="testing" class="column"></div>
+    <div id="user" class="column">
+      <%= content_tag(:h3, l(:kanban_text_user)) %>
+    </div>
+    <div id="active" class="column">
+      <%= content_tag(:h3, l(:kanban_text_active)) %>
+    </div>
+    <div id="testing" class="column">
+      <%= content_tag(:h3, l(:kanban_text_testing)) %>
+    </div>
   </div>
   <div id="finished-requests" class="column">
-
+    <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
   </div>
 </div>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'redmine_kanban.css', :plugin => "redmine_kanban" %>
+<% end %>

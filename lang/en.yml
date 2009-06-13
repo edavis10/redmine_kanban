@@ -1,2 +1,8 @@
 kanban_title: Kanban
-
+kanban_text_incoming: Incoming
+kanban_text_backlog: Backlog
+kanban_text_selected_requests: Selected Requests
+kanban_text_user: User
+kanban_text_active: Active
+kanban_text_testing: Testing
+kanban_text_finished_requests: Finished Requests
