@@ -10,6 +10,44 @@ Given /^I am on the (.*)$/ do |page_name|
   visit path_to(page_name)
 end
 
+Given /^the plugin is configured$/ do
+  Given 'there are the default issue statuses'
+  Given 'there are "5" active projects'
+  Given 'there are "5" roles'
+
+  Setting.plugin_redmine_kanban = {
+    "incoming_project"=> Project.find(:last).id,
+    "staff_role"=> Role.find(:last),
+    "panes"=>
+    {
+      "selected-requests"=>{
+        "status"=> IssueStatus.find_by_name('Selected').id,
+        "limit"=>"8"
+      },
+      "backlog"=>{
+        "status"=> '',
+        "limit"=>"15"
+      },
+      "testing"=>{
+        "status"=> IssueStatus.find_by_name('Test-N-Doc').id,
+        "limit"=>"5"
+      },
+      "active"=>{
+        "status"=> IssueStatus.find_by_name('Active').id,
+        "limit"=>"5"
+      },
+      "incoming"=>{
+        "status"=> IssueStatus.find_by_name('Unstaffed').id,
+        "limit"=>"5"
+      }
+    }}
+    
+end
+
+Given /^the Incoming project is not configured$/ do
+  Setting.plugin_redmine_kanban = Setting.plugin_redmine_kanban.merge({'incoming_project' => ''})
+end
+
 Given /^there is a user$/ do
   @user = User.make
 end
@@ -84,6 +122,14 @@ Then /^I should see an? "(.*)" pane in "(.*)"$/ do |pane_name, column_name|
   assert_select("#kanban") do
     assert_select("div##{div_name_to_css(column_name)}.column") do
       assert_select("div##{div_name_to_css(pane_name)}.pane")
+    end
+  end
+end
+
+Then /^I should not see an? "(.*)" pane in "(.*)"$/ do |pane_name, column_name|
+  assert_select("#kanban") do
+    assert_select("div##{div_name_to_css(column_name)}.column") do
+      assert_select("div##{div_name_to_css(pane_name)}.pane", :count => 0)
     end
   end
 end

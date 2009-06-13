@@ -2,9 +2,11 @@
 
 <div id="kanban">
   <div id="unstaffed-requests" class="column">
+    <% if incoming_project_configured? %>
     <div id="incoming" class="pane">
       <%= content_tag(:h3, l(:kanban_text_incoming)) %>
     </div>
+    <% end %>
     <div id="backlog" class="pane">
       <%= content_tag(:h3, l(:kanban_text_backlog)) %>
     </div>

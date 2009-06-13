@@ -18,7 +18,8 @@ Feature: Kanban Page
     And I should see a "Finished Requests" column
 
   Scenario: Kanban panes
-    Given I am logged in
+    Given the plugin is configured
+    And I am logged in
     And I am on the Kanban page
 
     Then I should see an "Incoming" pane in "Unstaffed Requests"

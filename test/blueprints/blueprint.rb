@@ -9,6 +9,7 @@ Sham.identifier { Faker::Internet.domain_word.downcase }
 Sham.message { Faker::Company.bs }
 Sham.position {|index| index }
 
+
 # Plugin Shams
 Sham.permissions(:unique => false) {
   [
@@ -57,7 +58,7 @@ Member.blueprint do
 end
 
 Role.blueprint do
-  name
+  name { Sham.identifier }
   position
   permissions
 end

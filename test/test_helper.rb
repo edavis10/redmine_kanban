@@ -12,3 +12,59 @@ Rails::Initializer.run do |config|
 end
 
 require 'blueprints/blueprint'
+
+module KanbanTestHelper
+  def make_issue_statuses
+    IssueStatus.make(:name => 'Unstaffed')
+    IssueStatus.make(:name => 'Selected')
+    IssueStatus.make(:name => 'Active')
+    IssueStatus.make(:name => 'Test-N-Doc')
+    IssueStatus.make(:name => 'Closed', :is_closed => true)
+    IssueStatus.make(:name => 'Rejected', :is_closed => true)
+  end
+
+  def make_roles(count = 5)
+    count.times do
+      Role.make
+    end
+  end
+  
+  def configure_plugin(configuration_change = {})
+    make_issue_statuses
+    make_roles
+    incoming_project = Project.make(:name => 'Incoming project')
+
+    Setting.plugin_redmine_kanban = {
+    "incoming_project"=> incoming_project.id,
+    "staff_role"=> Role.find(:last),
+    "panes"=>
+    {
+      "selected-requests"=>{
+        "status"=> IssueStatus.find_by_name('Selected').id,
+        "limit"=>"8"
+      },
+      "backlog"=>{
+        "status"=> '',
+        "limit"=>"15"
+      },
+      "testing"=>{
+        "status"=> IssueStatus.find_by_name('Test-N-Doc').id,
+        "limit"=>"5"
+      },
+      "active"=>{
+        "status"=> IssueStatus.find_by_name('Active').id,
+        "limit"=>"5"
+      },
+      "incoming"=>{
+        "status"=> IssueStatus.find_by_name('Unstaffed').id,
+        "limit"=>"5"
+      }
+      }}.merge(configuration_change)
+
+  end
+
+  def reconfigure_plugin(configuration_change)
+    Setting['plugin_redmine_kanban'] = Setting['plugin_redmine_kanban'].merge(configuration_change)
+  end
+end
+include KanbanTestHelper
