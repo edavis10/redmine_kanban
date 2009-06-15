@@ -4,7 +4,7 @@ Sham.name { Faker::Name.name }
 Sham.firstname { Faker::Name.first_name }
 Sham.lastname { Faker::Name.last_name }
 Sham.login { Faker::Internet.user_name }
-Sham.project_name { Faker::Company.name }
+Sham.project_name { Faker::Company.name[0..29] }
 Sham.identifier { Faker::Internet.domain_word.downcase }
 Sham.message { Faker::Company.bs }
 Sham.position {|index| index }
@@ -37,6 +37,7 @@ Project.blueprint do
   name { Sham.project_name }
   identifier
   enabled_modules
+  is_public { true }
 end
 
 def make_project_with_enabled_modules(attributes = {})
@@ -45,6 +46,14 @@ def make_project_with_enabled_modules(attributes = {})
       project.enabled_modules.make(:name => name)
     end
   end
+end
+
+def make_project_with_trackers(attributes = {}, tracker_name = 'Feature')
+  project = make_project_with_enabled_modules(attributes)
+  tracker = Tracker.find_by_name(tracker_name)
+  tracker = Tracker.make(:name => tracker_name) if tracker.nil?
+  assign_tracker_to_project tracker, project
+  project
 end
 
 EnabledModule.blueprint do

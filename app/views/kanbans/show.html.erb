@@ -2,14 +2,12 @@
 
 <div id="kanban">
   <div id="unstaffed-requests" class="column">
-    <% if incoming_project_configured? %>
     <div id="incoming" class="pane">
       <%= content_tag(:h3, l(:kanban_text_incoming)) %>
       <ol id="incoming-issues">
         <%= render :partial => 'issue', :collection => @incoming_issues %>
       </ol>
     </div>
-    <% end %>
     <div id="backlog" class="pane">
       <%= content_tag(:h3, l(:kanban_text_backlog)) %>
     </div>

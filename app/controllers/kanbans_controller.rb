@@ -7,12 +7,9 @@ class KanbansController < ApplicationController
 
   private
   def get_incoming_issues
-    incoming_project = Project.find_by_id(@settings['incoming_project'])
-    if incoming_project
-      return incoming_project.issues.find(:all,
-                                          :limit => @settings['panes']['incoming']['limit'],
-                                          :order => 'created_on ASC',
-                                          :conditions => {:status_id => @settings['panes']['incoming']['status']})
-    end
+    return Issue.visible.find(:all,
+                              :limit => @settings['panes']['incoming']['limit'],
+                              :order => "#{Issue.table_name}.created_on ASC",
+                              :conditions => {:status_id => @settings['panes']['incoming']['status']})
   end
 end

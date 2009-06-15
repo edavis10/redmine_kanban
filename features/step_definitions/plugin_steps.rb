@@ -91,8 +91,8 @@ Given /^there are "(\d*)" roles$/ do |count|
   end
 end
 
-Given /^there are "(\d*)" issues in the "(.*)" project with the "(.*)" status$/ do |count, project_name, status_name|
-  project = Project.find_by_name(project_name)
+Given /^there are "(\d*)" issues  with the "(.*)" status$/ do |count, status_name|
+  project =  make_project_with_trackers
   issue_status = IssueStatus.find_by_name(status_name)
   tracker = project.trackers.first
 
@@ -203,11 +203,10 @@ Then /^I should see "(\d*)" project names in the incoming project selector$/ do 
   end
 end
 
-Then /^the plugin shoud save my settings$/ do
+Then /^the plugin should save my settings$/ do
   settings = Setting['plugin_redmine_kanban']
 
   assert_equal Role.find(:last).id, settings['staff_role'].to_i
-  assert_equal Project.find(:last).id, settings['incoming_project'].to_i
 
   assert_equal(IssueStatus.find_by_name("Unstaffed").id,
                settings['panes']['incoming']['status'].to_i)

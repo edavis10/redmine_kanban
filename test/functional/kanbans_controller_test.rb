@@ -4,20 +4,24 @@ class KanbansControllerTest < ActionController::TestCase
   context "on GET to :show" do
     setup {
       configure_plugin
-      # Active issues
-      10.times do
-        Issue.make(:tracker => @incoming_project.trackers.first,
-                   :project => @incoming_project,
+      # Private Project
+      private_project = make_project_with_trackers(:is_public => false)
+      5.times do
+        Issue.make(:tracker => private_project.trackers.first,
+                   :project => private_project,
                    :status => IssueStatus.find_by_name('Active'))
 
       end
 
+      public_project = make_project_with_trackers(:is_public => true)
       6.times do
-        Issue.make(:tracker => @incoming_project.trackers.first,
-                   :project => @incoming_project,
+        Issue.make(:tracker => public_project.trackers.first,
+                   :project => public_project,
                    :status => IssueStatus.find_by_name('Unstaffed'))
       end
-      
+
+      @user = User.make
+      @request.session[:user_id] = @user.id
       get :show
     }
 
@@ -36,19 +40,6 @@ class KanbansControllerTest < ActionController::TestCase
       assigns(:incoming_issues).each do |issue|
         assert_equal 'Unstaffed', issue.status.name
       end
-    end
-  end
-
-  context "on GET to :show with no incoming project" do
-    setup {
-      configure_plugin({'incoming_project' => ''})
-      get :show
-    }
-
-    should_not_assign_to :incoming_issues
-
-    should "not show the Incoming pane if the Incoming project isn't setup" do
-      assert_select("div#incoming", :count => 0)
     end
   end
 end

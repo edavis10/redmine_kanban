@@ -21,8 +21,6 @@ Feature: Configuration Panel
 
     And I should see "General Settings"
     And there should be a select field to pick the role for the "Staff Requests" pane
-    And there should be a select field to pick the project for the "Incoming" pane
-    And I should see "5" project names in the incoming project selector
 
     And I should see "Pane Settings"
     And there should be a select field to pick the status for the "Incoming" pane
@@ -47,7 +45,6 @@ Feature: Configuration Panel
     And I am on the Kanban configuration page
 
     When I select the role for "staff_role"
-    And I select the project for "incoming_project"
     And I select the "Unstaffed" issue status for "Incoming"
     And I fill in the "Incoming" limit with "10"
     And I select the "Selected" issue status for "Selected Requests"
@@ -59,5 +56,5 @@ Feature: Configuration Panel
     And I press "Apply"
 
     Then I am on the Kanban configuration page
-    And the plugin shoud save my settings
+    And the plugin should save my settings
 

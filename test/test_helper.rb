@@ -29,7 +29,7 @@ module KanbanTestHelper
     end
   end
 
-  def make_incoming_project
+  def make_project
     incoming_project = Project.make(:name => 'Incoming project')
     tracker = Tracker.make(:name => 'Feature')
     assign_tracker_to_project tracker, incoming_project
@@ -40,10 +40,8 @@ module KanbanTestHelper
   def configure_plugin(configuration_change = {})
     make_issue_statuses
     make_roles
-    @incoming_project = make_incoming_project
 
     Setting.plugin_redmine_kanban = {
-    "incoming_project"=> @incoming_project.id,
     "staff_role"=> Role.find(:last),
     "panes"=>
     {
