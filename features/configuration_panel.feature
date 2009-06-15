@@ -45,8 +45,10 @@ Feature: Configuration Panel
     And I am on the Kanban configuration page
 
     When I select the role for "staff_role"
-    And I select the "Unstaffed" issue status for "Incoming"
+    And I select the "New" issue status for "Incoming"
     And I fill in the "Incoming" limit with "10"
+    And I select the "Unstaffed" issue status for "Backlog"
+    And I fill in the "Backlog" limit with "25"
     And I select the "Selected" issue status for "Selected Requests"
     And I fill in the "Selected Requests" limit with "20"
     And I select the "Active" issue status for "Active"
