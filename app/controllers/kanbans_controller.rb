@@ -15,10 +15,14 @@ class KanbansController < ApplicationController
   end
 
   def get_backlog_issues
-    return Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
-                             :order => "#{Issue.table_name}.created_on ASC",
-                             :conditions => {:status_id => @settings['panes']['backlog']['status']})
+    issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
+                               :order => "#{Issue.table_name}.created_on ASC",
+                               :conditions => {:status_id => @settings['panes']['backlog']['status']})
 
-
+    return issues.group_by {|issue|
+      issue.priority
+    }.sort {|a,b|
+      a[0].position <=> b[0].position # Sorted based on IssuePriority#position
+    }
   end
 end

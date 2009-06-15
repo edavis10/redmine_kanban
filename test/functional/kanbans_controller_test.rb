@@ -68,16 +68,25 @@ class KanbansControllerTest < ActionController::TestCase
     end
 
     should "only get backlog issues up to the limit" do
-      assert_equal 15, assigns(:backlog_issues).size
+      assert_equal 3, assigns(:backlog_issues).size # Priorities
+      assert_equal 15, assigns(:backlog_issues).values.collect.flatten.size # Issues
     end
 
     should "only get backlog issues with the configured status" do
-      assigns(:backlog_issues).each do |issue|
-        assert_equal 'Unstaffed', issue.status.name
+      assigns(:backlog_issues).each do |priority, issues|
+        issues.each do |issue|
+          assert_equal 'Unstaffed', issue.status.name
+        end
       end
     end
 
     should "group backlog issues by IssuePriority" do
+      assert_equal IssuePriority.find_by_name("High"),  assigns(:backlog_issues).keys[0]
+      assert_equal IssuePriority.find_by_name("Medium"),  assigns(:backlog_issues).keys[1]
+      assert_equal IssuePriority.find_by_name("Low"),  assigns(:backlog_issues).keys[2]
+    end
+
+  should "render nested lists for the grouping" do
       assert_select("ol#backlog-issues") do
         assert_select("ol.high") do
           assert_select("li", :count => 5)
