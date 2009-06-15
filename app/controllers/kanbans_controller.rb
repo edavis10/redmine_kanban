@@ -17,6 +17,7 @@ class KanbansController < ApplicationController
   def get_backlog_issues
     issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
                                :order => "#{Issue.table_name}.created_on ASC",
+                               :include => :priority,
                                :conditions => {:status_id => @settings['panes']['backlog']['status']})
 
     return issues.group_by {|issue|
