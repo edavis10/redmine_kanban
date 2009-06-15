@@ -17,7 +17,7 @@ class KanbansControllerTest < ActionController::TestCase
       6.times do
         Issue.make(:tracker => public_project.trackers.first,
                    :project => public_project,
-                   :status => IssueStatus.find_by_name('Unstaffed'))
+                   :status => IssueStatus.find_by_name('New'))
       end
 
       @user = User.make
@@ -38,7 +38,7 @@ class KanbansControllerTest < ActionController::TestCase
 
     should "only get incoming issues with the configured status" do
       assigns(:incoming_issues).each do |issue|
-        assert_equal 'Unstaffed', issue.status.name
+        assert_equal 'New', issue.status.name
       end
     end
   end

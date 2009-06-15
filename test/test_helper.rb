@@ -15,6 +15,7 @@ require 'blueprints/blueprint'
 
 module KanbanTestHelper
   def make_issue_statuses
+    IssueStatus.make(:name => 'New')
     IssueStatus.make(:name => 'Unstaffed')
     IssueStatus.make(:name => 'Selected')
     IssueStatus.make(:name => 'Active')
@@ -50,7 +51,7 @@ module KanbanTestHelper
         "limit"=>"8"
       },
       "backlog"=>{
-        "status"=> '',
+        "status"=> IssueStatus.find_by_name('Unstaffed').id,
         "limit"=>"15"
       },
       "testing"=>{
@@ -62,7 +63,7 @@ module KanbanTestHelper
         "limit"=>"5"
       },
       "incoming"=>{
-        "status"=> IssueStatus.find_by_name('Unstaffed').id,
+        "status"=> IssueStatus.find_by_name('New').id,
         "limit"=>"5"
       }
       }}.merge(configuration_change)
