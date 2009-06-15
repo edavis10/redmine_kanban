@@ -91,13 +91,25 @@ Given /^there are "(\d*)" roles$/ do |count|
   end
 end
 
-Given /^there are "(\d*)" issues  with the "(.*)" status$/ do |count, status_name|
+Given /^there are "(\d*)" issues with the "(.*)" status$/ do |count, status_name|
   project =  make_project_with_trackers
   issue_status = IssueStatus.find_by_name(status_name)
   tracker = project.trackers.first
 
   count.to_i.times do
     Issue.make(:project => project, :status => issue_status, :tracker => tracker)
+  end
+end
+
+Given /^there are "(\d*)" issues with the "(.*)" status and "(.*)" priority$/ do |count, status_name, priority_name|
+  @project =  make_project_with_trackers if @project.nil?
+  issue_status = IssueStatus.find_by_name(status_name)
+  tracker = @project.trackers.first
+  priority = IssuePriority.find_by_name(priority_name)
+  priority = IssuePriority.make(:name => priority_name) if priority.nil?
+  
+  count.to_i.times do
+    Issue.make(:project => @project, :status => issue_status, :tracker => tracker, :priority => priority)
   end
 end
 
@@ -235,6 +247,13 @@ Then /^I should see "(\d*)" issues in the "(.*)" pane$/ do |count, pane_name|
     assert_select("li.issue", :count => count.to_i)
   end
 end
+
+Then /^I should see a "(.*)" group with "(\d*)" issues$/ do |group, count|
+  assert_select("ol.#{div_name_to_css(group)}") do
+    assert_select("li.issue", :count => count.to_i)
+  end
+end
+
 
 Then /^there should be a user$/ do
   assert_equal 1, User.count(:conditions => {:login => @user.login})

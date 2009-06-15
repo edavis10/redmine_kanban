@@ -1,0 +1,6 @@
+<% backlog_issues.group_by {|issue| issue.priority }.sort {|a,b| b[0].position <=> a[0].position}.each do |priority, issues| %>
+<%= content_tag(:p, h(priority.name)) %>
+<ol class="<%= name_to_css(priority.name) %>">
+  <%= render :partial => 'issue', :collection => issues %>
+</ol>
+<% end %>

@@ -6,7 +6,7 @@ Feature: Incoming Pane
   Scenario: Display the oldest issues up to the limit
     Given the plugin is configured
     And I am logged in
-    And there are "6" issues  with the "New" status
+    And there are "6" issues with the "New" status
     And I am on the Kanban page
 
     Then I should see "5" issues in the "Incoming" pane
