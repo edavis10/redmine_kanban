@@ -93,13 +93,17 @@ Enumeration.blueprint do
   opt { 'IPRI' }
 end
 
+IssuePriority.blueprint do
+  name { Sham.single_name }
+end
+
 
 Issue.blueprint do
   project
   subject { Sham.message }
   tracker { Tracker.make }
   description { Sham.message }
-  priority { Enumeration.make(:opt => 'IPRI') }
+  priority { IssuePriority.make}
   status { IssueStatus.make }
   author { User.make }
 end
