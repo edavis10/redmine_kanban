@@ -117,5 +117,89 @@ class KanbansControllerTest < ActionController::TestCase
     end
   end
 
+  context "on PUT to :update for HTML format" do
+    setup {
+      shared_setup
+    }
+
+    context "with no data" do
+      setup {
+        put :update, {}
+      }
+
+      should_respond_with :redirect
+      should_redirect_to("main page") { kanban_path }
+      should_set_the_flash_to /error/i
+    end
+
+    context "from Incoming to Backlog for an issue #" do
+      setup {
+        shared_setup
+        @from = "incoming"
+        @to = "backlog"
+        high_priority = IssuePriority.find_by_name("High")
+        high_priority ||= IssuePriority.make(:name => "High") if high_priority.nil?
+        @issue = Issue.make(:tracker => @public_project.trackers.first,
+                            :project => @public_project,
+                            :priority => high_priority,
+                            :status => IssueStatus.find_by_name('New'))
+
+        put :update, {:from => @from, :to => @to, :issue_id => @issue.id}
+      }
+
+      should "update the issue status to 'to'" do
+        @issue.reload
+        assert_equal "Unstaffed", @issue.status.name
+      end
+
+      should "return the updated Incoming panes content"
+      should "return the updated Backlog panes content"
+    end
+    
+  end
+  
+  context "on PUT to :update for JSON format" do
+    setup {
+      shared_setup
+    }
+
+    context "with no data" do
+      should "return an empty object" do
+        xhr :put, :update
+        assert_equal '{}', @response.body
+      end
+
+      should "respond with error" do
+        xhr :put, :update
+        assert_response :bad_request
+      end
+    end
+
+    context "from Incoming to Backlog for an issue #" do
+      setup {
+        shared_setup
+        @from = "incoming"
+        @to = "backlog"
+        high_priority = IssuePriority.find_by_name("High")
+        high_priority ||= IssuePriority.make(:name => "High") if high_priority.nil?
+        @issue = Issue.make(:tracker => @public_project.trackers.first,
+                            :project => @public_project,
+                            :priority => high_priority,
+                            :status => IssueStatus.find_by_name('New'))
+
+        xhr :put, :update, {:from => @from, :to => @to, :issue_id => @issue.id}
+      }
+      
+      should "update the issue status to 'to'" do
+        @issue.reload
+        assert_equal "Unstaffed", @issue.status.name
+      end
+
+      should "return the updated Incoming panes content"
+      should "return the updated Backlog panes content"
+    end
+    
+  end
+
 end
 

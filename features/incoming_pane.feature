@@ -10,3 +10,20 @@ Feature: Incoming Pane
     And I am on the Kanban page
 
     Then I should see "5" issues in the "Incoming" pane
+
+  Scenario: Move from Incoming to Backlog
+    Given the plugin is configured
+    And I am logged in
+    And there are "6" issues with the "New" status
+    And there are "5" issues with the "Unstaffed" status and "High" priority
+    And there are "5" issues with the "Unstaffed" status and "Medium" priority
+    And there are "5" issues with the "Unstaffed" status and "Low" priority
+    And I am on the Kanban page
+
+    When I drap and drop an issue from "Incoming" to "Backlog"
+
+    Then the "Incoming" pane should refresh
+    And the "Backlog" pane should refresh
+    And a successful message should be display
+    And the issue should be on the "Backlog" pane now
+    And the issue should have the "Backlog" status now

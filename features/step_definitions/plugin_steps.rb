@@ -150,6 +150,10 @@ When /^I fill in the "(.*)" limit with "(\d*)"$/ do |pane_name, limit|
   When 'I fill in "' + limit_field + '" with "' + limit + '"'
 end
 
+When /^I drap and drop an issue from "Incoming" to "Backlog"$/ do
+  @issue = Issue.find(:first, :conditions => {:status_id => IssueStatus.find_by_name('New')})
+  request_page url_for(:controller => 'kanbans', :action => 'update', :method => :put), :put, {}
+end
 
 Then /^I should see a "top" menu item called "(.*)"$/ do |name|
   assert_select("div#top-menu") do
