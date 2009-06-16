@@ -13,7 +13,10 @@ class KanbansController < ApplicationController
     respond_to do |format|
 
       if saved
-        format.html { redirect_to kanban_path }
+        format.html {
+          flash[:notice] = l(:kanban_text_saved)
+          redirect_to kanban_path
+        }
         format.js { render :text => {}.to_json }
       else
         format.html {

@@ -132,7 +132,7 @@ class KanbansControllerTest < ActionController::TestCase
       should_set_the_flash_to /error/i
     end
 
-    context "from Incoming to Backlog for an issue #" do
+    context "from Incoming to Backlog for an issue" do
       setup {
         shared_setup
         @from = "incoming"
@@ -147,13 +147,14 @@ class KanbansControllerTest < ActionController::TestCase
         put :update, {:from => @from, :to => @to, :issue_id => @issue.id}
       }
 
+      should_redirect_to("main page") { kanban_path }
+      should_set_the_flash_to /updated/i
+
       should "update the issue status to 'to'" do
         @issue.reload
         assert_equal "Unstaffed", @issue.status.name
       end
 
-      should "return the updated Incoming panes content"
-      should "return the updated Backlog panes content"
     end
     
   end
