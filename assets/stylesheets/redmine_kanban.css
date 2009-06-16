@@ -24,3 +24,6 @@ ol#backlog-issues ol { padding-left: 15px; margin-bottom: 15px;}
 
 /* Issue rows */
 li.issue { cursor: move; }
+
+
+.drop-accepted { background-color:#FFFFEE; height: 32px; width: 100%; border: 1px solid #000000; }
