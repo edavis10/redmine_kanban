@@ -1,0 +1,4 @@
+      <%= content_tag(:h3, l(:kanban_text_backlog)) %>
+      <ol id="backlog-issues">
+        <%= render :partial => 'backlog_issues', :object => @backlog_issues %>
+      </ol>

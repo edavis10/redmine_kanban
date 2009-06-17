@@ -191,13 +191,24 @@ class KanbansControllerTest < ActionController::TestCase
         xhr :put, :update, {:from => @from, :to => @to, :issue_id => @issue.id}
       }
       
+      should_respond_with :success
+      should_assign_to :incoming_issues
+      should_assign_to :backlog_issues
+      
       should "update the issue status to 'to'" do
         @issue.reload
         assert_equal "Unstaffed", @issue.status.name
       end
 
-      should "return the updated Incoming panes content"
-      should "return the updated Backlog panes content"
+      should "return the updated Incoming panes content" do
+        json = ActiveSupport::JSON.decode @response.body
+        assert json.keys.include?('from')
+      end
+
+      should "return the updated Backlog panes content" do
+        json = ActiveSupport::JSON.decode @response.body
+        assert json.keys.include?('to')
+      end
     end
     
   end

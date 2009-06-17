@@ -1,5 +1,8 @@
 class KanbansController < ApplicationController
   unloadable
+  helper :kanbans
+  include KanbansHelper
+  
   def show
     @settings = Setting.plugin_redmine_kanban
     @incoming_issues = get_incoming_issues
@@ -8,8 +11,12 @@ class KanbansController < ApplicationController
 
   def update
     @settings = Setting.plugin_redmine_kanban
+    @from = params[:from]
+    @to = params[:to]
     saved = change_issue_status(params[:issue_id], params[:from], params[:to], User.current)
-    
+
+    @incoming_issues = get_incoming_issues
+    @backlog_issues = get_backlog_issues
     respond_to do |format|
 
       if saved
@@ -17,7 +24,12 @@ class KanbansController < ApplicationController
           flash[:notice] = l(:kanban_text_saved)
           redirect_to kanban_path
         }
-        format.js { render :text => {}.to_json }
+        format.js {
+          render :text => ActiveSupport::JSON.encode({
+                                                       'from' => render_pane_to_js(@from),
+                                                       'to' => render_pane_to_js(@to)
+                                                     })
+        }
       else
         format.html {
           flash[:error] = l(:kanban_text_error_saving)

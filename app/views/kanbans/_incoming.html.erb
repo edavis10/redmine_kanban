@@ -1,0 +1,4 @@
+      <%= content_tag(:h3, l(:kanban_text_incoming)) %>
+      <ol id="incoming-issues">
+        <%= render :partial => 'issue', :collection => @incoming_issues %>
+      </ol>

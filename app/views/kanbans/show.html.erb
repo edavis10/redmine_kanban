@@ -3,16 +3,10 @@
 <div id="kanban">
   <div id="unstaffed-requests" class="column">
     <div id="incoming" class="pane">
-      <%= content_tag(:h3, l(:kanban_text_incoming)) %>
-      <ol id="incoming-issues">
-        <%= render :partial => 'issue', :collection => @incoming_issues %>
-      </ol>
+      <%= render :partial => 'incoming' %>
     </div>
     <div id="backlog" class="pane">
-      <%= content_tag(:h3, l(:kanban_text_backlog)) %>
-      <ol id="backlog-issues">
-        <%= render :partial => 'backlog_issues', :object => @backlog_issues %>
-      </ol>
+      <%= render :partial => 'backlog' %>
     </div>
   </div>
   <div id="selected-requests" class="column">
