@@ -24,4 +24,3 @@ Feature: Backlog Pane
     And I should see a "Medium" group with "5" issues
     And I should see a "Low" group with "7" issues
 
-  Scenario: Move from Backlog to Incoming

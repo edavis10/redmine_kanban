@@ -17,7 +17,7 @@ Given /^the plugin is configured$/ do
 
   Setting.plugin_redmine_kanban = {
     "incoming_project"=> Project.find(:last).id,
-    "staff_role"=> Role.find(:last),
+    "staff_role"=> Role.find(:last).id,
     "panes"=>
     {
       "selected-requests"=>{
@@ -150,9 +150,16 @@ When /^I fill in the "(.*)" limit with "(\d*)"$/ do |pane_name, limit|
   When 'I fill in "' + limit_field + '" with "' + limit + '"'
 end
 
-When /^I drap and drop an issue from "Incoming" to "Backlog"$/ do
+When /^I drag and drop an issue from "(.*)" to "(.*)"$/ do |from, to|
   @issue = Issue.find(:first, :conditions => {:status_id => IssueStatus.find_by_name('New')})
-  request_page url_for(:controller => 'kanbans', :action => 'update', :method => :put), :put, {}
+  
+  request_page(url_for(:controller => 'kanbans', :action => 'update'),
+               :put,
+               {
+                 :issue_id => @issue.id,
+                 :from => div_name_to_css(from),
+                 :to =>  div_name_to_css(to)
+               })
 end
 
 Then /^I should see a "top" menu item called "(.*)"$/ do |name|
@@ -256,6 +263,21 @@ Then /^I should see a "(.*)" group with "(\d*)" issues$/ do |group, count|
   assert_select("ol.#{div_name_to_css(group)}") do
     assert_select("li.issue", :count => count.to_i)
   end
+end
+
+Then /^the "(.*)" pane should refresh$/ do |pane|
+  # no-op since this is done via HTML and not JavaScript
+end
+
+Then /^a successful message should be displayed$/ do
+  assert_match /updated/i, flash[:notice]
+end
+
+Then /^the issue should be on the "(.*)" pane now$/ do |pane_name|
+  assert @issue, "No @issue set"
+  @issue.reload
+  status_id = Setting['plugin_redmine_kanban']['panes'][div_name_to_css(pane_name)]['status']
+  assert_equal status_id, @issue.status_id
 end
 
 

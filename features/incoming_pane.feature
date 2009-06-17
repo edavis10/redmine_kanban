@@ -20,10 +20,9 @@ Feature: Incoming Pane
     And there are "5" issues with the "Unstaffed" status and "Low" priority
     And I am on the Kanban page
 
-    When I drap and drop an issue from "Incoming" to "Backlog"
+    When I drag and drop an issue from "Incoming" to "Backlog"
 
     Then the "Incoming" pane should refresh
     And the "Backlog" pane should refresh
-    And a successful message should be display
+    And a successful message should be displayed
     And the issue should be on the "Backlog" pane now
-    And the issue should have the "Backlog" status now
