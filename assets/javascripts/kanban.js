@@ -2,24 +2,27 @@ jQuery(function($) {
     $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
     $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
 
+    attachSortables = function() {
+        $("#incoming-issues").sortable({
+            cancel: 'a',
+            connectWith: ['#backlog-issues'],
+            placeholder: 'drop-accepted',
+            dropOnEmpty: true
+        });
 
-    $("#incoming-issues").sortable({
-        cancel: 'a',
-        connectWith: ['#backlog-issues'],
-        placeholder: 'drop-accepted',
-        dropOnEmpty: true
-    });
+        $("#backlog-issues").sortable({
+            cancel: 'a',
+            connectWith: ['#incoming-issues'],
+            items: 'li.issue',
+            placeholder: 'drop-accepted',
+            dropOnEmpty: true,
+            update: function (event, ui) {
+                updatePanes(ui.item,ui.sender,$(this));
+            }
+        });
+    },
 
-    $("#backlog-issues").sortable({
-        cancel: 'a',
-        connectWith: ['#incoming-issues'],
-        items: 'li.issue',
-        placeholder: 'drop-accepted',
-        dropOnEmpty: true,
-        update: function (event, ui) {
-            updatePanes(ui.item,ui.sender,$(this));
-        }
-    });
+    attachSortables();
 
     updatePanes = function(issue, from, to) {
         var issue_id = issue.attr('id').split('_')[1];
@@ -34,7 +37,8 @@ jQuery(function($) {
                 var partials = $.secureEvalJSON(response);
                 $(from).parent().html(partials.from);
                 $(to).parent().html(partials.to);
-                // TODO: reattach sortables
+
+                attachSortables();
             },
             error: function(response) {
                 $("div.error").html("Error saving lists.  Please refresh the page and try again.").show();
