@@ -35,10 +35,11 @@ jQuery(function($) {
                 $(from).parent().html(partials.from);
                 $(to).parent().html(partials.to);
                 // TODO: reattach sortables
+            },
+            error: function(response) {
+                $("div.error").html("Error saving lists.  Please refresh the page and try again.").show();
             }
         });
-
     };
-
 });
 
