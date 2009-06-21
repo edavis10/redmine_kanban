@@ -19,8 +19,8 @@ div.pane ol { list-style: none; padding-left: 0px; }
 div.pane ol li { padding: 1px 0; }
 div.pane ol li:hover { background-color:#ffffdd; }
 
-#backlog-issues p {margin: 0; font-weight: bold; }
-ol#backlog-issues ol { padding-left: 15px; margin-bottom: 15px;}
+#backlog-issues p, #quick-issues p {margin: 0; font-weight: bold; }
+ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15px;}
 
 /* Issue rows */
 li.issue { cursor: move; }
