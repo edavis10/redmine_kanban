@@ -47,6 +47,7 @@ class Kanban
     }
   end
 
-
-  
+  def quick_issue_ids
+    return @quick_issues.values.flatten.collect(&:id)
+  end
 end
