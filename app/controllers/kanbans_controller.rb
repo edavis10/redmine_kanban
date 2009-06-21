@@ -6,8 +6,8 @@ class KanbansController < ApplicationController
   def show
     @settings = Setting.plugin_redmine_kanban
     @incoming_issues = get_incoming_issues
-    @backlog_issues = get_backlog_issues
     @quick_issues = get_quick_issues
+    @backlog_issues = get_backlog_issues(@quick_issues.values.flatten.collect(&:id))
   end
 
   def update
@@ -51,11 +51,11 @@ class KanbansController < ApplicationController
                               :conditions => {:status_id => @settings['panes']['incoming']['status']})
   end
 
-  def get_backlog_issues
+  def get_backlog_issues(exclude_ids=[])
     issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
                                :order => "#{Issue.table_name}.created_on ASC",
                                :include => :priority,
-                               :conditions => {:status_id => @settings['panes']['backlog']['status']})
+                               :conditions => ["#{Issue.table_name}.status_id IN (?) AND #{Issue.table_name}.id NOT IN (?)", @settings['panes']['backlog']['status'], exclude_ids])
 
     return issues.group_by {|issue|
       issue.priority

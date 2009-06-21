@@ -115,4 +115,5 @@ Issue.blueprint do
   priority { IssuePriority.make}
   status { IssueStatus.make }
   author { User.make }
+  estimated_hours { (1...10).to_a.rand }
 end

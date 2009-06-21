@@ -58,11 +58,21 @@ class KanbansControllerTest < ActionController::TestCase
     setup do
       shared_setup
       high_priority = IssuePriority.make(:name => "High")
+      # Quick tasks
+      3.times do
+        Issue.make(:tracker => @public_project.trackers.first,
+                   :project => @public_project,
+                   :priority => high_priority,
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => nil)
+      end
+
       5.times do
         Issue.make(:tracker => @public_project.trackers.first,
                    :project => @public_project,
                    :priority => high_priority,
-                   :status => IssueStatus.find_by_name('Unstaffed'))
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => 5)
       end
 
       medium_priority = IssuePriority.make(:name => "Medium")
@@ -70,7 +80,8 @@ class KanbansControllerTest < ActionController::TestCase
         Issue.make(:tracker => @public_project.trackers.first,
                    :project => @public_project,
                    :priority => medium_priority,
-                   :status => IssueStatus.find_by_name('Unstaffed'))
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => 5)
       end
 
       low_priority = IssuePriority.make(:name => "Low")
@@ -78,7 +89,8 @@ class KanbansControllerTest < ActionController::TestCase
         Issue.make(:tracker => @public_project.trackers.first,
                    :project => @public_project,
                    :priority => low_priority,
-                   :status => IssueStatus.find_by_name('Unstaffed'))
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => 5)
       end
 
       get :show
@@ -93,6 +105,14 @@ class KanbansControllerTest < ActionController::TestCase
       assigns(:backlog_issues).each do |priority, issues|
         issues.each do |issue|
           assert_equal 'Unstaffed', issue.status.name
+        end
+      end
+    end
+
+    should "not include issues that are already in the Quick Issues list" do
+      assigns(:backlog_issues).each do |priority, issues|
+        issues.each do |issue|
+          assert_equal 5, issue.estimated_hours
         end
       end
     end
