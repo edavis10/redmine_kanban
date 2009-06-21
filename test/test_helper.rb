@@ -80,72 +80,77 @@ module KanbanTestHelper
   # Sets up a variety of issues to be used for the tests
   def setup_kanban_issues
     @private_project = make_project_with_trackers(:is_public => false)
+    private_tracker = @private_project.trackers.first
     @public_project = make_project_with_trackers(:is_public => true)
-
+    public_tracker = @public_project.trackers.first
+    
     high_priority = IssuePriority.make(:name => "High")
     medium_priority = IssuePriority.make(:name => "Medium")
     low_priority = IssuePriority.make(:name => "Low")
 
+    new_status = IssueStatus.find_by_name('New')
+    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
+    
     # Incoming
     5.times do
-      Issue.make(:tracker => @private_project.trackers.first,
+      Issue.make(:tracker => private_tracker,
                  :project => @private_project,
-                 :status => IssueStatus.find_by_name('New'))
+                 :status => new_status)
     end
 
     6.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
-                 :status => IssueStatus.find_by_name('New'))
+                 :status => new_status)
     end
 
     # Quick tasks
     4.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => high_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
     1.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => medium_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
     2.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => low_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
     # Backlog tasks
     5.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => high_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
     7.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => medium_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
     5.times do
-      Issue.make(:tracker => @public_project.trackers.first,
+      Issue.make(:tracker => public_tracker,
                  :project => @public_project,
                  :priority => low_priority,
-                 :status => IssueStatus.find_by_name('Unstaffed'),
+                 :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
