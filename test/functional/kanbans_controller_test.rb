@@ -18,6 +18,7 @@ class KanbansControllerTest < ActionController::TestCase
     should_assign_to :settings
     should_assign_to :incoming_issues
     should_assign_to :backlog_issues
+    should_assign_to :quick_issues
 
     should_respond_with :success
     should_render_template :show
@@ -117,6 +118,69 @@ class KanbansControllerTest < ActionController::TestCase
     end
   end
 
+  context "on GET to :show for quick issues" do
+    setup do
+      shared_setup
+      high_priority = IssuePriority.make(:name => "High")
+      4.times do
+        Issue.make(:tracker => @public_project.trackers.first,
+                   :project => @public_project,
+                   :priority => high_priority,
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => nil)
+      end
+
+      medium_priority = IssuePriority.make(:name => "Medium")
+      1.times do
+        Issue.make(:tracker => @public_project.trackers.first,
+                   :project => @public_project,
+                   :priority => medium_priority,
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => nil)
+      end
+
+      low_priority = IssuePriority.make(:name => "Low")
+      2.times do
+        Issue.make(:tracker => @public_project.trackers.first,
+                   :project => @public_project,
+                   :priority => low_priority,
+                   :status => IssueStatus.find_by_name('Unstaffed'),
+                   :estimated_hours => nil)
+      end
+
+      get :show
+    end
+    
+    should "only get quick issues up to the limit" do
+      assert_equal 2, assigns(:quick_issues).size # Priorities
+      assert_equal 5, assigns(:quick_issues).values.collect.flatten.size # Issues
+    end
+
+    should "only get quick issues with the configured Backlog status" do
+      assigns(:quick_issues).each do |priority, issues|
+        issues.each do |issue|
+          assert_equal 'Unstaffed', issue.status.name
+        end
+      end
+    end
+
+    should "group quick issues by IssuePriority" do
+      assert_equal IssuePriority.find_by_name("High"),  assigns(:quick_issues).keys[0]
+      assert_equal IssuePriority.find_by_name("Medium"),  assigns(:quick_issues).keys[1]
+    end
+
+    should "render nested lists for the grouping" do
+      assert_select("ol#quick-issues") do
+        assert_select("ol.high") do
+          assert_select("li", :count => 4)
+        end
+        assert_select("ol.medium") do
+          assert_select("li", :count => 1)
+        end
+      end
+    end
+  end
+  
   context "on PUT to :update for HTML format" do
     setup {
       shared_setup

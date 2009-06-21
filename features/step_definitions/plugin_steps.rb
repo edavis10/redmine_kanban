@@ -28,6 +28,9 @@ Given /^the plugin is configured$/ do
         "status"=> IssueStatus.find_by_name('Unstaffed').id,
         "limit"=>"15"
       },
+      "quick-tasks"=>{
+        "limit"=>"15"
+      },
       "testing"=>{
         "status"=> IssueStatus.find_by_name('Test-N-Doc').id,
         "limit"=>"5"
@@ -127,6 +130,17 @@ Given /^"(.*)" is configured as the "Incoming" project$/ do |project_name|
   reconfigure_plugin({'incoming_project' => Project.find_by_name(project_name)})
 end
 
+Given /^"(\d*)" issues that are "(.*)" are missing a time estimate$/ do |count, status|
+  status = IssueStatus.find_by_name(status)
+  issues = Issue.find(:all,
+                      :limit => count.to_i,
+                      :conditions => ['status_id = ?', status.id])
+  issues.each do |issue|
+    issue.estimated_hours = nil
+    issue.save
+  end
+  
+end
 
 When /^I select the role for "staff_role"$/ do
   role = Role.find(:last)
@@ -261,9 +275,11 @@ Then /^I should see "(\d*)" issues in the "(.*)" pane$/ do |count, pane_name|
   end
 end
 
-Then /^I should see a "(.*)" group with "(\d*)" issues$/ do |group, count|
-  assert_select("ol.#{div_name_to_css(group)}") do
-    assert_select("li.issue", :count => count.to_i)
+Then /^I should see a "(.*)" group with "(\d*)" issues in the "(.*)" pane$/ do |group, count,pane_name|
+  assert_select("div##{div_name_to_css(pane_name)}.pane") do
+    assert_select("ol.#{div_name_to_css(group)}") do
+      assert_select("li.issue", :count => count.to_i)
+    end
   end
 end
 

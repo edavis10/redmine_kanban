@@ -54,6 +54,9 @@ module KanbanTestHelper
         "status"=> IssueStatus.find_by_name('Unstaffed').id,
         "limit"=>"15"
       },
+      "quick-tasks"=>{
+        "limit"=>"5"
+      },
       "testing"=>{
         "status"=> IssueStatus.find_by_name('Test-N-Doc').id,
         "limit"=>"5"

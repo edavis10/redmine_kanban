@@ -13,6 +13,9 @@
   </div>
   <div id="selected-requests" class="column">
     <%= content_tag(:h3, l(:kanban_text_selected_requests)) %>
+    <div id="quick-tasks" class="pane">
+      <%= render :partial => 'quick_tasks' %>
+    </div>
   </div>
   <div id="staffed-requests" class="column">
     <div id="user" class="column">

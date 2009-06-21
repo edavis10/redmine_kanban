@@ -21,7 +21,7 @@ Feature: Quick Tasks Pane
     And "20" issues that are "Unstaffed" are missing a time estimate
     And I am on the Kanban page
 
-    Then I should see "15" issues in the "Unstaffed" pane
-    And I should see a "High" group with "10" issues
-    And I should see a "Medium" group with "5" issues
+    Then I should see "15" issues in the "Quick Tasks" pane
+    And I should see a "High" group with "10" issues in the "Quick Tasks" pane
+    And I should see a "Medium" group with "5" issues in the "Quick Tasks" pane
 

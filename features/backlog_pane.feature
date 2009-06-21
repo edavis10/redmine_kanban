@@ -20,7 +20,7 @@ Feature: Backlog Pane
     And I am on the Kanban page
 
     Then I should see "15" issues in the "Backlog" pane
-    And I should see a "High" group with "3" issues
-    And I should see a "Medium" group with "5" issues
-    And I should see a "Low" group with "7" issues
+    And I should see a "High" group with "3" issues in the "Backlog" pane
+    And I should see a "Medium" group with "5" issues in the "Backlog" pane
+    And I should see a "Low" group with "7" issues in the "Backlog" pane
 
