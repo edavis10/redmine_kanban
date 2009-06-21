@@ -1,4 +1,4 @@
-<% backlog_issues.each do |priority, issues| %>
+<% grouped_issues.each do |priority, issues| %>
 <%= content_tag(:p, h(priority.name)) %>
 <ol class="<%= name_to_css(priority.name) %>">
   <%= render :partial => 'issue', :collection => issues %>

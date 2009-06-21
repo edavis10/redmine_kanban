@@ -1,4 +1,4 @@
       <%= content_tag(:h3, l(:kanban_text_quick_tasks)) %>
       <ol id="quick-issues">
-        <%= render :partial => 'backlog_issues', :object => @quick_issues %>
+        <%= render :partial => 'grouped_issues', :object => @quick_issues %>
       </ol>
