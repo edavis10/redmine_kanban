@@ -240,6 +240,8 @@ Then /^the plugin should save my settings$/ do
                settings['panes']['backlog']['status'].to_i)
   assert_equal("25", settings['panes']['backlog']['limit'])
 
+  assert_equal("25", settings['panes']['quick-tasks']['limit'])
+
   assert_equal(IssueStatus.find_by_name("Selected").id,
                settings['panes']['selected-requests']['status'].to_i)
   assert_equal("20", settings['panes']['selected-requests']['limit'])

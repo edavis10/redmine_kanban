@@ -14,6 +14,7 @@ en:
   kanban_label_incoming_pane: Incoming
   kanban_label_backlog_pane: Backlog
   kanban_label_selected-requests_pane: Selected Requests
+  kanban_label_quick-tasks_pane: Quick Tasks
   kanban_label_active_pane: Active
   kanban_label_testing_pane: Testing
   kanban_label_limit: Maximum number of items
