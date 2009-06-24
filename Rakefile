@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+gem 'cucumber', '< 0.2'
 require 'redmine_plugin_support'
 
 Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each { |ext| load ext }

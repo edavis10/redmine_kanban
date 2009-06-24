@@ -19,6 +19,7 @@ require 'machinist'
 require File.expand_path(File.dirname(__FILE__) + '/../../test/blueprints/blueprint')
 
 # Testing emails
+gem 'bmabey-email_spec', '0.1.2'
 require 'email_spec'
 require 'email_spec/cucumber'
 
