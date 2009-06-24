@@ -2,7 +2,9 @@
 Sham.mail { Faker::Internet.email }
 Sham.name { Faker::Name.name }
 Sham.firstname { Faker::Name.first_name }
-Sham.lastname { Faker::Name.last_name }
+Sham.lastname {
+  Faker::Name.last_name + ' ' + Faker::Name.last_name
+}
 Sham.login { Faker::Internet.user_name }
 Sham.project_name { Faker::Company.name[0..29] }
 Sham.identifier { Faker::Internet.domain_word.downcase }
