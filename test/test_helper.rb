@@ -11,7 +11,7 @@ Rails::Initializer.run do |config|
   config.gem "notahat-machinist", :lib => "machinist", :source => "http://gems.github.com"
 end
 
-require 'blueprints/blueprint'
+require File.expand_path(File.dirname(__FILE__) + '/blueprints/blueprint')
 
 module KanbanTestHelper
   def make_issue_statuses
@@ -157,3 +157,17 @@ module KanbanTestHelper
   end
 end
 include KanbanTestHelper
+
+class Test::Unit::TestCase
+  def self.should_allow_state_change_from(starting_state, options = {:to => nil, :using => :nothing})
+    should "allow the change from #{starting_state} to #{options[:to]} using #{options[:using]}" do
+      assert @object, "No @object set"
+      @object.state = starting_state
+      assert @object.save, "Failed to save object"
+      @object.send(options[:using].to_sym)
+      assert_equal options[:to], @object.state
+    end
+
+
+  end
+end
