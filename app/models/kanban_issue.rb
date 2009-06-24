@@ -21,7 +21,7 @@ class KanbanIssue < ActiveRecord::Base
   aasm_initial_state :none
 
   aasm_state :none
-  aasm_state :selected
+  aasm_state :selected, :enter => :remove_user
   aasm_state :active
   aasm_state :testing
 
@@ -35,5 +35,10 @@ class KanbanIssue < ActiveRecord::Base
 
   aasm_event :testing do
     transitions :to => :testing, :from => [:none, :selected, :active]
+  end
+
+  def remove_user
+    self.user = nil
+    save!
   end
 end

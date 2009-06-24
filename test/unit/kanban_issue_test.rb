@@ -76,9 +76,26 @@ class KanbanIssueTest < Test::Unit::TestCase
   end
   
   context 'associations to user' do
-    should 'be empty in the Selected state'
-    should 'not be empty in the Active state'
-    should 'not be empty in the Testing state'
+    setup do
+      shared_setup
+      @kanban_issue.save!
+    end
+    
+    should 'be empty in the Selected state' do
+      @kanban_issue.user = @user
+      @kanban_issue.selected!
+      assert_nil @kanban_issue.user
+    end
+
+    should 'not be empty in the Active state' do
+      @kanban_issue.active!
+      assert_equal @user, @kanban_issue.user
+    end
+
+    should 'not be empty in the Testing state' do
+      @kanban_issue.testing!
+      assert_equal @user, @kanban_issue.user
+    end
   end
 
   context 'position' do
