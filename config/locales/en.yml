@@ -24,3 +24,4 @@ en:
   kanban_label_incoming_project: Project to use for the Incoming pane
   kanban_text_error_saving: Error saving lists.  Please refresh the page and try again.
   kanban_text_saved: Updated lists.
+  field_state: "State"

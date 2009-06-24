@@ -64,7 +64,6 @@ end
 Member.blueprint do
   project
   user
-  role
 end
 
 Role.blueprint do
@@ -73,8 +72,19 @@ Role.blueprint do
   permissions
 end
 
+MemberRole.blueprint do
+  role { Role.make }
+end
+
+# Stupid circular validations
+def make_member(attributes, roles)
+  member = Member.new(attributes)
+  member.roles << roles
+  member.save!
+end
+
 IssueStatus.blueprint do
-  name
+  name { Sham.single_name }
   is_closed { false }
   is_default { false }
   position
@@ -116,4 +126,12 @@ Issue.blueprint do
   status { IssueStatus.make }
   author { User.make }
   estimated_hours { (1...10).to_a.rand }
+end
+
+# Plugin specific
+KanbanIssue.blueprint do
+  issue { Issue.make }
+  user { User.make }
+  position { Sham.position }
+  state { '' }
 end
