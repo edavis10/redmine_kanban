@@ -116,6 +116,12 @@ Given /^there are "(\d*)" issues with the "(.*)" status and "(.*)" priority$/ do
   end
 end
 
+Given /^there are "(.*)" issues prioritized by the Manager$/ do |count|
+  Given 'there are "' + count.to_s + '" issues with the "Unstaffed" status'
+  # TODO: Add manger prioritized issues
+end
+
+
 Given /^there are the default issue statuses$/ do
   IssueStatus.make(:name => 'New')
   IssueStatus.make(:name => 'Unstaffed')
