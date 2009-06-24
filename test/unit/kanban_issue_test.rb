@@ -11,7 +11,7 @@ class KanbanIssueTest < Test::Unit::TestCase
                             :project => @project
                           },
                           [@role])
-    @kanban_issue = KanbanIssue.new(:issue => @issue, :user => @user)
+    @kanban_issue = KanbanIssue.new(:issue => @issue, :user => @user, :state => "selected")
   end
 
   should_validate_presence_of :position
@@ -31,7 +31,12 @@ class KanbanIssueTest < Test::Unit::TestCase
   end
 
   context 'position' do
-    should 'use acts_as_list'
-    should 'be scoped based on the State and User'
+    should 'use acts_as_list' do
+      assert @kanban_issue.acts_as_list_class, "Missing acts_as_list defination"
+    end
+
+    should 'be scoped based on the State and User' do
+      assert_equal "state = 'selected' AND user_id = #{@kanban_issue.user_id}", @kanban_issue.scope_condition
+    end
   end
 end
