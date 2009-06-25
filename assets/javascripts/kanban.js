@@ -16,10 +16,8 @@ jQuery(function($) {
             items: 'li.issue',
             placeholder: 'drop-accepted',
             dropOnEmpty: true,
-            update: function (event, ui) {
-              if (ui.sender) {
+            receive: function (event, ui) {
                 updatePanes(ui.item,ui.sender,$(this));
-              }
             }
         });
 
@@ -29,10 +27,8 @@ jQuery(function($) {
             items: 'li.issue',
             placeholder: 'drop-accepted',
             dropOnEmpty: true,
-            update: function (event, ui) {
-              if (ui.sender) {
+            receive: function (event, ui) {
                 updatePanes(ui.item,ui.sender,$(this));
-              }
             }
         });
 
@@ -41,12 +37,17 @@ jQuery(function($) {
     attachSortables();
 
     updatePanes = function(issue, from, to) {
-        var issue_id = issue.attr('id').split('_')[1];
-        var from_pane = from.attr('id').split('-')[0];
+          var issue_id = issue.attr('id').split('_')[1];
         var to_pane = to.attr('id').split('-')[0];
-
-        var from_order = from.sortable('serialize', {'key': 'from_issue[]'});
         var to_order = to.sortable('serialize', {'key': 'to_issue[]'});
+
+      if (from) {
+        var from_pane = from.attr('id').split('-')[0];
+        var from_order = from.sortable('serialize', {'key': 'from_issue[]'});
+      } else {
+        var from_pane = '';
+        var from_order = [];
+      }
 
         $.ajax({
             type: "PUT",
@@ -58,6 +59,7 @@ jQuery(function($) {
                 $(to).parent().html(partials.to);
 
                 attachSortables();
+
             },
             error: function(response) {
                 $("div.error").html("Error saving lists.  Please refresh the page and try again.").show();

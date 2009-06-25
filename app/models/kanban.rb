@@ -56,10 +56,13 @@ class Kanban
   # Updates +target_pane+ so that the KanbanIssues match +sorted_issues+
   def self.update_sorted_issues(target_pane, sorted_issues)
     if ['selected'].include?(target_pane)
-
-      if sorted_issues.empty? && !target_pane.blank?
+      if sorted_issues.blank? && !target_pane.blank?
         KanbanIssue.destroy_all(:state => target_pane)
       else
+        # Remove items that are in the database but not in the
+        # sorted_issues
+        KanbanIssue.destroy_all(['state = ? AND issue_id NOT IN (?)','selected', sorted_issues])
+        
         sorted_issues.each_with_index do |issue_id, zero_position|
           kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
           if kanban_issue
