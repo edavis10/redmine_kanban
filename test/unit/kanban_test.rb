@@ -87,6 +87,66 @@ class KanbanTest < Test::Unit::TestCase
         end
       end
     end
-  end      
+  end
+
+  context "#update_sorted_issues" do
+    setup {
+      shared_setup
+      setup_kanban_issues
+    }
+
+    context "with 0 issues" do
+      should 'remove all KanbanIssues for that pane' do
+        assert_difference('KanbanIssue.count', -10) do
+          Kanban.update_sorted_issues('selected',[])
+        end
+      end
+    end
+
+    context "with a new KanbanIssue" do
+      should "create a new KanbanIssue" do
+        issue = Issue.make({
+                             :tracker => @public_project.trackers.first,
+                             :project => @public_project
+                           })
+        
+        assert_difference('KanbanIssue.count') do
+          Kanban.update_sorted_issues('selected',[issue.id])
+        end
+
+        kanban_issue = KanbanIssue.find_by_issue_id(issue.id)
+        assert kanban_issue
+        assert_equal 1, kanban_issue.position
+        assert_equal 'selected', kanban_issue.state
+      end
+    end
+
+    context "with an existing KanbanIssue" do
+      setup {
+        @issue = Issue.make({
+                             :tracker => @public_project.trackers.first,
+                             :project => @public_project
+                           })
+        @kanban_issue = KanbanIssue.make({
+                                           :issue => @issue,
+                                           :user => nil,
+                                           :state => 'none',
+                                           :position => 3
+                                         })
+      }
+      
+      should "change the state to the pane's state" do
+        Kanban.update_sorted_issues('selected',[@issue.id])
+        @kanban_issue.reload
+        assert_equal "selected", @kanban_issue.state
+      end
+
+      should "update the position based on the sorted_issues" do
+        Kanban.update_sorted_issues('selected',[@issue.id])
+        @kanban_issue.reload
+        assert_equal 1, @kanban_issue.position
+      end
+    end
+  end
 end
 
