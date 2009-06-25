@@ -105,6 +105,7 @@ class KanbanTest < Test::Unit::TestCase
 
     context "with a new KanbanIssue" do
       should "create a new KanbanIssue" do
+        KanbanIssue.destroy_all
         issue = Issue.make({
                              :tracker => @public_project.trackers.first,
                              :project => @public_project
