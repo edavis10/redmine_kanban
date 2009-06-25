@@ -12,14 +12,30 @@ jQuery(function($) {
 
         $("#backlog-issues").sortable({
             cancel: 'a',
-            connectWith: ['#incoming-issues'],
+            connectWith: ['#incoming-issues','#selected-issues'],
             items: 'li.issue',
             placeholder: 'drop-accepted',
             dropOnEmpty: true,
             update: function (event, ui) {
+              if (ui.sender) {
                 updatePanes(ui.item,ui.sender,$(this));
+              }
             }
         });
+
+        $("#selected-issues").sortable({
+            cancel: 'a',
+            connectWith: ['#backlog-issues'],
+            items: 'li.issue',
+            placeholder: 'drop-accepted',
+            dropOnEmpty: true,
+            update: function (event, ui) {
+              if (ui.sender) {
+                updatePanes(ui.item,ui.sender,$(this));
+              }
+            }
+        });
+
     },
 
     attachSortables();
@@ -29,10 +45,13 @@ jQuery(function($) {
         var from_pane = from.attr('id').split('-')[0];
         var to_pane = to.attr('id').split('-')[0];
 
+        var from_order = from.sortable('serialize', {'key': 'from_issue[]'});
+        var to_order = to.sortable('serialize', {'key': 'to_issue[]'});
+
         $.ajax({
             type: "PUT",
             url: 'kanban.js',
-            data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane,
+            data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order,
             success: function(response) {
                 var partials = $.secureEvalJSON(response);
                 $(from).parent().html(partials.from);
