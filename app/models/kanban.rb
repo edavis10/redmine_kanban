@@ -61,24 +61,24 @@ class Kanban
         KanbanIssue.destroy_all(:state => target_pane)
       else
         sorted_issues.each_with_index do |issue_id, zero_position|
-        kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
-        if kanban_issue
-          if kanban_issue.state != target_pane
-            # Change state
-            kanban_issue.send(target_pane.to_sym)
+          kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
+          if kanban_issue
+            if kanban_issue.state != target_pane
+              # Change state
+              kanban_issue.send(target_pane.to_sym)
+            end
+            kanban_issue.position = zero_position + 1 # acts_as_list is 1 based
+            kanban_issue.save
+          else
+            kanban_issue = KanbanIssue.new
+            kanban_issue.issue_id = issue_id
+            kanban_issue.state = target_pane
+            kanban_issue.position = (zero_position + 1)
+            kanban_issue.save
+            # Need to resave since acts_as_list automatically moves a
+            # new issue to the bottom on create
+            kanban_issue.insert_at(zero_position + 1)
           end
-          kanban_issue.position = zero_position + 1 # acts_as_list is 1 based
-          kanban_issue.save
-        else
-          kanban_issue = KanbanIssue.new
-          kanban_issue.issue_id = issue_id
-          kanban_issue.state = target_pane
-          kanban_issue.position = (zero_position + 1)
-          kanban_issue.save
-          # Need to resave since acts_as_list automatically moves a
-          # new issue to the bottom on create
-          kanban_issue.insert_at(zero_position + 1)
-        end
         end
       end
     end
