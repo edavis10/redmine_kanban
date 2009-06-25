@@ -2,13 +2,19 @@
 # Define some "helpers" here
 
 def issue_status_pane(pane_name)
+    selected_status = @settings['panes'][pane_name] && @settings['panes'][pane_name]['status'] ? @settings['panes'][pane_name]['status'].to_i : ''
+    limit = @settings['panes'][pane_name] && @settings['panes'][pane_name]['limit'] ? @settings['panes'][pane_name]['limit'].to_i : ''
     status = content_tag(:p,
       content_tag(:label, l("kanban_label_#{pane_name}_pane".to_sym)) + 
       select_tag("settings[panes][#{pane_name}][status]",
-        content_tag(:option, '') + options_from_collection_for_select(IssueStatus.all, :id, :name, @settings['panes'][pane_name]['status'].to_i)) + 
+                 content_tag(:option, '') +
+                 options_from_collection_for_select(IssueStatus.all,
+                                                    :id,
+                                                    :name,
+                                                    selected_status)) + 
 
       content_tag(:span, l(:kanban_label_limit), :style => "padding: 0 0.5em 0 3em;") + 
-      text_field_tag("settings[panes][#{pane_name}][limit]", @settings['panes'][pane_name]['limit']))
+      text_field_tag("settings[panes][#{pane_name}][limit]", limit ))
       return status
 
 end
@@ -50,7 +56,7 @@ end
     <%= text_field_tag("settings[panes][quick-tasks][limit]", @settings['panes']['quick-tasks']['limit']) %>
   </p>
 
-  <%= issue_status_pane('selected-requests') %>
+  <%= issue_status_pane('selected') %>
   <%= issue_status_pane('active') %>
   <%= issue_status_pane('testing') %>
 </fieldset>

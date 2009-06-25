@@ -15,7 +15,7 @@ Redmine::Plugin.register :redmine_kanban do
              'panes' => {
                'incoming' => { 'status' => nil, 'limit' => 5},
                'backlog' => { 'status' => nil, 'limit' => 15},
-               'selected-requests' => { 'status' => nil, 'limit' => 8},
+               'selected' => { 'status' => nil, 'limit' => 8},
                'quick-tasks' => {'limit' => 5},
                'active' => { 'status' => nil, 'limit' => 5},
                'testing' => { 'status' => nil, 'limit' => 5}
