@@ -16,8 +16,8 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    update_sorted_issues(@from, params[:from_issue])
-    update_sorted_issues(@to, params[:to_issue])
+    Kanban.update_sorted_issues(@from, params[:from_issue])
+    Kanban.update_sorted_issues(@to, params[:to_issue])
     saved = change_issue_status(params[:issue_id], params[:from], params[:to], User.current)
 
     @kanban = Kanban.find
@@ -62,33 +62,6 @@ class KanbansController < ApplicationController
       issue.init_journal(user)
       issue.status = new_status
       return issue.save
-    end
-  end
-
-  def update_sorted_issues(target_pane, sorted_issues)
-    if ['selected'].include?(target_pane)
-      sorted_issues.each_with_index do |issue_id, zero_position|
-        kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
-        if kanban_issue
-          if kanban_issue.state != target_pane
-            # Change state
-            kanban_issue.send(:target_pane)
-          end
-          kanban_issue.position = zero_position + 1 # acts_as_list is 1 based
-          kanban_issue.save
-          kanban_issue.reload
-        else
-          kanban_issue = KanbanIssue.new
-          kanban_issue.issue_id = issue_id
-          kanban_issue.state = target_pane
-          kanban_issue.position = (zero_position + 1)
-          kanban_issue.save
-          # Need to resave since acts_as_list automatically moves a
-          # new issue to the bottom on create
-          kanban_issue.insert_at(zero_position + 1)
-        end
-        
-      end
     end
   end
 end
