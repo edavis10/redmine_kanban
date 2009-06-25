@@ -26,3 +26,4 @@ en:
   kanban_text_error_saving: Error saving lists.  Please refresh the page and try again.
   kanban_text_saved: Updated lists.
   field_state: "State"
+  kanban_text_nothing: "(No issues)"

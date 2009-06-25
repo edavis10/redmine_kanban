@@ -13,11 +13,12 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 
 == Installation and Setup
 
-1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
-2. Run the plugin migrations +rake db:migrate_plugins+
-3. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
-4. Login and configure the plugin (Administration > Plugins > Configure)
-5. Click the Kanban link in the top left menu
+1. Install the aasm gem: +sudo gem install rubyist-aasm --source http://gems.github.com+
+2. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
+3. Run the plugin migrations +rake db:migrate_plugins+
+4. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+5. Login and configure the plugin (Administration > Plugins > Configure)
+6. Click the Kanban link in the top left menu
 
 == Usage
 

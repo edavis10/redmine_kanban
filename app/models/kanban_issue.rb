@@ -40,7 +40,7 @@ class KanbanIssue < ActiveRecord::Base
   end
 
   named_scope :find_selected, lambda {
-    limit = Setting['plugin_redmine_kanban']["panes"]["selected-requests"]["limit"].to_i
+    limit = Setting['plugin_redmine_kanban']["panes"]["selected"]["limit"].to_i
     {
       :limit => limit,
       :order => 'position ASC',

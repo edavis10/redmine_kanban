@@ -46,7 +46,7 @@ module KanbanTestHelper
     "staff_role"=> Role.find(:last),
     "panes"=>
     {
-      "selected-requests"=>{
+      "selected"=>{
         "status"=> IssueStatus.find_by_name('Selected').id,
         "limit"=>"8"
       },

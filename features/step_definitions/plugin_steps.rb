@@ -20,7 +20,7 @@ Given /^the plugin is configured$/ do
     "staff_role"=> Role.find(:last).id,
     "panes"=>
     {
-      "selected-requests"=>{
+      "selected"=>{
         "status"=> IssueStatus.find_by_name('Selected').id,
         "limit"=>"8"
       },
@@ -265,8 +265,8 @@ Then /^the plugin should save my settings$/ do
   assert_equal("25", settings['panes']['quick-tasks']['limit'])
 
   assert_equal(IssueStatus.find_by_name("Selected").id,
-               settings['panes']['selected-requests']['status'].to_i)
-  assert_equal("20", settings['panes']['selected-requests']['limit'])
+               settings['panes']['selected']['status'].to_i)
+  assert_equal("20", settings['panes']['selected']['limit'])
 
   assert_equal(IssueStatus.find_by_name("Active").id,
                settings['panes']['active']['status'].to_i)

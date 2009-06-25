@@ -4,7 +4,7 @@ module KanbansHelper
   end
 
   def render_pane_to_js(pane)
-    if ["incoming","backlog"].include?(pane)
+    if ["incoming","backlog","selected"].include?(pane)
       return render_to_string(:partial => pane)
     else
       ''

@@ -25,14 +25,14 @@ Feature: Configuration Panel
     And I should see "Pane Settings"
     And there should be a select field to pick the status for the "Incoming" pane
     And there should be a select field to pick the status for the "Backlog" pane
-    And there should be a select field to pick the status for the "Selected Requests" pane
+    And there should be a select field to pick the status for the "Selected" pane
     And there should be a select field to pick the status for the "Active" pane
     And there should be a select field to pick the status for the "Testing" pane
 
     And there should be a text field to enter the item limit for the "Incoming" pane
     And there should be a text field to enter the item limit for the "Backlog" pane
     And there should be a text field to enter the item limit for the "Quick Tasks" pane
-    And there should be a text field to enter the item limit for the "Selected Requests" pane
+    And there should be a text field to enter the item limit for the "Selected" pane
     And there should be a text field to enter the item limit for the "Active" pane
     And there should be a text field to enter the item limit for the "Testing" pane
     
@@ -51,8 +51,8 @@ Feature: Configuration Panel
     And I select the "Unstaffed" issue status for "Backlog"
     And I fill in the "Backlog" limit with "25"
     And I fill in the "Quick Tasks" limit with "25"
-    And I select the "Selected" issue status for "Selected Requests"
-    And I fill in the "Selected Requests" limit with "20"
+    And I select the "Selected" issue status for "Selected"
+    And I fill in the "Selected" limit with "20"
     And I select the "Active" issue status for "Active"
     And I fill in the "Active" limit with "10"
     And I select the "Test-N-Doc" issue status for "Testing"
