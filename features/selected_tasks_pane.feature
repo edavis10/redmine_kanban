@@ -11,4 +11,3 @@ Feature: Selected Tasks Pane
 
     Then I should see "8" issues in the "Selected Tasks" pane
 
-  Scenario: Group Selected Tasks by their sort order
