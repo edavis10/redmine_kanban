@@ -29,6 +29,12 @@ jQuery(function($) {
             dropOnEmpty: true,
             receive: function (event, ui) {
                 updatePanes(ui.item,ui.sender,$(this));
+            },
+            update: function (event, ui) {
+              // Allow drag and drop inside the list
+              if (ui.sender == null && event.target == this) {
+                updatePanes(ui.item,ui.sender,$(this));
+              }
             }
         });
 
