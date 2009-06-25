@@ -11,7 +11,6 @@ class KanbanTest < Test::Unit::TestCase
     setup {
       shared_setup
       setup_kanban_issues
-
       @kanban = Kanban.find
     }
 
@@ -74,6 +73,18 @@ class KanbanTest < Test::Unit::TestCase
       should "group quick issues by IssuePriority" do
         assert_equal IssuePriority.find_by_name("High"),  @kanban.quick_issues.keys[0]
         assert_equal IssuePriority.find_by_name("Medium"),  @kanban.quick_issues.keys[1]
+      end
+    end
+
+    context "for selected issues" do
+      should "only get selected issues up to the limit" do
+        assert_equal 8, @kanban.selected_issues.length
+      end
+
+      should "only get selected issues with the configured status" do
+        @kanban.selected_issues.each do |kanban_issue|
+          assert_equal 'Selected', kanban_issue.issue.status.name
+        end
       end
     end
   end      

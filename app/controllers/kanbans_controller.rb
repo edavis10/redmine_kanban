@@ -9,6 +9,7 @@ class KanbansController < ApplicationController
     @incoming_issues = @kanban.incoming_issues
     @quick_issues = @kanban.quick_issues
     @backlog_issues = @kanban.backlog_issues
+    @selected_issues = @kanban.selected_issues
   end
 
   def update

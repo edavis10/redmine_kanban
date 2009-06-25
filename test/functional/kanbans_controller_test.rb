@@ -21,6 +21,7 @@ class KanbansControllerTest < ActionController::TestCase
     should_assign_to :incoming_issues
     should_assign_to :backlog_issues
     should_assign_to :quick_issues
+    should_assign_to :selected_issues
 
     should_respond_with :success
     should_render_template :show

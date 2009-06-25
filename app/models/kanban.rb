@@ -2,6 +2,7 @@ class Kanban
   attr_accessor :incoming_issues
   attr_accessor :quick_issues
   attr_accessor :backlog_issues
+  attr_accessor :selected_issues
   attr_accessor :settings
   
   def self.find
@@ -10,6 +11,7 @@ class Kanban
     kanban.incoming_issues = kanban.get_incoming_issues
     kanban.quick_issues = kanban.get_quick_issues
     kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.values.flatten.collect(&:id))
+    kanban.selected_issues = KanbanIssue.find_selected
     kanban
   end
 

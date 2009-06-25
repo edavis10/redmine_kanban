@@ -90,6 +90,7 @@ module KanbanTestHelper
 
     new_status = IssueStatus.find_by_name('New')
     unstaffed_status = IssueStatus.find_by_name('Unstaffed')
+    selected_status = IssueStatus.find_by_name('Selected')
     
     # Incoming
     5.times do
@@ -152,6 +153,16 @@ module KanbanTestHelper
                  :priority => low_priority,
                  :status => unstaffed_status,
                  :estimated_hours => 5)
+    end
+
+    # Selected tasks
+    10.times do
+      i = Issue.make(:tracker => public_tracker,
+                     :project => @public_project,
+                     :status => selected_status)
+      KanbanIssue.make(:issue => i,
+                       :user => nil,
+                       :state => "selected")
     end
 
   end

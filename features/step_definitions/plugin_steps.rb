@@ -118,7 +118,9 @@ end
 
 Given /^there are "(.*)" issues prioritized by the Manager$/ do |count|
   Given 'there are "' + count.to_s + '" issues with the "Unstaffed" status'
-  # TODO: Add manger prioritized issues
+  Issue.all(:limit => count.to_i).each do |issue|
+    KanbanIssue.make(:issue => issue, :user => nil, :state => "selected")
+  end
 end
 
 

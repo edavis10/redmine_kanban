@@ -1,0 +1,4 @@
+      <%= content_tag(:h3, l(:kanban_text_selected_requests)) %>
+      <ol id="selected-issues">
+        <%= render(:partial => 'issue', :collection => @selected_issues.collect(&:issue)) unless @selected_issues.empty? %>
+      </ol>
