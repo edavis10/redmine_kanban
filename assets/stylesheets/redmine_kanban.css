@@ -11,7 +11,8 @@
 #staffed-requests #testing { width: 33%;}
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
-.staffed-column { float:left; border: 2px solid #333333; padding: 5px;}
+.staff { border: 2px solid #333333; padding: 5px; min-height: 60px; }
+.staffed-column { float:left; }
 .active-header { width:33%; display: inline;}
 .active-header h3 { display:inline }
 

@@ -1,15 +1,18 @@
   <div class="staff">
-    <div id="user" class="staffed-column">
+    <div id="user" class="staffed-column pane">
       <%= h user.name %>
     </div>
-    <div id="active" class="staffed-column">
+    <div id="active" class="staffed-column pane">
+      <ol id="active-issues-user-<%= h user.id -%>">
         <% if @kanban.active_issues[user].empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
         <%= render(:partial => 'issue', :collection => @kanban.active_issues[user].collect(&:issue)) %>
         <% end %>
+      </ol>
     </div>
-    <div id="testing" class="staffed-column">
+    <div id="testing" class="staffed-column pane">
       TODO
     </div>
+    <div style="clear:both"></div>
   </div>
