@@ -55,7 +55,7 @@ class Kanban
 
   def get_users
     role = Role.find_by_id(@settings["staff_role"])
-    @users = role.members.collect(&:user) if role
+    @users = role.members.collect(&:user).uniq.sort if role
   end
 
   def get_active
