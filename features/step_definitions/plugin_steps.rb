@@ -109,10 +109,14 @@ Given /^there are "(\d*)" issues with the "(.*)" status assigned to "(.*)"$/ do 
   project =  make_project_with_trackers
   issue_status = IssueStatus.find_by_name(status_name)
   tracker = project.trackers.first
-  assigned_to = User.make(:login => assignee)
 
+  assigned_to = User.make(:login => assignee)
+  make_member({:user => assigned_to, :project => project}, [Role.find(:last)])
+  
   count.to_i.times do
-    Issue.make(:project => project, :status => issue_status, :tracker => tracker, :assigned_to => assigned_to)
+    issue = Issue.make(:project => project, :status => issue_status, :tracker => tracker, :assigned_to => assigned_to)
+    KanbanIssue.make(:issue => issue, :user => assigned_to, :state => "active")
+
   end
 end
 
@@ -296,7 +300,9 @@ Then /^I should see "(\d*)" issues in the "(.*)" pane$/ do |count, pane_name|
 end
 
 Then /^I should see "(\d*)" issues in "(.*)"s "(.*)" pane$/ do |count, login, pane_name|
-  assert_select("div##{div_name_to_css(pane_name)}.pane.#{login}") do
+  user = User.find(:first, :conditions => {:login => login})
+
+  assert_select("div##{div_name_to_css(pane_name)}.pane.user-#{user.id}") do
     assert_select("li.issue", :count => count.to_i)
   end
 end

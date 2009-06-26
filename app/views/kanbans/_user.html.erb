@@ -2,7 +2,7 @@
     <div id="user" class="staffed-column pane">
       <%= h user.name %>
     </div>
-    <div id="active" class="staffed-column pane">
+    <div id="active" class="staffed-column pane user-<%= h user.id -%>">
       <ol id="active-issues-user-<%= h user.id -%>">
         <% if @kanban.active_issues[user].empty? %>
         <%= render :partial => 'empty_issue' %>
