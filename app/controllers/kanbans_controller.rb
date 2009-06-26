@@ -16,8 +16,10 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    Kanban.update_sorted_issues(@to, params[:to_issue]) if ['selected'].include?(@to)
-    Kanban.update_sorted_issues(@from, params[:from_issue]) if ['selected'].include?(@from)
+    @user_id = params[:user_id]
+    @user = User.find_by_id(@user_id) # only needed for user specific views
+    Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if ['selected','active'].include?(@to)
+    Kanban.update_sorted_issues(@from, params[:from_issue], @user_id) if ['selected','active'].include?(@from)
 
     saved = change_issue_status(params[:issue_id], params[:from], params[:to], User.current)
 

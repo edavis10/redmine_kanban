@@ -71,15 +71,15 @@ class Kanban
   end
 
   # Updates +target_pane+ so that the KanbanIssues match +sorted_issues+
-  def self.update_sorted_issues(target_pane, sorted_issues)
-    if ['selected'].include?(target_pane)
+  def self.update_sorted_issues(target_pane, sorted_issues, user_id=nil)
+    if ['selected','active'].include?(target_pane)
       if sorted_issues.blank? && !target_pane.blank?
-        KanbanIssue.destroy_all(:state => target_pane)
+        KanbanIssue.destroy_all(:state => target_pane, :user_id => user_id)
       else
         # Remove items that are in the database but not in the
         # sorted_issues
-        KanbanIssue.destroy_all(['state = ? AND issue_id NOT IN (?)','selected', sorted_issues])
-        
+        KanbanIssue.destroy_all(['state = ? AND user_id = ? AND issue_id NOT IN (?)',target_pane, user_id, sorted_issues])
+
         sorted_issues.each_with_index do |issue_id, zero_position|
           kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
           if kanban_issue
@@ -87,12 +87,14 @@ class Kanban
               # Change state
               kanban_issue.send(target_pane.to_sym)
             end
+            kanban_issue.user_id = user_id
             kanban_issue.position = zero_position + 1 # acts_as_list is 1 based
             kanban_issue.save
           else
             kanban_issue = KanbanIssue.new
             kanban_issue.issue_id = issue_id
             kanban_issue.state = target_pane
+            kanban_issue.user_id = user_id
             kanban_issue.position = (zero_position + 1)
             kanban_issue.save
             # Need to resave since acts_as_list automatically moves a

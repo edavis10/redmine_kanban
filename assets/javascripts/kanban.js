@@ -12,7 +12,7 @@ jQuery(function($) {
 
         $("#backlog-issues").sortable({
             cancel: 'a',
-            connectWith: ['#incoming-issues','#selected-issues'],
+            connectWith: ['#incoming-issues','#selected-issues', '.active-issues'],
             items: 'li.issue',
             placeholder: 'drop-accepted',
             dropOnEmpty: true,
@@ -22,6 +22,23 @@ jQuery(function($) {
         });
 
         $("#selected-issues").sortable({
+            cancel: 'a',
+            connectWith: ['#backlog-issues'],
+            items: 'li.issue',
+            placeholder: 'drop-accepted',
+            dropOnEmpty: true,
+            receive: function (event, ui) {
+                updatePanes(ui.item,ui.sender,$(this));
+            },
+            update: function (event, ui) {
+              // Allow drag and drop inside the list
+              if (ui.sender == null && event.target == this) {
+                updatePanes(ui.item,ui.sender,$(this));
+              }
+            }
+        });
+
+        $(".active-issues").sortable({
             cancel: 'a',
             connectWith: ['#backlog-issues'],
             items: 'li.issue',
@@ -55,10 +72,20 @@ jQuery(function($) {
         var from_order = [];
       }
 
+      // Active pane needs to send which user was modified
+      if (to_pane == 'active') {
+        var user_id = to.attr('id').split('-')[3];
+      } else if (from_pane == 'active'){
+        var user_id = from.attr('id').split('-')[3];
+      } else {
+        var user_id = null;
+      }
+
+
         $.ajax({
             type: "PUT",
             url: 'kanban.js',
-            data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order,
+            data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&user_id=' + user_id,
             success: function(response) {
                 var partials = $.secureEvalJSON(response);
                 $(from).parent().html(partials.from);

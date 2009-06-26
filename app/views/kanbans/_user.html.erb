@@ -3,13 +3,7 @@
       <%= h user.name %>
     </div>
     <div id="active" class="staffed-column pane user-<%= h user.id -%>">
-      <ol id="active-issues-user-<%= h user.id -%>">
-        <% if @kanban.active_issues[user].empty? %>
-        <%= render :partial => 'empty_issue' %>
-        <% else %>
-        <%= render(:partial => 'issue', :collection => @kanban.active_issues[user].collect(&:issue)) %>
-        <% end %>
-      </ol>
+      <%= render(:partial => 'active', :locals => {:user => user}) %>
     </div>
     <div id="testing" class="staffed-column pane">
       TODO
