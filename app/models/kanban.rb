@@ -3,15 +3,19 @@ class Kanban
   attr_accessor :quick_issues
   attr_accessor :backlog_issues
   attr_accessor :selected_issues
+  attr_accessor :active_issues
   attr_accessor :settings
+  attr_accessor :users
   
   def self.find
     kanban = Kanban.new
     kanban.settings = Setting.plugin_redmine_kanban
+    kanban.users = kanban.get_users
     kanban.incoming_issues = kanban.get_incoming_issues
     kanban.quick_issues = kanban.get_quick_issues
     kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.values.flatten.collect(&:id))
     kanban.selected_issues = KanbanIssue.find_selected
+    kanban.active_issues = kanban.get_active
     kanban
   end
 
@@ -47,6 +51,19 @@ class Kanban
     }.sort {|a,b|
       a[0].position <=> b[0].position # Sorted based on IssuePriority#position
     }
+  end
+
+  def get_users
+    role = Role.find_by_id(@settings["staff_role"])
+    @users = role.members.collect(&:user) if role
+  end
+
+  def get_active
+    active = {}
+    @users.each do |user|
+      active[user] = KanbanIssue.find_active(user.id)
+    end
+    active
   end
 
   def quick_issue_ids

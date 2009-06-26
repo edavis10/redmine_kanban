@@ -48,6 +48,15 @@ class KanbanIssue < ActiveRecord::Base
     }
   }
   
+  named_scope :find_active, lambda { |user_id|
+    limit = Setting['plugin_redmine_kanban']["panes"]["active"]["limit"].to_i
+    {
+      :limit => limit,
+      :order => 'user_id ASC, position ASC',
+      :conditions => { :user_id => user_id, :state => 'active'}
+    }
+  }
+  
   def remove_user
     self.user = nil
     save!

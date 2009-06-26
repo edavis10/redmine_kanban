@@ -30,6 +30,16 @@ module KanbanTestHelper
     end
   end
 
+  def make_users(count = 3)
+    role = Role.find(:last)
+    @users = []
+    count.times do
+      user = User.make
+      make_member({:user => user, :project => @public_project}, [role])
+      @users << user
+    end
+  end
+
   def make_project
     incoming_project = Project.make(:name => 'Incoming project')
     tracker = Tracker.make(:name => 'Feature')
@@ -83,6 +93,8 @@ module KanbanTestHelper
     private_tracker = @private_project.trackers.first
     @public_project = make_project_with_trackers(:is_public => true)
     public_tracker = @public_project.trackers.first
+
+    make_users
     
     high_priority = IssuePriority.make(:name => "High")
     medium_priority = IssuePriority.make(:name => "Medium")
@@ -91,6 +103,7 @@ module KanbanTestHelper
     new_status = IssueStatus.find_by_name('New')
     unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     selected_status = IssueStatus.find_by_name('Selected')
+    active_status = IssueStatus.find_by_name('Active')
     
     # Incoming
     5.times do
@@ -165,6 +178,17 @@ module KanbanTestHelper
                        :state => "selected")
     end
 
+    # Active tasks
+    @users.each do |user|
+      5.times do
+        i = Issue.make(:tracker => public_tracker,
+                       :project => @public_project,
+                       :status => active_status)
+        KanbanIssue.make(:issue => i,
+                         :user => user,
+                         :state => "active")
+      end
+    end
   end
 end
 include KanbanTestHelper

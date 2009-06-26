@@ -1,0 +1,15 @@
+  <div class="staff">
+    <div id="user" class="staffed-column">
+      <%= h user.name %>
+    </div>
+    <div id="active" class="staffed-column">
+        <% if @kanban.active_issues[user].empty? %>
+        <%= render :partial => 'empty_issue' %>
+        <% else %>
+        <%= render(:partial => 'issue', :collection => @kanban.active_issues[user].collect(&:issue)) %>
+        <% end %>
+    </div>
+    <div id="testing" class="staffed-column">
+      TODO
+    </div>
+  </div>

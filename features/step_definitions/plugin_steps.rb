@@ -104,6 +104,18 @@ Given /^there are "(\d*)" issues with the "(.*)" status$/ do |count, status_name
   end
 end
 
+# TODO: refactor with above
+Given /^there are "(\d*)" issues with the "(.*)" status assigned to "(.*)"$/ do |count, status_name, assignee|
+  project =  make_project_with_trackers
+  issue_status = IssueStatus.find_by_name(status_name)
+  tracker = project.trackers.first
+  assigned_to = User.make(:login => assignee)
+
+  count.to_i.times do
+    Issue.make(:project => project, :status => issue_status, :tracker => tracker, :assigned_to => assigned_to)
+  end
+end
+
 Given /^there are "(\d*)" issues with the "(.*)" status and "(.*)" priority$/ do |count, status_name, priority_name|
   @project =  make_project_with_trackers if @project.nil?
   issue_status = IssueStatus.find_by_name(status_name)
@@ -215,7 +227,7 @@ end
 Then /^I should see an? "(.*)" column in "(.*)"$/ do |inner_column_name, column_name|
   assert_select("#kanban") do
     assert_select("div##{div_name_to_css(column_name)}.column") do
-      assert_select("div##{div_name_to_css(inner_column_name)}.column")
+      assert_select("div.active-header.#{div_name_to_css(inner_column_name)}")
     end
   end
 end
@@ -279,6 +291,12 @@ end
 
 Then /^I should see "(\d*)" issues in the "(.*)" pane$/ do |count, pane_name|
   assert_select("div##{div_name_to_css(pane_name)}.pane") do
+    assert_select("li.issue", :count => count.to_i)
+  end
+end
+
+Then /^I should see "(\d*)" issues in "(.*)"s "(.*)" pane$/ do |count, login, pane_name|
+  assert_select("div##{div_name_to_css(pane_name)}.pane.#{login}") do
     assert_select("li.issue", :count => count.to_i)
   end
 end

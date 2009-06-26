@@ -9,7 +9,8 @@ Feature: Kanban Page
     Then I should see a "top" menu item called "Kanban"
 
   Scenario: Kanban columns
-    Given I am logged in
+    Given the plugin is configured
+    And I am logged in
     And I am on the Kanban page
 
     Then I should see an "Unstaffed Requests" column

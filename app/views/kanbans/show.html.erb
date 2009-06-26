@@ -20,15 +20,12 @@
     </div>
   </div>
   <div id="staffed-requests" class="column">
-    <div id="user" class="column">
-      <%= content_tag(:h3, l(:kanban_text_user)) %>
-    </div>
-    <div id="active" class="column">
-      <%= content_tag(:h3, l(:kanban_text_active)) %>
-    </div>
-    <div id="testing" class="column">
-      <%= content_tag(:h3, l(:kanban_text_testing)) %>
-    </div>
+    <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "active-header user") %>
+    <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "active-header active") %>
+    <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "active-header testing") %>
+
+    <%= render :partial => 'user', :collection => @kanban.users %>
+
   </div>
   <div id="finished-requests" class="column">
     <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>

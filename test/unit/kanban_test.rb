@@ -87,6 +87,32 @@ class KanbanTest < Test::Unit::TestCase
         end
       end
     end
+
+    context "for active issues" do
+      
+      should "only get active issues up to the limit" do
+        assert_equal 3, @kanban.active_issues.size # Users
+        assert_equal 15, @kanban.active_issues.values.collect.flatten.size # Issues
+      end
+
+      should "only get quick issues with the configured Active status" do
+        @kanban.active_issues.each do |user, kanban_issues|
+          kanban_issues.each do |kanban_issue|
+            assert_equal 'Active', kanban_issue.issue.status.name
+          end
+        end
+      end
+
+      should "group quick issues by User" do
+        @kanban.active_issues.keys.each do |key|
+          assert key.is_a?(User)
+        end
+      end
+    end
+
+    should "set @users based on the configured role" do
+      assert_equal 3, @kanban.users.length
+    end
   end
 
   context "#update_sorted_issues" do
