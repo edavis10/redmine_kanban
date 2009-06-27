@@ -6,6 +6,18 @@ class Kanban
   attr_accessor :active_issues
   attr_accessor :settings
   attr_accessor :users
+
+  def self.non_kanban_issues_panes
+     ["incoming","backlog"]
+  end
+
+  def self.kanban_issues_panes
+    ['selected','active']
+  end
+
+  def self.valid_panes
+    kanban_issues_panes + non_kanban_issues_panes
+  end
   
   def self.find
     kanban = Kanban.new
@@ -72,7 +84,7 @@ class Kanban
 
   # Updates +target_pane+ so that the KanbanIssues match +sorted_issues+
   def self.update_sorted_issues(target_pane, sorted_issues, user_id=nil)
-    if ['selected','active'].include?(target_pane)
+    if Kanban.kanban_issues_panes.include?(target_pane)
       if sorted_issues.blank? && !target_pane.blank?
         KanbanIssue.destroy_all(:state => target_pane, :user_id => user_id)
       else

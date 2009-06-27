@@ -4,7 +4,7 @@ module KanbansHelper
   end
 
   def render_pane_to_js(pane)
-    if ["incoming","backlog","selected","active"].include?(pane)
+    if Kanban.valid_panes.include?(pane)
       return render_to_string(:partial => pane, :locals => {:user => @user })
     else
       ''
