@@ -78,8 +78,12 @@ class Kanban
       else
         # Remove items that are in the database but not in the
         # sorted_issues
-        KanbanIssue.destroy_all(['state = ? AND user_id = ? AND issue_id NOT IN (?)',target_pane, user_id, sorted_issues])
-
+        if user_id
+          KanbanIssue.destroy_all(['state = ? AND user_id = ? AND issue_id NOT IN (?)',target_pane, user_id, sorted_issues])
+        else
+          KanbanIssue.destroy_all(['state = ? AND issue_id NOT IN (?)',target_pane, sorted_issues])
+        end
+          
         sorted_issues.each_with_index do |issue_id, zero_position|
           kanban_issue = KanbanIssue.find_by_issue_id(issue_id)
           if kanban_issue
