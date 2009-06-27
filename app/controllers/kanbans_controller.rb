@@ -16,7 +16,7 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    @user_id = params[:user_id]
+    @user_id = params[:user_id] != 'null' ? params[:user_id] : nil # Javascript nulls
     @user = User.find_by_id(@user_id) # only needed for user specific views
     Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if ['selected','active'].include?(@to)
     Kanban.update_sorted_issues(@from, params[:from_issue], @user_id) if ['selected','active'].include?(@from)
