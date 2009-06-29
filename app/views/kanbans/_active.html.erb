@@ -1,4 +1,4 @@
-      <ol id="active-issues-user-<%= h user.id -%>" class="active-issues allowed">
+      <ol id="active-issues-user-<%= h user.id -%>" class="active-issues <%= allowed_to_assign_staffed_issue_to(user) -%>">
         <% if @kanban.active_issues[user].empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
