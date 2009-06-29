@@ -40,7 +40,7 @@ class Kanban
 
   def get_backlog_issues(exclude_ids=[])
     issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
-                               :order => "#{Issue.table_name}.created_on ASC",
+                               :order => "#{IssuePriority.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
                                :conditions => ["#{Issue.table_name}.status_id IN (?) AND #{Issue.table_name}.id NOT IN (?)", @settings['panes']['backlog']['status'], exclude_ids])
 
@@ -54,7 +54,7 @@ class Kanban
   # TODO: similar to backlog issues
   def get_quick_issues
     issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
-                               :order => "#{Issue.table_name}.created_on ASC",
+                               :order => "#{IssuePriority.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
                                :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
 
