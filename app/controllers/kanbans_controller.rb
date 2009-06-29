@@ -19,7 +19,6 @@ class KanbansController < ApplicationController
     @user_id = params[:user_id] != 'null' ? params[:user_id] : nil # Javascript nulls
     @user = User.find_by_id(@user_id) # only needed for user specific views
     Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if Kanban.kanban_issues_panes.include?(@to)
-    Kanban.update_sorted_issues(@from, params[:from_issue], @user_id) if Kanban.kanban_issues_panes.include?(@from)
 
     saved = change_issue_status(params[:issue_id], params[:from], params[:to], User.current)
 
