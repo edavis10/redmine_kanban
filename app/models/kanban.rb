@@ -9,7 +9,7 @@ class Kanban
   attr_accessor :users
 
   def self.non_kanban_issues_panes
-     ["incoming","backlog"]
+     ["incoming","backlog", "quick"]
   end
 
   def self.kanban_issues_panes

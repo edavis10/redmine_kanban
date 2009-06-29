@@ -21,6 +21,17 @@ jQuery(function($) {
       }
     });
 
+    $("#quick-issues").sortable({
+      cancel: 'a',
+      connectWith: ['#selected-issues', '.active-issues', '.testing-issues'],
+      items: 'li.issue',
+      placeholder: 'drop-accepted',
+      dropOnEmpty: true,
+      receive: function (event, ui) {
+        updatePanes(ui.item,ui.sender,$(this));
+      }
+    });
+
     $("#selected-issues").sortable({
       cancel: 'a',
       connectWith: ['#backlog-issues', '.active-issues', '.testing-issues'],
