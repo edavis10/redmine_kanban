@@ -1,11 +1,11 @@
   <div class="staff">
-    <div id="user" class="staffed-column pane">
+    <div id="user-<%= h user.id -%>" class="staffed-column pane user">
       <%= h user.name %>
     </div>
-    <div id="active" class="staffed-column pane user-<%= h user.id -%>">
+    <div id="active-<%= h user.id -%>" class="staffed-column pane active user-<%= h user.id -%>">
       <%= render(:partial => 'active', :locals => {:user => user}) %>
     </div>
-    <div id="testing" class="staffed-column pane user-<%= h user.id -%>">
+    <div id="testing-<%= h user.id -%>" class="staffed-column pane testing user-<%= h user.id -%>">
       <%= render(:partial => 'testing', :locals => {:user => user}) %>
     </div>
     <div style="clear:both"></div>

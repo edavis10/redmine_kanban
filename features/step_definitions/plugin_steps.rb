@@ -235,7 +235,7 @@ end
 Then /^I should see an? "(.*)" column in "(.*)"$/ do |inner_column_name, column_name|
   assert_select("#kanban") do
     assert_select("div##{div_name_to_css(column_name)}.column") do
-      assert_select("div.active-header.#{div_name_to_css(inner_column_name)}")
+      assert_select("div.staffed-column.#{div_name_to_css(inner_column_name)}")
     end
   end
 end
@@ -306,7 +306,7 @@ end
 Then /^I should see "(\d*)" issues in "(.*)"s "(.*)" pane$/ do |count, login, pane_name|
   user = User.find(:first, :conditions => {:login => login})
 
-  assert_select("div##{div_name_to_css(pane_name)}.pane.user-#{user.id}") do
+  assert_select("div##{div_name_to_css(pane_name)}-#{user.id}.pane.user-#{user.id}") do
     assert_select("li.issue", :count => count.to_i)
   end
 end

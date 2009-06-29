@@ -6,9 +6,9 @@
 
 #incoming {min-height: 200px;}
 #backlog { }
-#staffed-requests #user { width: 25%;}
-#staffed-requests #active { width: 33%;}
-#staffed-requests #testing { width: 33%;}
+#staffed-requests .user { width: 25%;}
+#staffed-requests .active { width: 33%;}
+#staffed-requests .testing { width: 33%;}
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
 .staff { border: 2px solid #333333; padding: 5px; min-height: 60px; }
@@ -19,6 +19,7 @@
 .pane { }
 
 #staffed-requests .column { padding: 0; }
+#staffed-requests-header { min-height: 1.5em; border: none; text-align: center;}
 
 div.pane ol { list-style: none; padding-left: 0px; }
 div.pane ol li { padding: 1px 0; }
