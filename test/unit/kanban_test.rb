@@ -95,7 +95,7 @@ class KanbanTest < Test::Unit::TestCase
         assert_equal 15, @kanban.active_issues.values.collect.flatten.size # Issues
       end
 
-      should "only get quick issues with the configured Active status" do
+      should "only get issues with the configured Active status" do
         @kanban.active_issues.each do |user, kanban_issues|
           kanban_issues.each do |kanban_issue|
             assert_equal 'Active', kanban_issue.issue.status.name
@@ -103,7 +103,7 @@ class KanbanTest < Test::Unit::TestCase
         end
       end
 
-      should "group quick issues by User" do
+      should "group active issues by User" do
         @kanban.active_issues.keys.each do |key|
           assert key.is_a?(User)
         end
