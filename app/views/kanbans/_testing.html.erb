@@ -1,0 +1,8 @@
+      <ol id="testing-issues-user-<%= h user.id -%>" class="testing-issues">
+        <% if @kanban.testing_issues[user].empty? %>
+        <%= render :partial => 'empty_issue' %>
+        <% else %>
+        <%= render(:partial => 'issue', :collection => @kanban.testing_issues[user].collect(&:issue)) %>
+        <% end %>
+      </ol>
+

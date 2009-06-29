@@ -110,6 +110,28 @@ class KanbanTest < Test::Unit::TestCase
       end
     end
 
+    context "for testing issues" do
+      
+      should "only get testing issues up to the limit" do
+        assert_equal 3, @kanban.testing_issues.size # Users
+        assert_equal 15, @kanban.testing_issues.values.collect.flatten.size # Issues
+      end
+
+      should "only get issues with the configured Testing status" do
+        @kanban.testing_issues.each do |user, kanban_issues|
+          kanban_issues.each do |kanban_issue|
+            assert_equal 'Test-N-Doc', kanban_issue.issue.status.name
+          end
+        end
+      end
+
+      should "group testing issues by User" do
+        @kanban.testing_issues.keys.each do |key|
+          assert key.is_a?(User)
+        end
+      end
+    end
+
     should "set @users based on the configured role" do
       assert_equal 3, @kanban.users.length
     end

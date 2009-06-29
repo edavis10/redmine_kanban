@@ -104,6 +104,7 @@ module KanbanTestHelper
     unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     selected_status = IssueStatus.find_by_name('Selected')
     active_status = IssueStatus.find_by_name('Active')
+    testing_status = IssueStatus.find_by_name('Test-N-Doc')
     
     # Incoming
     5.times do
@@ -189,6 +190,19 @@ module KanbanTestHelper
                          :state => "active")
       end
     end
+
+    # Testing tasks
+    @users.each do |user|
+      5.times do
+        i = Issue.make(:tracker => public_tracker,
+                       :project => @public_project,
+                       :status => testing_status)
+        KanbanIssue.make(:issue => i,
+                         :user => user,
+                         :state => "testing")
+      end
+    end
+
   end
 end
 include KanbanTestHelper

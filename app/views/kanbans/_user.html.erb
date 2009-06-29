@@ -5,8 +5,8 @@
     <div id="active" class="staffed-column pane user-<%= h user.id -%>">
       <%= render(:partial => 'active', :locals => {:user => user}) %>
     </div>
-    <div id="testing" class="staffed-column pane">
-      TODO
+    <div id="testing" class="staffed-column pane user-<%= h user.id -%>">
+      <%= render(:partial => 'testing', :locals => {:user => user}) %>
     </div>
     <div style="clear:both"></div>
   </div>

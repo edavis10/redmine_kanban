@@ -4,6 +4,7 @@ class Kanban
   attr_accessor :backlog_issues
   attr_accessor :selected_issues
   attr_accessor :active_issues
+  attr_accessor :testing_issues
   attr_accessor :settings
   attr_accessor :users
 
@@ -28,6 +29,7 @@ class Kanban
     kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.values.flatten.collect(&:id))
     kanban.selected_issues = KanbanIssue.find_selected
     kanban.active_issues = kanban.get_active
+    kanban.testing_issues = kanban.get_testing
     kanban
   end
 
@@ -78,6 +80,14 @@ class Kanban
     active
   end
 
+  def get_testing
+    testing = {}
+    @users.each do |user|
+      testing[user] = KanbanIssue.find_testing(user.id)
+    end
+    testing
+  end
+  
   def quick_issue_ids
     return @quick_issues.values.flatten.collect(&:id)
   end
