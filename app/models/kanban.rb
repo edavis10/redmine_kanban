@@ -41,10 +41,14 @@ class Kanban
   end
 
   def get_backlog_issues(exclude_ids=[])
+    conditions = ARCondition.new
+    conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
+    conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
+
     issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
                                :order => "#{IssuePriority.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
-                               :conditions => ["#{Issue.table_name}.status_id IN (?) AND #{Issue.table_name}.id NOT IN (?)", @settings['panes']['backlog']['status'], exclude_ids])
+                               :conditions => conditions.conditions)
 
     return issues.group_by {|issue|
       issue.priority
