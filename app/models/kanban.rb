@@ -113,14 +113,14 @@ class Kanban
               # Change state
               kanban_issue.send(target_pane.to_sym)
             end
-            kanban_issue.user_id = user_id
+            kanban_issue.user_id = user_id unless target_pane == 'selected'
             kanban_issue.position = zero_position + 1 # acts_as_list is 1 based
             kanban_issue.save
           else
             kanban_issue = KanbanIssue.new
             kanban_issue.issue_id = issue_id
             kanban_issue.state = target_pane
-            kanban_issue.user_id = user_id
+            kanban_issue.user_id = user_id unless target_pane == 'selected'
             kanban_issue.position = (zero_position + 1)
             kanban_issue.save
             # Need to resave since acts_as_list automatically moves a

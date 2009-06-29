@@ -23,7 +23,7 @@ jQuery(function($) {
 
     $("#selected-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues'],
+      connectWith: ['#backlog-issues', '.active-issues', '.testing-issues'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -40,7 +40,7 @@ jQuery(function($) {
 
     $(".active-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '.testing-issues'],
+      connectWith: ['#backlog-issues', '#selected-issues', '.testing-issues'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -57,7 +57,7 @@ jQuery(function($) {
 
     $(".testing-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues','.active-issues'],
+      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
