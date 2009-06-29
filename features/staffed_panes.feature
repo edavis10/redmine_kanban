@@ -11,3 +11,11 @@ Feature: Staffed Panes
 
     Then I should see "5" issues in "John"s "Active" pane
 
+  Scenario: Display a list of Testing issues
+    Given the plugin is configured
+    And I am logged in
+    And there are "5" issues with the "Testing" status assigned to "John"
+    And I am on the Kanban page
+
+    Then I should see "5" issues in "John"s "Testing" pane
+
