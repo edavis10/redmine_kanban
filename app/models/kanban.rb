@@ -13,7 +13,7 @@ class Kanban
   end
 
   def self.kanban_issues_panes
-    ['selected','active']
+    ['selected','active','testing']
   end
 
   def self.valid_panes
