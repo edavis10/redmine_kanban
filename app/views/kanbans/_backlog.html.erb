@@ -1,4 +1,8 @@
       <%= content_tag(:h3, l(:kanban_text_backlog)) %>
       <ol id="backlog-issues">
+        <% if @backlog_issues.empty? %>
+        <%= render :partial => 'empty_issue' %>
+        <% else %>
         <%= render :partial => 'grouped_issues', :object => @backlog_issues %>
+        <% end %>
       </ol>
