@@ -1,5 +1,18 @@
 require 'redmine'
 
+# Patches to the Redmine core.
+require 'dispatcher'
+
+Dispatcher.to_prepare :redmine_kanban do
+  require_dependency 'issue'
+  # Guards against including the module multiple time (like in tests)
+  # and registering multiple callbacks
+  unless Issue.included_modules.include? RedmineKanban::IssuePatch
+    Issue.send(:include, RedmineKanban::IssuePatch)
+  end
+end
+
+
 Redmine::Plugin.register :redmine_kanban do
   name 'Kanban'
   author 'Eric Davis'

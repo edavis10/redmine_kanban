@@ -109,4 +109,74 @@ class KanbanIssueTest < Test::Unit::TestCase
       assert_equal "state = 'none' AND user_id = #{@kanban_issue.user_id}", @kanban_issue.scope_condition
     end
   end
+
+  context 'update_from_issue' do
+    context 'to a status without a kanban issue setting' do
+      should 'remove all KanbanIssues for the issue' do
+        configure_plugin
+        setup_kanban_issues
+        unconfigured_status = IssueStatus.make(:name => 'NoKanban')
+        kanban = KanbanIssue.last
+        issue = kanban.issue
+
+        assert issue
+        issue.status = unconfigured_status
+        assert issue.save
+        KanbanIssue.update_from_issue(issue)
+        assert_nil KanbanIssue.find_by_id(kanban.id)
+      end
+    end
+
+    context 'to a status with a kanban status' do
+      setup {
+        configure_plugin
+        setup_kanban_issues
+      }
+      
+      should 'create a new KanbanIssue if there is not one already' do
+        assert_difference('KanbanIssue.count') do
+          @issue = Issue.make(:tracker => @public_project.trackers.first,
+                              :project => @public_project,
+                              :status => IssueStatus.find_by_name('Selected'))
+        end
+        
+        kanban_issue = KanbanIssue.find(:last)
+        assert_equal @issue, kanban_issue.issue
+        assert_equal 'selected', kanban_issue.state
+      end
+
+      should 'change the state of an existing KanbanIssue' do
+        kanban_issue = KanbanIssue.find_by_state('selected')
+        assert_equal 'selected', kanban_issue.state
+
+        issue = kanban_issue.issue
+        issue.status = IssueStatus.find_by_name('Active')
+        issue.save
+        kanban_issue.reload
+
+        assert_equal 'active', kanban_issue.state
+      end
+
+      should 'assign the KanbanIssue to the assigned to user if the state is active or testing' do
+        kanban_issue = KanbanIssue.find_by_state('selected')
+        assert_equal 'selected', kanban_issue.state
+
+        issue = kanban_issue.issue
+        issue.assigned_to = User.make
+        issue.status = IssueStatus.find_by_name('Active')
+        issue.save
+        kanban_issue.reload
+
+        assert_equal issue.assigned_to, kanban_issue.user
+      end
+    end
+
+    should 'return true' do
+      @public_project = make_project_with_trackers(:is_public => true)
+      issue = Issue.make(:tracker => @public_project.trackers.first,
+                         :project => @public_project)
+
+      assert KanbanIssue.update_from_issue(issue)
+    end
+  end
 end

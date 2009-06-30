@@ -72,4 +72,47 @@ class KanbanIssue < ActiveRecord::Base
     self.user = nil
     save!
   end
+
+  # Called when an issue is updated.  This will create, remove, or
+  # modify a KanbanIssue based on an Issue's status change
+  def self.update_from_issue(issue)
+    return true if issue.nil?
+    if self.configured_statuses.include? issue.status.id.to_s
+      kanban_issue = KanbanIssue.find_or_initialize_by_issue_id(issue.id)
+      kanban_issue.issue_id = issue.id
+      kanban_issue.state = pane_for_status(issue.status)
+
+      if kanban_issue.new_record?
+        kanban_issue.position = 0
+      end
+
+      if ['active','testing'].include? kanban_issue.state
+        kanban_issue.user = issue.assigned_to
+      end
+      
+      return kanban_issue.save
+    else
+      KanbanIssue.destroy_all(['issue_id = ?', issue.id])
+    end
+    return true
+  end
+
+  private
+  def self.configured_statuses
+    valid_statuses = []
+    Setting.plugin_redmine_kanban['panes'].each do |pane, options|
+      if Kanban.kanban_issues_panes.include?(pane)
+        valid_statuses << options["status"].to_s
+      end
+    end
+    valid_statuses
+  end
+
+  def self.pane_for_status(status)
+    Setting.plugin_redmine_kanban['panes'].each do |pane, options|
+      if options['status'] && options['status'].to_i == status.id
+        return pane
+      end
+    end
+  end
 end

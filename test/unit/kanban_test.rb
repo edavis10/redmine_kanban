@@ -145,7 +145,8 @@ class KanbanTest < Test::Unit::TestCase
 
     context "with 0 issues" do
       should 'remove all KanbanIssues for that pane' do
-        assert_difference('KanbanIssue.count', -10) do
+        total = KanbanIssue.count(:conditions => {:state => 'selected'}) * -1
+        assert_difference('KanbanIssue.count', total) do
           Kanban.update_sorted_issues('selected',[])
         end
       end
