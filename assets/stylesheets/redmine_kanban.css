@@ -1,14 +1,15 @@
 #kanban {width: 100%;}
 #unstaffed-requests { width: 17%; background-color: #E6E6FF; }
 #selected-requests { width: 17%; background-color: #E6E6FF; }
-#staffed-requests { width: 44%; background-color: #FFFFCC; }
+#staffed-requests { width: 62%; background-color: #FFFFCC; }
 #finished-requests { width: 17%; background-color: #C2C29B; }
 
 #incoming {min-height: 200px;}
 #backlog { }
-#staffed-requests .user { width: 25%;}
-#staffed-requests .active { width: 33%;}
-#staffed-requests .testing { width: 33%;}
+#staffed-requests .user { width: 10%;}
+#staffed-requests .active { width: 29%;}
+#staffed-requests .testing { width: 29%;}
+#staffed-requests .finished { width: 29%;}
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
 .staff { border: 2px solid #333333; padding: 5px; min-height: 60px; }
