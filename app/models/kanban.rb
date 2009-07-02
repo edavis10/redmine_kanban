@@ -80,7 +80,7 @@ class Kanban
     active = {}
     @users.each do |user|
       active[user] = KanbanIssue.find_active(user.id)
-    end
+    end unless @users.blank?
     active
   end
 
@@ -88,7 +88,7 @@ class Kanban
     testing = {}
     @users.each do |user|
       testing[user] = KanbanIssue.find_testing(user.id)
-    end
+    end unless @users.blank?
     testing
   end
   
