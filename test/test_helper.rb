@@ -78,6 +78,9 @@ module KanbanTestHelper
       "incoming"=>{
         "status"=> IssueStatus.find_by_name('New').id,
         "limit"=>"5"
+      },
+      "finished"=>{
+        "status"=> IssueStatus.find_by_name('Closed').id
       }
       }}.merge(configuration_change)
 
@@ -105,6 +108,8 @@ module KanbanTestHelper
     selected_status = IssueStatus.find_by_name('Selected')
     active_status = IssueStatus.find_by_name('Active')
     testing_status = IssueStatus.find_by_name('Test-N-Doc')
+    closed_status = IssueStatus.find_by_name('Closed')
+    rejected_status = IssueStatus.find_by_name('Rejected')
     
     # Incoming
     5.times do
@@ -201,6 +206,22 @@ module KanbanTestHelper
                          :user => user,
                          :state => "testing")
       end
+    end
+
+    # Finished tasks
+    @users.each do |user|
+      5.times do
+        Issue.make(:tracker => public_tracker,
+                   :project => @public_project,
+                   :status => closed_status,
+                   :assigned_to => user)
+      end
+
+      # Extra issues that should not show up
+      Issue.make(:tracker => public_tracker,
+                 :project => @public_project,
+                 :status => rejected_status,
+                 :assigned_to => user)
     end
 
   end

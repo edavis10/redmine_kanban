@@ -24,13 +24,12 @@
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "staffed-column user") %>
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active") %>
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "staffed-column testing") %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "staffed-column finished") %>
     </div>
+    <div style="clear:both"></div>
 
     <%= render :partial => 'user', :collection => @kanban.users %>
 
-  </div>
-  <div id="finished-requests" class="column">
-    <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
   </div>
 </div>
 

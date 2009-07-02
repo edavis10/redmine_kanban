@@ -5,6 +5,7 @@ class Kanban
   attr_accessor :selected_issues
   attr_accessor :active_issues
   attr_accessor :testing_issues
+  attr_accessor :finished_issues
   attr_accessor :settings
   attr_accessor :users
 
@@ -30,6 +31,7 @@ class Kanban
     kanban.selected_issues = KanbanIssue.find_selected
     kanban.active_issues = kanban.get_active
     kanban.testing_issues = kanban.get_testing
+    kanban.finished_issues = kanban.get_finished_issues
     kanban
   end
 
@@ -69,6 +71,15 @@ class Kanban
     }.sort {|a,b|
       a[0].position <=> b[0].position # Sorted based on IssuePriority#position
     }
+  end
+
+  # TODO: similar to backlog issues
+  def get_finished_issues
+    issues = Issue.visible.all(:include => :assigned_to,
+                               :order => "#{Issue.table_name}.updated_on DESC",
+                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['finished']['status'], 7.days.ago])
+
+    return issues.group_by(&:assigned_to)
   end
 
   def get_users

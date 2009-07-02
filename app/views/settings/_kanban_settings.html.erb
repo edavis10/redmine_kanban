@@ -59,4 +59,16 @@ end
   <%= issue_status_pane('selected') %>
   <%= issue_status_pane('active') %>
   <%= issue_status_pane('testing') %>
+  <p>
+    <% finished_status = @settings['panes']['finished'] && @settings['panes']['finished']['status'] ? @settings['panes']['finished']['status'].to_i : ''    %>
+
+    <%= content_tag(:label, l("kanban_label_finished_pane".to_sym)) + 
+      select_tag("settings[panes][finished][status]",
+                 content_tag(:option, '') +
+                 options_from_collection_for_select(IssueStatus.all(:conditions => {:is_closed => true}),
+                                                    :id,
+                                                    :name,
+                                                    finished_status)) %>
+  </p>
+
 </fieldset>

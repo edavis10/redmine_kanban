@@ -42,6 +42,9 @@ Given /^the plugin is configured$/ do
       "incoming"=>{
         "status"=> IssueStatus.find_by_name('New').id,
         "limit"=>"5"
+      },
+      "finished"=>{
+        "status"=> IssueStatus.find_by_name('Closed').id
       }
     }}
     

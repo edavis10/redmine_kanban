@@ -132,6 +132,30 @@ class KanbanTest < Test::Unit::TestCase
       end
     end
 
+    context "for finished issues" do
+      should "only get issues with the configured Finished status" do
+        @kanban.finished_issues.each do |user, issues|
+          issues.each do |issue|
+            assert_equal 'Closed', issue.status.name
+          end
+        end
+      end
+
+      should "only get issues from the last 7 days" do
+        @kanban.finished_issues.each do |user, issues|
+          issues.each do |issue|
+            assert issue.updated_on > 7.days.ago
+          end
+        end
+      end
+    
+      should "group issues by User" do
+        @kanban.finished_issues.keys.each do |key|
+          assert key.is_a?(User)
+        end
+      end
+    end
+
     should "set @users based on the configured role" do
       assert_equal 3, @kanban.users.length
     end

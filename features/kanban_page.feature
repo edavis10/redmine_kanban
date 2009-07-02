@@ -16,7 +16,6 @@ Feature: Kanban Page
     Then I should see an "Unstaffed Requests" column
     And I should see a "Selected Requests" column
     And I should see a "Staffed Requests" column
-    And I should see a "Finished Requests" column
 
   Scenario: Kanban panes
     Given the plugin is configured

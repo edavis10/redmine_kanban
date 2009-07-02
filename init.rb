@@ -31,7 +31,8 @@ Redmine::Plugin.register :redmine_kanban do
                'selected' => { 'status' => nil, 'limit' => 8},
                'quick-tasks' => {'limit' => 5},
                'active' => { 'status' => nil, 'limit' => 5},
-               'testing' => { 'status' => nil, 'limit' => 5}
+               'testing' => { 'status' => nil, 'limit' => 5},
+               'finished' => {'status' => nil}
              }
            })
   
