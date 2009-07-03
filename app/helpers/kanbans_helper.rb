@@ -17,4 +17,12 @@ module KanbansHelper
   def allowed_to_assign_staffed_issue_to(user)
     User.current == user ? 'allowed' : ''
   end
+
+  def over_pane_limit?(limit, counter)
+    if counter >= limit # 0 based counter
+      return 'over-limit'
+    else
+      return ''
+    end
+  end
 end

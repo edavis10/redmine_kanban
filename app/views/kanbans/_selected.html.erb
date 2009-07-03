@@ -3,6 +3,8 @@
         <% if @selected_issues.empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
-        <%= render(:partial => 'issue', :collection => @selected_issues.collect(&:issue)) %>
+        <%= render(:partial => 'issue',
+                   :collection => @selected_issues.collect(&:issue),
+                   :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["selected"]["limit"].to_i }) %>
         <% end %>
       </ol>

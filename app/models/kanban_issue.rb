@@ -39,30 +39,24 @@ class KanbanIssue < ActiveRecord::Base
     transitions :to => :testing, :from => [:none, :selected, :active]
   end
 
-  # Named with a find_ prefix becasue of the name conflict with the
+  # Named with a find_ prefix because of the name conflict with the
   # state transitions.
   named_scope :find_selected, lambda {
-    limit = Setting['plugin_redmine_kanban']["panes"]["selected"]["limit"].to_i
     {
-      :limit => limit,
       :order => 'position ASC',
       :conditions => { :user_id => nil, :state => 'selected'}
     }
   }
 
   named_scope :find_active, lambda { |user_id|
-    limit = Setting['plugin_redmine_kanban']["panes"]["active"]["limit"].to_i
     {
-      :limit => limit,
       :order => 'user_id ASC, position ASC',
       :conditions => { :user_id => user_id, :state => 'active'}
     }
   }
 
   named_scope :find_testing, lambda { |user_id|
-    limit = Setting['plugin_redmine_kanban']["panes"]["testing"]["limit"].to_i
     {
-      :limit => limit,
       :order => 'user_id ASC, position ASC',
       :conditions => { :user_id => user_id, :state => 'testing'}
     }

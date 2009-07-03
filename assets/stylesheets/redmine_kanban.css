@@ -25,6 +25,8 @@
 div.pane ol { list-style: none; padding-left: 0px; }
 div.pane ol li { padding: 1px 0; }
 div.pane ol li:hover { background-color:#ffffdd; }
+div.pane li.over-limit { background-color: #F00000; }
+div.pane li.over-limit:hover { background-color: #FF0000; }
 
 #backlog-issues p, #quick-issues p {margin: 0; font-weight: bold; }
 ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15px;}

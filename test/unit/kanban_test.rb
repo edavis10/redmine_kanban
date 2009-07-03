@@ -95,8 +95,8 @@ class KanbanTest < Test::Unit::TestCase
         @kanban = Kanban.find
       }
 
-      should "only get selected issues up to the limit" do
-        assert_equal 8, @kanban.selected_issues.length
+      should "get all selected issues" do
+        assert_equal 10, @kanban.selected_issues.length
       end
 
       should "only get selected issues with the configured status" do
@@ -112,7 +112,7 @@ class KanbanTest < Test::Unit::TestCase
         @kanban = Kanban.find
       }
       
-      should "only get active issues up to the limit" do
+      should "only get all active issues" do
         assert_equal 3, @kanban.active_issues.size # Users
         assert_equal 15, @kanban.active_issues.values.collect.flatten.size # Issues
       end
@@ -138,7 +138,7 @@ class KanbanTest < Test::Unit::TestCase
         @kanban = Kanban.find
       }
       
-      should "only get testing issues up to the limit" do
+      should "only get all testing issues" do
         assert_equal 3, @kanban.testing_issues.size # Users
         assert_equal 15, @kanban.testing_issues.values.collect.flatten.size # Issues
       end

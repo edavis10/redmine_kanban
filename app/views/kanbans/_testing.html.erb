@@ -2,7 +2,9 @@
         <% if @kanban.testing_issues[user].empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
-        <%= render(:partial => 'issue', :collection => @kanban.testing_issues[user].collect(&:issue)) %>
+        <%= render(:partial => 'issue',
+                   :collection => @kanban.testing_issues[user].collect(&:issue),
+                   :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["testing"]["limit"].to_i }) %>
         <% end %>
       </ol>
 
