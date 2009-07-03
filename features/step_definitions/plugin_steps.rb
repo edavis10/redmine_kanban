@@ -118,12 +118,6 @@ Given /^there are "(\d*)" issues with the "(.*)" status assigned to "(.*)"$/ do 
   
   count.to_i.times do
     issue = Issue.make(:project => project, :status => issue_status, :tracker => tracker, :assigned_to => assigned_to)
-    if status_name.match(/active/i)
-      KanbanIssue.make(:issue => issue, :user => assigned_to, :state => "active")
-    else
-      KanbanIssue.make(:issue => issue, :user => assigned_to, :state => "testing")
-    end
-
   end
 end
 

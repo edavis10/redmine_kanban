@@ -193,12 +193,9 @@ module KanbanTestHelper
     selected_status = IssueStatus.find_by_name('Selected')
     # Selected tasks
     10.times do
-      i = Issue.make(:tracker => @public_tracker,
-                     :project => @public_project,
-                     :status => selected_status)
-      KanbanIssue.make(:issue => i,
-                       :user => nil,
-                       :state => "selected")
+      Issue.make(:tracker => @public_tracker,
+                 :project => @public_project,
+                 :status => selected_status)
     end
 
   end
@@ -208,12 +205,10 @@ module KanbanTestHelper
     # Active tasks
     @users.each do |user|
       5.times do
-        i = Issue.make(:tracker => @public_tracker,
-                       :project => @public_project,
-                       :status => active_status)
-        KanbanIssue.make(:issue => i,
-                         :user => user,
-                         :state => "active")
+        Issue.make(:tracker => @public_tracker,
+                   :project => @public_project,
+                   :assigned_to => user,
+                   :status => active_status)
       end
     end
 
@@ -224,12 +219,10 @@ module KanbanTestHelper
     # Testing tasks
     @users.each do |user|
       5.times do
-        i = Issue.make(:tracker => @public_tracker,
-                       :project => @public_project,
-                       :status => testing_status)
-        KanbanIssue.make(:issue => i,
-                         :user => user,
-                         :state => "testing")
+        Issue.make(:tracker => @public_tracker,
+                   :project => @public_project,
+                   :assigned_to => user,
+                   :status => testing_status)
       end
     end
 
