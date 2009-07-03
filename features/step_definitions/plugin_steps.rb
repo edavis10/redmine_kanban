@@ -148,13 +148,13 @@ end
 
 
 Given /^there are the default issue statuses$/ do
-  IssueStatus.make(:name => 'New')
-  IssueStatus.make(:name => 'Unstaffed')
-  IssueStatus.make(:name => 'Selected')
-  IssueStatus.make(:name => 'Active')
-  IssueStatus.make(:name => 'Test-N-Doc')
-  IssueStatus.make(:name => 'Closed', :is_closed => true)
-  IssueStatus.make(:name => 'Rejected', :is_closed => true)
+  IssueStatus.make(:name => 'New') if IssueStatus.find_by_name('New').nil?
+  IssueStatus.make(:name => 'Unstaffed') if IssueStatus.find_by_name('Unstaffed').nil?
+  IssueStatus.make(:name => 'Selected') if IssueStatus.find_by_name('Selected').nil?
+  IssueStatus.make(:name => 'Active') if IssueStatus.find_by_name('Active').nil?
+  IssueStatus.make(:name => 'Test-N-Doc') if IssueStatus.find_by_name('Test-N-Doc').nil?
+  IssueStatus.make(:name => 'Closed', :is_closed => true) if IssueStatus.find_by_name('Closed').nil?
+  IssueStatus.make(:name => 'Rejected', :is_closed => true) if IssueStatus.find_by_name('Rejected').nil?
 end
 
 Given /^"(.*)" is configured as the "Incoming" project$/ do |project_name|

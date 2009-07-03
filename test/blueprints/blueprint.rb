@@ -10,7 +10,7 @@ Sham.project_name { Faker::Company.name[0..29] }
 Sham.identifier { Faker::Internet.domain_word.downcase }
 Sham.message { Faker::Company.bs }
 Sham.position {|index| index }
-Sham.single_name { Faker::Internet.domain_word.capitalize }
+Sham.single_name {|index|  Faker::Internet.domain_word.capitalize + index.to_s}
 
 
 # Plugin Shams

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class KanbanTest < Test::Unit::TestCase
   def shared_setup
-    configure_plugin
+
     @user = User.make
     User.current = @user
   end
@@ -11,10 +11,14 @@ class KanbanTest < Test::Unit::TestCase
     setup {
       shared_setup
       setup_kanban_issues
-      @kanban = Kanban.find
     }
 
     context "for incoming issues" do
+      setup {
+        setup_incoming_issues
+        @kanban = Kanban.find
+      }
+
       should "only get incoming issues up to the limit" do
         assert_equal 5, @kanban.incoming_issues.size
       end
@@ -27,6 +31,11 @@ class KanbanTest < Test::Unit::TestCase
     end
     
     context "for backlog issues" do
+      setup {
+        setup_backlog_issues
+        @kanban = Kanban.find
+      }
+
       should "only get backlog issues up to the limit" do
         assert_equal 3, @kanban.backlog_issues.size # Priorities
         assert_equal 15, @kanban.backlog_issues.values.collect.flatten.size # Issues
@@ -56,6 +65,10 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     context "for quick issues" do
+      setup {
+        setup_quick_issues
+        @kanban = Kanban.find
+      }
       
       should "only get quick issues up to the limit" do
         assert_equal 2, @kanban.quick_issues.size # Priorities
@@ -77,6 +90,11 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     context "for selected issues" do
+      setup {
+        setup_selected_issues
+        @kanban = Kanban.find
+      }
+
       should "only get selected issues up to the limit" do
         assert_equal 8, @kanban.selected_issues.length
       end
@@ -89,6 +107,10 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     context "for active issues" do
+      setup {
+        setup_active_issues
+        @kanban = Kanban.find
+      }
       
       should "only get active issues up to the limit" do
         assert_equal 3, @kanban.active_issues.size # Users
@@ -111,6 +133,10 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     context "for testing issues" do
+      setup {
+        setup_testing_issues
+        @kanban = Kanban.find
+      }
       
       should "only get testing issues up to the limit" do
         assert_equal 3, @kanban.testing_issues.size # Users
@@ -133,6 +159,11 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     context "for finished issues" do
+      setup {
+        setup_finished_issues
+        @kanban = Kanban.find
+      }
+
       should "only get issues with the configured Finished status" do
         @kanban.finished_issues.each do |user, issues|
           issues.each do |issue|
@@ -157,6 +188,7 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     should "set @users based on the configured role" do
+      @kanban = Kanban.find
       assert_equal 3, @kanban.users.length
     end
   end

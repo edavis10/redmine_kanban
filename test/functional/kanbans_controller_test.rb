@@ -13,6 +13,7 @@ class KanbansControllerTest < ActionController::TestCase
     setup {
       shared_setup
       setup_kanban_issues
+      setup_all_issues
 
       get :show
     }

@@ -5,7 +5,11 @@ class KanbanIssueTest < Test::Unit::TestCase
     @project = make_project_with_trackers
     @issue = Issue.make(:project => @project, :tracker => @project.trackers.first)
     @user = User.make
-    @role = Role.make
+    @role = Role.find_by_name('KanbanRole')
+    if @role.nil?
+      @role = Role.make(:name => 'KanbanRole')
+    end
+    
     @member = make_member({
                             :user => @user,
                             :project => @project
@@ -111,12 +115,19 @@ class KanbanIssueTest < Test::Unit::TestCase
   end
 
   context 'update_from_issue' do
+    setup {
+      setup_kanban_issues
+      setup_selected_issues
+    }
+    
     context 'to a status without a kanban issue setting' do
       should 'remove all KanbanIssues for the issue' do
-        configure_plugin
+        
         setup_kanban_issues
         unconfigured_status = IssueStatus.make(:name => 'NoKanban')
         kanban = KanbanIssue.last
+        assert kanban
+        assert kanban.issue
         issue = kanban.issue
 
         assert issue
@@ -128,11 +139,6 @@ class KanbanIssueTest < Test::Unit::TestCase
     end
 
     context 'to a status with a kanban status' do
-      setup {
-        configure_plugin
-        setup_kanban_issues
-      }
-      
       should 'create a new KanbanIssue if there is not one already' do
         assert_difference('KanbanIssue.count') do
           @issue = Issue.make(:tracker => @public_project.trackers.first,

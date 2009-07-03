@@ -50,7 +50,7 @@ module KanbanTestHelper
   
   def configure_plugin(configuration_change = {})
     make_issue_statuses
-    make_roles
+    Role.make(:name => 'KanbanRole') if Role.find_by_name('KanbanRole').nil?
 
     Setting.plugin_redmine_kanban = {
     "staff_role"=> Role.find(:last),
@@ -93,90 +93,107 @@ module KanbanTestHelper
   # Sets up a variety of issues to be used for the tests
   def setup_kanban_issues
     @private_project = make_project_with_trackers(:is_public => false)
-    private_tracker = @private_project.trackers.first
+    @private_tracker = @private_project.trackers.first
     @public_project = make_project_with_trackers(:is_public => true)
-    public_tracker = @public_project.trackers.first
+    @public_tracker = @public_project.trackers.first
 
     make_users
     
-    high_priority = IssuePriority.make(:name => "High")
-    medium_priority = IssuePriority.make(:name => "Medium")
-    low_priority = IssuePriority.make(:name => "Low")
+    @high_priority = IssuePriority.make(:name => "High") if IssuePriority.find_by_name("High").nil?
+    @medium_priority = IssuePriority.make(:name => "Medium") if IssuePriority.find_by_name("Medium").nil?
+    @low_priority = IssuePriority.make(:name => "Low") if IssuePriority.find_by_name("Low").nil?
 
+  end
+
+  def setup_all_issues
+    setup_incoming_issues
+    setup_quick_issues
+    setup_backlog_issues
+    setup_selected_issues
+    setup_active_issues
+    setup_testing_issues
+    setup_finished_issues
+  end
+  
+  def setup_incoming_issues
     new_status = IssueStatus.find_by_name('New')
-    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
-    selected_status = IssueStatus.find_by_name('Selected')
-    active_status = IssueStatus.find_by_name('Active')
-    testing_status = IssueStatus.find_by_name('Test-N-Doc')
-    closed_status = IssueStatus.find_by_name('Closed')
-    rejected_status = IssueStatus.find_by_name('Rejected')
-    
     # Incoming
     5.times do
-      Issue.make(:tracker => private_tracker,
+      Issue.make(:tracker => @private_tracker,
                  :project => @private_project,
                  :status => new_status)
     end
 
     6.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => new_status)
     end
+  end
 
+  def setup_quick_issues
+    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Quick tasks
     4.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => high_priority,
+                 :priority => @high_priority,
                  :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
     1.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => medium_priority,
+                 :priority => @medium_priority,
                  :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
     2.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => low_priority,
+                 :priority => @low_priority,
                  :status => unstaffed_status,
                  :estimated_hours => nil)
     end
 
+  end
+
+  def setup_backlog_issues
+    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Backlog tasks
     5.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => high_priority,
+                 :priority => @high_priority,
                  :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
     7.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => medium_priority,
+                 :priority => @medium_priority,
                  :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
     5.times do
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => low_priority,
+                 :priority => @low_priority,
                  :status => unstaffed_status,
                  :estimated_hours => 5)
     end
 
+  end
+
+  def setup_selected_issues
+    selected_status = IssueStatus.find_by_name('Selected')
     # Selected tasks
     10.times do
-      i = Issue.make(:tracker => public_tracker,
+      i = Issue.make(:tracker => @public_tracker,
                      :project => @public_project,
                      :status => selected_status)
       KanbanIssue.make(:issue => i,
@@ -184,10 +201,14 @@ module KanbanTestHelper
                        :state => "selected")
     end
 
+  end
+
+  def setup_active_issues
+    active_status = IssueStatus.find_by_name('Active')
     # Active tasks
     @users.each do |user|
       5.times do
-        i = Issue.make(:tracker => public_tracker,
+        i = Issue.make(:tracker => @public_tracker,
                        :project => @public_project,
                        :status => active_status)
         KanbanIssue.make(:issue => i,
@@ -196,10 +217,14 @@ module KanbanTestHelper
       end
     end
 
+  end
+  
+  def setup_testing_issues
+    testing_status = IssueStatus.find_by_name('Test-N-Doc')
     # Testing tasks
     @users.each do |user|
       5.times do
-        i = Issue.make(:tracker => public_tracker,
+        i = Issue.make(:tracker => @public_tracker,
                        :project => @public_project,
                        :status => testing_status)
         KanbanIssue.make(:issue => i,
@@ -208,17 +233,23 @@ module KanbanTestHelper
       end
     end
 
+  end
+  
+  def setup_finished_issues
+    closed_status = IssueStatus.find_by_name('Closed')
+    rejected_status = IssueStatus.find_by_name('Rejected')
+
     # Finished tasks
     @users.each do |user|
       5.times do
-        Issue.make(:tracker => public_tracker,
+        Issue.make(:tracker => @public_tracker,
                    :project => @public_project,
                    :status => closed_status,
                    :assigned_to => user)
       end
 
       # Extra issues that should not show up
-      Issue.make(:tracker => public_tracker,
+      Issue.make(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => rejected_status,
                  :assigned_to => user)
@@ -227,6 +258,9 @@ module KanbanTestHelper
   end
 end
 include KanbanTestHelper
+
+configure_plugin # Run it once now so each test doesn't need to run it
+
 
 class Test::Unit::TestCase
   def self.should_allow_state_change_from(starting_state, options = {:to => nil, :using => :nothing})
