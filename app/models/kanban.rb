@@ -107,6 +107,25 @@ class Kanban
     return @quick_issues.values.flatten.collect(&:id)
   end
 
+  def self.update_issue_attributes(issue_id, from, to, user)
+    @settings = Setting.plugin_redmine_kanban
+
+    issue = Issue.find_by_id(issue_id)
+
+    if @settings['panes'][to] && @settings['panes'][to]['status']
+      new_status = IssueStatus.find_by_id(@settings['panes'][to]['status'])
+    end
+      
+    if issue && new_status
+      issue.init_journal(user)
+      issue.status = new_status
+      return issue.save
+    else
+      return false
+    end
+
+  end
+
   # Updates +target_pane+ so that the KanbanIssues match +sorted_issues+
   def self.update_sorted_issues(target_pane, sorted_issues, user_id=nil)
     if Kanban.kanban_issues_panes.include?(target_pane)

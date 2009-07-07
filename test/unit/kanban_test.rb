@@ -254,5 +254,37 @@ class KanbanTest < Test::Unit::TestCase
       end
     end
   end
+
+  context "#update_issue_attributes" do
+    setup {
+      shared_setup
+      setup_kanban_issues
+      @from = "incoming"
+      @to = "active"
+      @high_priority = IssuePriority.find_by_name("High")
+      @high_priority ||= IssuePriority.make(:name => "High") if @high_priority.nil?
+
+      @issue = Issue.make(:tracker => @public_project.trackers.first,
+                          :project => @public_project,
+                          :priority => @high_priority,
+                          :status => IssueStatus.find_by_name('New'))
+    }
+
+    should "update the issue status to the 'to' pane's Status" do
+      Kanban.update_issue_attributes(@issue, @from, @to, @user)
+      @issue.reload
+      assert_equal "Active", @issue.status.name
+    end
+
+    should "return true if the issue was saved" do
+      assert Kanban.update_issue_attributes(@issue, @from, @to, @user)
+    end
+
+    should "return false if the issue wasn't found" do
+      assert !Kanban.update_issue_attributes('1234567890', @from, @to, @user)
+    end
+
+    should "return false if the issue didn't save"
+  end
 end
 

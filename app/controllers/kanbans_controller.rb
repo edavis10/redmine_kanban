@@ -54,16 +54,6 @@ class KanbansController < ApplicationController
   
   private
   def change_issue_status(issue, from, to, user)
-    issue = Issue.find_by_id(issue)
-
-    if @settings['panes'][to] && @settings['panes'][to]['status']
-      new_status = IssueStatus.find_by_id(@settings['panes'][to]['status'])
-    end
-      
-    if issue && new_status
-      issue.init_journal(user)
-      issue.status = new_status
-      return issue.save
-    end
+    Kanban.update_issue_attributes(issue, from, to, user)
   end
 end
