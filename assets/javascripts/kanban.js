@@ -8,14 +8,25 @@ jQuery(function($) {
 
     $("#incoming-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues','#selected-issues','.active-issues.allowed','.testing-issues.allowed','.finished-issues.allowed'],
+      connectWith: [
+        '#backlog-issues',
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       placeholder: 'drop-accepted',
       dropOnEmpty: true
     });
 
     $("#backlog-issues").sortable({
       cancel: 'a',
-      connectWith: ['#selected-issues', '.active-issues.allowed', '.testing-issues.allowed', '.finished-issues.allowed'],
+      connectWith: [
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -26,7 +37,12 @@ jQuery(function($) {
 
     $("#quick-issues").sortable({
       cancel: 'a',
-      connectWith: ['#selected-issues', '.active-issues.allowed', '.testing-issues.allowed', '.finished-issues.allowed'],
+      connectWith: [
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -37,7 +53,12 @@ jQuery(function($) {
 
     $("#selected-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '.active-issues.allowed', '.testing-issues.allowed', '.finished-issues.allowed'],
+      connectWith: [
+        '#backlog-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -54,7 +75,13 @@ jQuery(function($) {
 
     $(".active-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues.allowed', '.testing-issues.allowed', '.finished-issues.allowed'],
+      connectWith: [
+        '#backlog-issues',
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -71,7 +98,13 @@ jQuery(function($) {
 
     $(".testing-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues.allowed', '.testing-issues.allowed', '.finished-issues.allowed'],
+      connectWith: [
+        '#backlog-issues',
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -88,7 +121,11 @@ jQuery(function($) {
 
     $(".finished-issues").sortable({
       cancel: 'a',
-      connectWith: ['#selected-issues', '.active-issues.allowed', '.testing-issues.allowed'],
+      connectWith: [
+        '#selected-issues',
+        '.active-issues.allowed',
+        '.testing-issues.allowed'
+      ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
