@@ -3,16 +3,19 @@ jQuery(function($) {
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
 
   attachSortables = function() {
+    // connectWith means that this item can be drug out of it's
+    // sortable list and into an item in connectWith
+
     $("#incoming-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues'],
+      connectWith: ['#backlog-issues','.finished-issues.allowed'],
       placeholder: 'drop-accepted',
       dropOnEmpty: true
     });
 
     $("#backlog-issues").sortable({
       cancel: 'a',
-      connectWith: ['#incoming-issues','#selected-issues', '.active-issues', '.testing-issues'],
+      connectWith: ['#incoming-issues','#selected-issues', '.active-issues', '.testing-issues', '.finished-issues.allowed'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -23,7 +26,7 @@ jQuery(function($) {
 
     $("#quick-issues").sortable({
       cancel: 'a',
-      connectWith: ['#selected-issues', '.active-issues', '.testing-issues'],
+      connectWith: ['#selected-issues', '.active-issues', '.testing-issues', '.finished-issues.allowed'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -34,7 +37,7 @@ jQuery(function($) {
 
     $("#selected-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '.active-issues', '.testing-issues'],
+      connectWith: ['#backlog-issues', '.active-issues', '.testing-issues', '.finished-issues.allowed'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -51,7 +54,7 @@ jQuery(function($) {
 
     $(".active-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues.allowed', '.testing-issues'],
+      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues.allowed', '.testing-issues', '.finished-issues.allowed'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -68,7 +71,7 @@ jQuery(function($) {
 
     $(".testing-issues").sortable({
       cancel: 'a',
-      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues', '.testing-issues.allowed'],
+      connectWith: ['#backlog-issues', '#selected-issues', '.active-issues', '.testing-issues.allowed', '.finished-issues.allowed'],
       items: 'li.issue',
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
@@ -80,6 +83,17 @@ jQuery(function($) {
         if (ui.sender == null && event.target == this) {
           updatePanes(ui.item,ui.sender,$(this));
         }
+      }
+    });
+
+    $(".finished-issues").sortable({
+      cancel: 'a',
+      connectWith: ['#selected-issues', '.active-issues', '.testing-issues'],
+      items: 'li.issue',
+      placeholder: 'drop-accepted',
+      dropOnEmpty: true,
+      receive: function (event, ui) {
+        updatePanes(ui.item,ui.sender,$(this));
       }
     });
 
@@ -101,9 +115,9 @@ jQuery(function($) {
     }
 
     // Active pane needs to send which user was modified
-    if (to_pane == 'active' || to_pane == 'testing') {
+    if (to_pane == 'active' || to_pane == 'testing' || to_pane == 'finished') {
       var user_id = to.attr('id').split('-')[3];
-    } else if (from_pane == 'active' || from_pane == 'testing'){
+    } else if (from_pane == 'active' || from_pane == 'testing' || to_pane == 'finished'){
       var user_id = from.attr('id').split('-')[3];
     } else {
       var user_id = null;
