@@ -20,7 +20,11 @@ class Kanban
   def self.valid_panes
     kanban_issues_panes + non_kanban_issues_panes
   end
-  
+
+  def self.staffed_panes
+    ['active','testing','finished']
+  end
+
   def self.find
     kanban = Kanban.new
     kanban.settings = Setting.plugin_redmine_kanban
@@ -107,7 +111,10 @@ class Kanban
     return @quick_issues.values.flatten.collect(&:id)
   end
 
-  def self.update_issue_attributes(issue_id, from, to, user)
+  # Updates the Issue with +issue_id+ to change it's
+  # * Status to the IssueStatus set for the +to+ pane
+  # * Assignment to the +target_user+ on staffed panes
+  def self.update_issue_attributes(issue_id, from, to, user=User.current, target_user=nil)
     @settings = Setting.plugin_redmine_kanban
 
     issue = Issue.find_by_id(issue_id)
@@ -119,6 +126,11 @@ class Kanban
     if issue && new_status
       issue.init_journal(user)
       issue.status = new_status
+
+      if Kanban.staffed_panes.include?(to) && !target_user.nil?
+        issue.assigned_to = target_user
+      end
+
       return issue.save
     else
       return false

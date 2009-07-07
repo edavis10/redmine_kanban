@@ -285,6 +285,46 @@ class KanbanTest < Test::Unit::TestCase
     end
 
     should "return false if the issue didn't save"
+
+    context "to a staffed pane" do
+      should "assign the issue to the target user if the target user is set" do
+        Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+        @issue.reload
+        assert_equal @user, @issue.assigned_to
+      end
+
+      should "keep the user assignment if the target user is nil" do
+        @issue.update_attribute(:assigned_to, @user)
+        @issue.reload
+
+        Kanban.update_issue_attributes(@issue, @from, @to, @user, nil)
+        @issue.reload
+        assert_equal @user, @issue.assigned_to
+      end
+
+    end
+
+    context "to an unstaffed pane" do
+      setup {
+        @to = 'backlog'
+        @from = 'active'
+        @issue.update_attribute(:assigned_to, @user)
+        @issue.reload
+      }
+
+      should "keep the user assignement if the target user is set" do
+        Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+        @issue.reload
+        assert_equal @user, @issue.assigned_to
+      end
+
+      should "keep the user assignement if the target user is nil" do
+        Kanban.update_issue_attributes(@issue, @from, @to, @user, nil)
+        @issue.reload
+        assert_equal @user, @issue.assigned_to
+      end
+
+    end
   end
 end
 

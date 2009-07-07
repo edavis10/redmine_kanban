@@ -20,7 +20,7 @@ class KanbansController < ApplicationController
     @user = User.find_by_id(@user_id) # only needed for user specific views
     Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if Kanban.kanban_issues_panes.include?(@to)
 
-    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current)
+    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @user)
 
     @kanban = Kanban.find
     @incoming_issues = @kanban.incoming_issues
