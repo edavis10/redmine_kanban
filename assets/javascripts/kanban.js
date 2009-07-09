@@ -31,7 +31,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this));
+        updatePanes(ui.item,ui.sender,$(this), '#quick-issues');
       }
     });
 
@@ -138,6 +138,11 @@ jQuery(function($) {
 
   attachSortables();
 
+  // * issue
+  // * from
+  // * to
+  // *  additional_pane - (optional) the id selector for an additional 3rd
+  //    pane to update
   updatePanes = function(issue, from, to) {
     var issue_id = issue.attr('id').split('_')[1];
     var to_pane = to.attr('id').split('-')[0];
@@ -149,6 +154,14 @@ jQuery(function($) {
     } else {
       var from_pane = '';
       var from_order = [];
+    }
+
+    // Check for the optional additional pane
+    if (arguments.length == 4) {
+      var additional_pane = arguments[3];
+      var additional_pane_name = arguments[3].split('-')[0].replace('#','');
+    } else {
+      var additional_pane = '';
     }
 
     // Active pane needs to send which user was modified
@@ -164,11 +177,15 @@ jQuery(function($) {
     $.ajax({
       type: "PUT",
       url: 'kanban.js',
-      data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&user_id=' + user_id,
+      data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&user_id=' + user_id + '&additional_pane=' + additional_pane_name,
       success: function(response) {
         var partials = $.secureEvalJSON(response);
         $(from).parent().html(partials.from);
         $(to).parent().html(partials.to);
+
+        if (additional_pane.length > 1) {
+          $(additional_pane).parent().html(partials.additional_pane);
+        }
 
         attachSortables();
 

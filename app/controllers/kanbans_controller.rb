@@ -37,7 +37,8 @@ class KanbansController < ApplicationController
         format.js {
           render :text => ActiveSupport::JSON.encode({
                                                        'from' => render_pane_to_js(@from),
-                                                       'to' => render_pane_to_js(@to)
+                                                       'to' => render_pane_to_js(@to),
+                                                       'additional_pane' => render_pane_to_js(params[:additional_pane])
                                                      })
         }
       else
