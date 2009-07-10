@@ -114,6 +114,7 @@ class Kanban
   # Updates the Issue with +issue_id+ to change it's
   # * Status to the IssueStatus set for the +to+ pane
   # * Assignment to the +target_user+ on staffed panes
+  # * Start date based on the panes
   def self.update_issue_attributes(issue_id, from, to, user=User.current, target_user=nil)
     @settings = Setting.plugin_redmine_kanban
 
@@ -129,6 +130,16 @@ class Kanban
 
       if Kanban.staffed_panes.include?(to) && !target_user.nil?
         issue.assigned_to = target_user
+      end
+
+      # Change issue start_dates (#2670)
+      case
+      when Kanban.staffed_panes.include?(to)
+        issue.start_date = Date.today if issue.start_date.blank?
+      when from == 'incoming' && (to == 'backlog' || to == 'selected')
+        issue.start_date = nil
+      else
+        # Nothing
       end
 
       return issue.save

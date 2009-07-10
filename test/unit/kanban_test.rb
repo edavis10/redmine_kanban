@@ -301,6 +301,91 @@ class KanbanTest < Test::Unit::TestCase
         @issue.reload
         assert_equal @user, @issue.assigned_to
       end
+    end
+      
+    context "set the start_date for an issue when" do
+      context "empty" do
+        should "to today when moved to active" do
+          @to = 'active'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+
+        should "to today when moved to testing" do
+          @to = 'testing'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+
+        should "to today when moved to finished" do
+          @to = 'finished'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+      end
+
+      context "not empty" do
+        setup {
+          @past = 7.days.ago.to_date
+          @issue.update_attribute(:start_date, @past)
+        }
+        
+        should "not change the date when moved to active" do
+          @to = 'active'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal @past, @issue.start_date
+        end
+
+        should "not change the date when moved to testing" do
+          @to = 'testing'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal @past, @issue.start_date
+        end
+
+        should "not change the date when moved to finished" do
+          @to = 'finished'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal @past, @issue.start_date
+        end
+
+        should "not change the date when moved to incoming" do
+          @from = 'backlog'
+          @to = 'incoming'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal @past, @issue.start_date
+        end
+
+        should "not change the date when moved to selected" do
+          @from = 'backlog'
+          @to = 'selected'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal @past, @issue.start_date
+        end
+
+        should "clear the date when moved from incoming to backlog" do
+          @from = 'incoming'
+          @to = 'backlog'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal nil, @issue.start_date
+        end
+
+        should "clear the date when moved from incoming to selected" do
+          @from = 'incoming'
+          @to = 'selected'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal nil, @issue.start_date
+        end
+      end
 
     end
 
