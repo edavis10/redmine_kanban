@@ -4,15 +4,14 @@ Feature: Configuration Panel
   So it will work with how I setup my Redmine
 
   Scenario: Configuration link
-    Given I am an Administrator
-    And I am logged in
+    Given the plugin is configured
+    And I am an Administrator
     And I am on the plugin administration page
     Then I should see a "Configure" link for "Kanban"
 
   Scenario: Configuration
-    Given I am an Administrator
-    And there are "5" active projects
-    And I am logged in
+    Given the plugin is configured
+    And I am an Administrator
     And I am on the plugin administration page
 
     When I follow "Configure"
@@ -38,11 +37,8 @@ Feature: Configuration Panel
     
     
   Scenario: Changing the configuration
-    Given I am an Administrator
-    And there are the default issue statuses
-    And there are "5" active projects
-    And there are "3" roles
-    And I am logged in
+    Given the plugin is configured
+    And I am an Administrator
     And I am on the Kanban configuration page
 
     When I select the role for "staff_role"

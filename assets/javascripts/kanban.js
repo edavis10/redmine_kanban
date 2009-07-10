@@ -10,7 +10,7 @@ jQuery(function($) {
       cancel: 'a',
       connectWith: [
         '#backlog-issues',
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed'
@@ -22,7 +22,7 @@ jQuery(function($) {
     $("#backlog-issues").sortable({
       cancel: 'a',
       connectWith: [
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed'
@@ -38,7 +38,7 @@ jQuery(function($) {
     $("#quick-issues").sortable({
       cancel: 'a',
       connectWith: [
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed'
@@ -77,7 +77,7 @@ jQuery(function($) {
       cancel: 'a',
       connectWith: [
         '#backlog-issues',
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed'
@@ -96,11 +96,12 @@ jQuery(function($) {
       }
     });
 
+
     $(".testing-issues").sortable({
       cancel: 'a',
       connectWith: [
         '#backlog-issues',
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
         '.finished-issues.allowed'
@@ -122,9 +123,10 @@ jQuery(function($) {
     $(".finished-issues").sortable({
       cancel: 'a',
       connectWith: [
-        '#selected-issues',
+        '#selected-issues.allowed',
         '.active-issues.allowed',
-        '.testing-issues.allowed'
+        '.testing-issues.allowed',
+        '.finished-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',

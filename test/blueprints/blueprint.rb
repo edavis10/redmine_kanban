@@ -6,7 +6,7 @@ Sham.lastname {
   Faker::Name.last_name + ' ' + Faker::Name.last_name
 }
 Sham.login { Faker::Internet.user_name }
-Sham.project_name { Faker::Company.name[0..29] }
+Sham.project_name { Faker::Company.name[0..29]}
 Sham.identifier { Faker::Internet.domain_word.downcase }
 Sham.message { Faker::Company.bs }
 Sham.position {|index| index }
@@ -16,6 +16,9 @@ Sham.single_name { |index| Faker::Internet.domain_word.capitalize + index.to_s }
 # Plugin Shams
 Sham.permissions(:unique => false) {
   [
+   :view_kanban,
+   :edit_kanban,
+   :manage_kanban
   ]
 }
 

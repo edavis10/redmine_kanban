@@ -2,7 +2,9 @@ class KanbansController < ApplicationController
   unloadable
   helper :kanbans
   include KanbansHelper
-  
+
+  before_filter :authorize
+
   def show
     @settings = Setting.plugin_redmine_kanban
     @kanban = Kanban.find
@@ -51,5 +53,23 @@ class KanbansController < ApplicationController
         }
       end
     end
+  end
+
+  private
+  # Override the default authorize and add in the global option. This will allow
+  # the user in if they have any roles with the correct permission
+  def authorize(ctrl = params[:controller], action = params[:action])
+    allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, nil, { :global => true})
+    allowed ? true : deny_access
+  end
+
+  helper_method :allowed_to_edit?
+  def allowed_to_edit?
+    User.current.allowed_to?({:controller => params[:controller], :action => 'update'}, nil, :global => true)
+  end
+
+  helper_method :allowed_to_manage?
+  def allowed_to_manage?
+    User.current.allowed_to?(:manage_kanban, nil, :global => true)
   end
 end

@@ -1,5 +1,5 @@
       <%= content_tag(:h3, l(:kanban_text_selected_requests)) %>
-      <ol id="selected-issues">
+      <ol id="selected-issues" class="<%= allowed_to_assign_staffed_issue_to(nil) -%>">
         <% if @selected_issues.empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>

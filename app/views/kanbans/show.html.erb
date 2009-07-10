@@ -39,5 +39,7 @@
   <%= javascript_include_tag 'jquery-ui-1.7.2.custom.min.js', :plugin => 'redmine_kanban' %>
   <%= javascript_include_tag 'jquery.json-1.3.min.js', :plugin => 'redmine_kanban' %>
   <%= javascript_tag("jQuery.noConflict();") %>
+  <% if allowed_to_edit? %>
   <%= javascript_include_tag 'kanban.js', :plugin => 'redmine_kanban' %>
+  <% end %>
 <% end %>

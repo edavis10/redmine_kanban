@@ -8,6 +8,7 @@ end
 
 Given /^I am on the (.*)$/ do |page_name|
   visit path_to(page_name)
+  assert_response :success
 end
 
 Given /^the plugin is configured$/ do
@@ -65,6 +66,7 @@ end
 
 Given /^I am logged in$/ do
   @current_user ||= User.make
+  make_member({:user => @current_user, :project => Project.find(:last)}, [Role.find(:last)])
   User.stubs(:current).returns(@current_user)
 end
 
@@ -78,7 +80,8 @@ Given /^there are "(\d*)" active projects$/ do |count|
     Project.make
   end
 
-  @feature_tracker = Tracker.make(:name => 'Feature')
+  @feature_tracker = Tracker.find_by_name('Feature')
+  @feature_tracker ||= Tracker.make(:name => 'Feature')
 
   Project.find(:all).each do |project|
     assign_tracker_to_project @feature_tracker, project

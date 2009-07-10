@@ -7,8 +7,45 @@ class KanbansControllerTest < ActionController::TestCase
     @public_project = make_project_with_trackers(:is_public => true)
     @user = User.make
     @request.session[:user_id] = @user.id
+    @role = Role.make
+    @member = make_member({:user => @user, :project => @public_project}, @role)
   end
-  
+
+  context "permissions" do
+    setup {
+      shared_setup
+    }
+
+    context "allow" do
+      should ":view_kanban to view show" do
+        get :show
+        assert_response :success
+      end
+
+      should ":edit_kanban to put update" do
+        put :update, {}
+        assert_response :redirect
+      end
+    end
+
+    context "deny access should use" do
+      setup {
+        @user.members.destroy_all
+      }
+
+      should ":view_kanban" do
+        get :show
+        assert_response 403
+      end
+
+      should ":edit_kanban" do
+        put :update, {}
+        assert_response 403
+      end
+    end
+
+  end
+
   context "on GET to :show" do
     setup {
       shared_setup
