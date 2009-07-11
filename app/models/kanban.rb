@@ -89,6 +89,8 @@ class Kanban
   def get_users
     role = Role.find_by_id(@settings["staff_role"])
     @users = role.members.collect(&:user).uniq.sort if role
+    @users << UnknownUser.instance
+    @users
   end
 
   def get_active
@@ -128,7 +130,7 @@ class Kanban
       issue.init_journal(user)
       issue.status = new_status
 
-      if Kanban.staffed_panes.include?(to) && !target_user.nil?
+      if Kanban.staffed_panes.include?(to) && !target_user.nil? && target_user.is_a?(User)
         issue.assigned_to = target_user
       end
 

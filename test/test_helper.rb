@@ -249,6 +249,27 @@ module KanbanTestHelper
     end
 
   end
+
+  # Unknow user issues are KanbanIssues that should have a user
+  # assigned but somehow didn't as the result of bad data.
+  def setup_unknown_user_issues
+    active_status = IssueStatus.find_by_name('Active')
+    testing_status = IssueStatus.find_by_name('Test-N-Doc')
+    3.times do
+      i = Issue.make(:tracker => @public_tracker,
+                     :project => @public_project,
+                     :assigned_to => nil,
+                     :status => active_status)
+    end
+
+    4.times do
+      i = Issue.make(:tracker => @public_tracker,
+                     :project => @public_project,
+                     :assigned_to => nil,
+                     :status => testing_status)
+    end
+  end
+
 end
 include KanbanTestHelper
 

@@ -49,6 +49,10 @@ class KanbanIssue < ActiveRecord::Base
   }
 
   named_scope :find_active, lambda { |user_id|
+    # Unknown users
+    if user_id && user_id <= 0
+      user_id = nil
+    end
     {
       :order => 'user_id ASC, position ASC',
       :conditions => { :user_id => user_id, :state => 'active'}
@@ -56,6 +60,10 @@ class KanbanIssue < ActiveRecord::Base
   }
 
   named_scope :find_testing, lambda { |user_id|
+    # Unknown users
+    if user_id && user_id <= 0
+      user_id = nil
+    end
     {
       :order => 'user_id ASC, position ASC',
       :conditions => { :user_id => user_id, :state => 'testing'}

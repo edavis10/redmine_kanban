@@ -109,12 +109,13 @@ class KanbanTest < Test::Unit::TestCase
     context "for active issues" do
       setup {
         setup_active_issues
+        setup_unknown_user_issues
         @kanban = Kanban.find
       }
       
       should "only get all active issues" do
-        assert_equal 3, @kanban.active_issues.size # Users
-        assert_equal 15, @kanban.active_issues.values.collect.flatten.size # Issues
+        assert_equal 4, @kanban.active_issues.size # Users + Unknown
+        assert_equal 18, @kanban.active_issues.values.collect.flatten.size # Issues
       end
 
       should "only get issues with the configured Active status" do
@@ -127,7 +128,7 @@ class KanbanTest < Test::Unit::TestCase
 
       should "group active issues by User" do
         @kanban.active_issues.keys.each do |key|
-          assert key.is_a?(User)
+          assert key.is_a?(UnknownUser) || key.is_a?(User)
         end
       end
     end
@@ -135,12 +136,13 @@ class KanbanTest < Test::Unit::TestCase
     context "for testing issues" do
       setup {
         setup_testing_issues
+        setup_unknown_user_issues
         @kanban = Kanban.find
       }
       
       should "only get all testing issues" do
-        assert_equal 3, @kanban.testing_issues.size # Users
-        assert_equal 15, @kanban.testing_issues.values.collect.flatten.size # Issues
+        assert_equal 4, @kanban.testing_issues.size # Users + Unknow
+        assert_equal 19, @kanban.testing_issues.values.collect.flatten.size # Issues
       end
 
       should "only get issues with the configured Testing status" do
@@ -153,7 +155,7 @@ class KanbanTest < Test::Unit::TestCase
 
       should "group testing issues by User" do
         @kanban.testing_issues.keys.each do |key|
-          assert key.is_a?(User)
+          assert key.is_a?(UnknownUser) || key.is_a?(User)
         end
       end
     end
@@ -182,14 +184,14 @@ class KanbanTest < Test::Unit::TestCase
     
       should "group issues by User" do
         @kanban.finished_issues.keys.each do |key|
-          assert key.is_a?(User)
+          assert key.is_a?(UnknownUser) || key.is_a?(User)
         end
       end
     end
 
     should "set @users based on the configured role" do
       @kanban = Kanban.find
-      assert_equal 3, @kanban.users.length
+      assert_equal 4, @kanban.users.length # +1 Unknown
     end
   end
 

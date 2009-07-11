@@ -18,8 +18,8 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    @user_id = params[:user_id] != 'null' ? params[:user_id] : nil # Javascript nulls
-    @user = User.find_by_id(@user_id) # only needed for user specific views
+    user_and_user_id
+    
     Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if Kanban.kanban_issues_panes.include?(@to)
 
     saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @user)
@@ -71,5 +71,20 @@ class KanbansController < ApplicationController
   helper_method :allowed_to_manage?
   def allowed_to_manage?
     User.current.allowed_to?(:manage_kanban, nil, :global => true)
+  end
+
+  # Sets @user and @user_id based on the parameters
+  def user_and_user_id
+    case params[:user_id]
+    when 'null' # Javascript nulls
+      @user_id = nil
+      @user = nil
+    when '0' # Unknown user
+      @user_id = 0
+      @user = UnknownUser.instance
+    else
+      @user_id = params[:user_id]
+      @user = User.find_by_id(@user_id) # only needed for user specific views
+    end
   end
 end
