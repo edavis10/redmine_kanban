@@ -137,7 +137,10 @@ class Kanban
       # Change issue start_dates (#2670)
       case
       when Kanban.staffed_panes.include?(to)
-        issue.start_date = Date.today if issue.start_date.blank?
+        # Set if blank or it's from incoming
+        if issue.start_date.blank? || from == 'incoming'
+          issue.start_date = Date.today
+        end
       when from == 'incoming' && (to == 'backlog' || to == 'selected')
         issue.start_date = nil
       else

@@ -335,7 +335,32 @@ class KanbanTest < Test::Unit::TestCase
           @issue.update_attribute(:start_date, @past)
         }
         
+        should "change the date to today when moved from incoming to active" do
+          @from = 'incoming'
+          @to = 'active'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+
+        should "change the date to today when moved from incoming to testing" do
+          @from = 'incoming'
+          @to = 'testing'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+
+        should "change the date to today when moved from incoming to finished" do
+          @from = 'incoming'
+          @to = 'finished'
+          Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
+          @issue.reload
+          assert_equal Date.today, @issue.start_date
+        end
+
         should "not change the date when moved to active" do
+          @from = 'backlog'
           @to = 'active'
           Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
           @issue.reload
@@ -343,6 +368,7 @@ class KanbanTest < Test::Unit::TestCase
         end
 
         should "not change the date when moved to testing" do
+          @from = 'backlog'
           @to = 'testing'
           Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
           @issue.reload
@@ -350,6 +376,7 @@ class KanbanTest < Test::Unit::TestCase
         end
 
         should "not change the date when moved to finished" do
+          @from = 'backlog'
           @to = 'finished'
           Kanban.update_issue_attributes(@issue, @from, @to, @user, @user)
           @issue.reload
