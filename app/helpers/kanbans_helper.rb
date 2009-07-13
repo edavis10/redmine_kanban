@@ -3,9 +3,9 @@ module KanbansHelper
     name.gsub(' ','-').downcase
   end
 
-  def render_pane_to_js(pane)
+  def render_pane_to_js(pane, user=nil)
     if Kanban.valid_panes.include?(pane)
-      return render_to_string(:partial => pane, :locals => {:user => @user })
+      return render_to_string(:partial => pane, :locals => {:user => user })
     else
       ''
     end

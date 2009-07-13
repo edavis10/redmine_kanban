@@ -166,20 +166,23 @@ jQuery(function($) {
       var additional_pane = '';
     }
 
-    // Active pane needs to send which user was modified
+    // Active panes needs to send which user was modified
     if (to_pane == 'active' || to_pane == 'testing' || to_pane == 'finished') {
-      var user_id = to.attr('id').split('-')[3];
-    } else if (from_pane == 'active' || from_pane == 'testing' || to_pane == 'finished'){
-      var user_id = from.attr('id').split('-')[3];
+      var to_user_id = to.attr('id').split('-')[3];
     } else {
-      var user_id = null;
+      var from_user_id = null;
     }
 
+    if (from_pane == 'active' || from_pane == 'testing' || from_pane == 'finished'){
+      var from_user_id = from.attr('id').split('-')[3];
+    } else {
+      var from_user_id = null;
+    }
 
     $.ajax({
       type: "PUT",
       url: 'kanban.js',
-      data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&user_id=' + user_id + '&additional_pane=' + additional_pane_name,
+      data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
       success: function(response) {
         var partials = $.secureEvalJSON(response);
         $(from).parent().html(partials.from);

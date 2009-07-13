@@ -18,11 +18,11 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    user_and_user_id
-    
-    Kanban.update_sorted_issues(@to, params[:to_issue], @user_id) if Kanban.kanban_issues_panes.include?(@to)
+    @from_user_id, @from_user, @to_user_id, @to_user =  *user_and_user_id
 
-    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @user)
+    Kanban.update_sorted_issues(@to, params[:to_issue], @to_user_id) if Kanban.kanban_issues_panes.include?(@to)
+
+    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @to_user)
 
     @kanban = Kanban.find
     @incoming_issues = @kanban.incoming_issues
@@ -38,8 +38,8 @@ class KanbansController < ApplicationController
         }
         format.js {
           render :text => ActiveSupport::JSON.encode({
-                                                       'from' => render_pane_to_js(@from),
-                                                       'to' => render_pane_to_js(@to),
+                                                       'from' => render_pane_to_js(@from, @from_user),
+                                                       'to' => render_pane_to_js(@to, @to_user),
                                                        'additional_pane' => render_pane_to_js(params[:additional_pane])
                                                      })
         }
@@ -75,16 +75,36 @@ class KanbansController < ApplicationController
 
   # Sets @user and @user_id based on the parameters
   def user_and_user_id
-    case params[:user_id]
+    from_user_id = nil
+    from_user = nil
+    to_user_id = nil
+    to_user = nil
+
+    
+    case params[:from_user_id]
     when 'null' # Javascript nulls
-      @user_id = nil
-      @user = nil
+      from_user_id = nil
+      from_user = nil
     when '0' # Unknown user
-      @user_id = 0
-      @user = UnknownUser.instance
+      from_user_id = 0
+      from_user = UnknownUser.instance
     else
-      @user_id = params[:user_id]
-      @user = User.find_by_id(@user_id) # only needed for user specific views
+      from_user_id = params[:from_user_id]
+      from_user = User.find_by_id(from_user_id) # only needed for user specific views
     end
+
+    case params[:to_user_id]
+    when 'null' # Javascript nulls
+      to_user_id = nil
+      to_user = nil
+    when '0' # Unknown user
+      to_user_id = 0
+      to_user = UnknownUser.instance
+    else
+      to_user_id = params[:to_user_id]
+      to_user = User.find_by_id(to_user_id) # only needed for user specific views
+    end
+
+    return [from_user_id, from_user, to_user_id, to_user]
   end
 end
