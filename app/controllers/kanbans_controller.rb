@@ -73,30 +73,32 @@ class KanbansController < ApplicationController
     User.current.allowed_to?(:manage_kanban, nil, :global => true)
   end
 
-  # Sets @user and @user_id based on the parameters
+  # Sets instance variables based on the parameters
+  # * @from_user_id
+  # * @from_user
+  # * @to_user_id
+  # * @to_user
   def user_and_user_id
-    case params[:from_user_id]
+    @from_user_id, @from_user = *extract_user_id_and_user(params[:from_user_id])
+    @to_user_id, @to_user = *extract_user_id_and_user(params[:to_user_id])
+  end
+
+  def extract_user_id_and_user(user_id_param)
+    user_id = nil
+    user = nil
+
+    case user_id_param
     when 'null' # Javascript nulls
-      @from_user_id = nil
-      @from_user = nil
+      user_id = nil
+      user = nil
     when '0' # Unknown user
-      @from_user_id = 0
-      @from_user = UnknownUser.instance
+      user_id = 0
+      user = UnknownUser.instance
     else
-      @from_user_id = params[:from_user_id]
-      @from_user = User.find_by_id(@from_user_id) # only needed for user specific views
+      user_id = user_id_param
+      user = User.find_by_id(user_id) # only needed for user specific views
     end
 
-    case params[:to_user_id]
-    when 'null' # Javascript nulls
-      @to_user_id = nil
-      @to_user = nil
-    when '0' # Unknown user
-      @to_user_id = 0
-      @to_user = UnknownUser.instance
-    else
-      @to_user_id = params[:to_user_id]
-      @to_user = User.find_by_id(@to_user_id) # only needed for user specific views
-    end
+    return [user_id, user]
   end
 end
