@@ -16,7 +16,7 @@ end
 Redmine::Plugin.register :redmine_kanban do
   name 'Kanban'
   author 'Eric Davis'
-  url 'https://projects.littlestreamsoftware.com/'
+  url 'https://projects.littlestreamsoftware.com/projects/redmine-kanban'
   author_url 'http://www.littlestreamsoftware.com'
   description 'The Redmine Kanban plugin is used to manage issues according to the Kanban system of project management.'
   version '0.1.0'
