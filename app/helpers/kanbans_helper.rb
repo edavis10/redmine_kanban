@@ -23,7 +23,7 @@ module KanbansHelper
   end
 
   def over_pane_limit?(limit, counter)
-    if counter >= limit # 0 based counter
+    if !counter.nil? && !limit.nil? && counter.to_i >= limit.to_i # 0 based counter
       return 'over-limit'
     else
       return ''

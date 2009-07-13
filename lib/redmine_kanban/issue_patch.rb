@@ -11,6 +11,12 @@ module RedmineKanban
         unloadable # Send unloadable so it will not be unloaded in development
 
         after_save :update_kanban_from_issue
+
+        # Add visible to Redmine 0.8.x
+        unless respond_to?(:visible)
+          named_scope :visible, lambda {|*args| { :include => :project,
+              :conditions => Project.allowed_to_condition(args.first || User.current, :view_issues) } }
+        end
       end
 
     end

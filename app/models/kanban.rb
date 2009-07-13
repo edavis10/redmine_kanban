@@ -52,7 +52,7 @@ class Kanban
     conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
 
     issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
-                               :order => "#{IssuePriority.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
                                :conditions => conditions.conditions)
 
@@ -66,7 +66,7 @@ class Kanban
   # TODO: similar to backlog issues
   def get_quick_issues
     issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
-                               :order => "#{IssuePriority.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
                                :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
 
