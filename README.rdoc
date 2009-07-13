@@ -14,9 +14,9 @@ The Redmine Kanban plugin is used to manage issues according to the Kanban syste
   * Testing Staffed Requests - issues awaiting testing
   * Finished Requests
 * Updates to Kanban view are saved to the issues
-** Issue status
-** Issue assignment
-** Issue start date
+  * Issue status
+  * Issue assignment
+  * Issue start date
 
 == Getting the plugin
 
