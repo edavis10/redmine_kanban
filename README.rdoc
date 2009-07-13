@@ -4,12 +4,23 @@ The Redmine Kanban plugin is used to manage issues according to the Kanban syste
 
 == Features
 
-TODO:
+* Global Kanban page showing the status of issues across projects
+* Multiple "Panes" to show the lifecycle of an issue
+  * Incoming Pane
+  * Unstaffed Backlog pane
+  * Quick Tasks pane - issues without a time estimate
+  * Selected Tasks - Manager prioritized list
+  * Active Staffed Requests - issues in progress
+  * Testing Staffed Requests - issues awaiting testing
+  * Finished Requests
+* Updates to Kanban view are saved to the issues
+** Issue status
+** Issue assignment
+** Issue start date
 
 == Getting the plugin
 
 A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-kanban/files] or from {GitHub}[http://github.com/edavis10/redmine-kanban]
-
 
 == Installation and Setup
 
@@ -17,12 +28,26 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 2. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
 3. Run the plugin migrations +rake db:migrate_plugins+
 4. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
-5. Login and configure the plugin (Administration > Plugins > Configure)
+5. Login and configure the plugin (Administration > Plugins > Configure).  See below for the recommend approach.
 6. Click the Kanban link in the top left menu
 
 == Usage
 
-TODO
+=== Recommended configuration
+
+The Kanban plugin uses 7 sets of lists, referred to panes:
+
+* Incoming - New
+* Unstaffed Backlog - Approved
+* Quick Tasks
+* Selected Tasks - Selected
+* Active Staffed Requests - In Progress
+* Testing Staffed Requests - Resolved
+* Finished Requests - Complete
+
+Each pane (except Quick Tasks) needs to be associated with a Issue Status.  The recommended statuses are above but you can customize them as needed.  The Staffed panes (Active, Testing, Finished) also require choosing a Role to use.  Any user with this Role will have their own personal set of panes created on the Kanban page.
+
+Quick tasks will pull in the highest priority issues from the Backlog that don't have an estimate.  This is useful when someone has a limited amount of time but wants to finish something, like when it's 4:30pm on a Friday afternoon.
 
 == License
 
