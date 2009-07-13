@@ -36,3 +36,4 @@ li.issue { cursor: move; }
 
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; width: 100%; border: 1px solid #000000; }
+.general-help {font-size: 90%; font-style: italic;}
