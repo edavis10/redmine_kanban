@@ -18,7 +18,7 @@ class KanbansController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
-    @from_user_id, @from_user, @to_user_id, @to_user =  *user_and_user_id
+    user_and_user_id
 
     Kanban.update_sorted_issues(@to, params[:to_issue], @to_user_id) if Kanban.kanban_issues_panes.include?(@to)
 
@@ -75,36 +75,28 @@ class KanbansController < ApplicationController
 
   # Sets @user and @user_id based on the parameters
   def user_and_user_id
-    from_user_id = nil
-    from_user = nil
-    to_user_id = nil
-    to_user = nil
-
-    
     case params[:from_user_id]
     when 'null' # Javascript nulls
-      from_user_id = nil
-      from_user = nil
+      @from_user_id = nil
+      @from_user = nil
     when '0' # Unknown user
-      from_user_id = 0
-      from_user = UnknownUser.instance
+      @from_user_id = 0
+      @from_user = UnknownUser.instance
     else
-      from_user_id = params[:from_user_id]
-      from_user = User.find_by_id(from_user_id) # only needed for user specific views
+      @from_user_id = params[:from_user_id]
+      @from_user = User.find_by_id(@from_user_id) # only needed for user specific views
     end
 
     case params[:to_user_id]
     when 'null' # Javascript nulls
-      to_user_id = nil
-      to_user = nil
+      @to_user_id = nil
+      @to_user = nil
     when '0' # Unknown user
-      to_user_id = 0
-      to_user = UnknownUser.instance
+      @to_user_id = 0
+      @to_user = UnknownUser.instance
     else
-      to_user_id = params[:to_user_id]
-      to_user = User.find_by_id(to_user_id) # only needed for user specific views
+      @to_user_id = params[:to_user_id]
+      @to_user = User.find_by_id(@to_user_id) # only needed for user specific views
     end
-
-    return [from_user_id, from_user, to_user_id, to_user]
   end
 end
