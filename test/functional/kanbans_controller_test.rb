@@ -56,10 +56,7 @@ class KanbansControllerTest < ActionController::TestCase
     }
 
     should_assign_to :settings
-    should_assign_to :incoming_issues
-    should_assign_to :backlog_issues
-    should_assign_to :quick_issues
-    should_assign_to :selected_issues
+    should_assign_to :kanban
 
     should_respond_with :success
     should_render_template :show
@@ -167,9 +164,9 @@ class KanbansControllerTest < ActionController::TestCase
       }
       
       should_respond_with :success
-      should_assign_to :incoming_issues
-      should_assign_to :backlog_issues
-      
+      should_assign_to :settings
+      should_assign_to :kanban
+
       should "update the issue status to 'to'" do
         @issue.reload
         assert_equal "Unstaffed", @issue.status.name

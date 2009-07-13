@@ -1,8 +1,8 @@
       <%= content_tag(:h3, l(:kanban_text_quick_tasks)) %>
       <ol id="quick-issues">
-        <% if @quick_issues.empty? %>
+        <% if @kanban.quick_issues.empty? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
-        <%= render :partial => 'grouped_issues', :object => @quick_issues %>
+        <%= render :partial => 'grouped_issues', :object => @kanban.quick_issues %>
         <% end %>
       </ol>

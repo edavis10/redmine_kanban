@@ -8,10 +8,6 @@ class KanbansController < ApplicationController
   def show
     @settings = Setting.plugin_redmine_kanban
     @kanban = Kanban.find
-    @incoming_issues = @kanban.incoming_issues
-    @quick_issues = @kanban.quick_issues
-    @backlog_issues = @kanban.backlog_issues
-    @selected_issues = @kanban.selected_issues
   end
 
   def update
@@ -25,10 +21,6 @@ class KanbansController < ApplicationController
     saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @to_user)
 
     @kanban = Kanban.find
-    @incoming_issues = @kanban.incoming_issues
-    @quick_issues = @kanban.quick_issues
-    @backlog_issues = @kanban.backlog_issues
-    @selected_issues = @kanban.selected_issues
     respond_to do |format|
 
       if saved
