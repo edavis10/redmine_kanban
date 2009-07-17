@@ -5,4 +5,21 @@ class KanbanTest < Test::Unit::TestCase
     configure_plugin
   end
 
+  context 'after_destroy' do
+    should 'destroy any associated KanbanIssues' do
+      shared_setup
+      project = make_project_with_trackers
+      issue = Issue.make(:project => project,
+                         :tracker => project.trackers.first,
+                         :status => IssueStatus.find_by_name('Active')
+                         )
+
+      assert KanbanIssue.find_by_issue_id(issue.id)
+      assert_difference('KanbanIssue.count',-1) do
+        issue.destroy
+      end
+      assert_nil KanbanIssue.find_by_issue_id(issue.id)
+    end
+  end
+  
 end

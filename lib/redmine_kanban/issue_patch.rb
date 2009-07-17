@@ -11,6 +11,7 @@ module RedmineKanban
         unloadable # Send unloadable so it will not be unloaded in development
 
         after_save :update_kanban_from_issue
+        after_destroy :remove_kanban_issues
 
         # Add visible to Redmine 0.8.x
         unless respond_to?(:visible)
@@ -30,6 +31,10 @@ module RedmineKanban
         self.reload
         KanbanIssue.update_from_issue(self)
         return true
+      end
+
+      def remove_kanban_issues
+        KanbanIssue.destroy_all(['issue_id = (?)', self.id]) if self.id
       end
     end    
   end
