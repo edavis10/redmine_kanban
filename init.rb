@@ -43,5 +43,8 @@ Redmine::Plugin.register :redmine_kanban do
   menu(:top_menu,
        :kanban,
        {:controller => 'kanbans', :action => 'show'},
-       :caption => :kanban_title)
+       :caption => :kanban_title,
+       :if => Proc.new {
+         User.current.allowed_to?(:view_kanban, nil, :global => true)
+       })
 end
