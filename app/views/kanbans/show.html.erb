@@ -6,20 +6,28 @@
 
 <div id="kanban">
   <div id="unstaffed-requests" class="column">
+    <% if pane_configured?('incoming') %>
     <div id="incoming" class="pane">
       <%= render :partial => 'incoming' %>
     </div>
+    <% end %>
+    <% if pane_configured?('backlog') %>
     <div id="backlog" class="pane">
       <%= render :partial => 'backlog' %>
     </div>
+    <% end %>
   </div>
   <div id="selected-requests" class="column">
+    <% if pane_configured?('backlog') %>
     <div id="quick-tasks" class="pane">
       <%= render :partial => 'quick' %>
     </div>
+    <% end %>
+    <% if pane_configured?('selected') %>
     <div id="selected-tasks"class="pane">
       <%= render :partial => 'selected' %>
     </div>
+    <% end %>
   </div>
   <div id="staffed-requests" class="column">
     <div id="staffed-requests-header" class="staff">

@@ -2,14 +2,20 @@
     <div id="user-<%= h user.id -%>" class="staffed-column pane user">
       <%= h user.name %>
     </div>
+    <% if pane_configured?('active') %>
     <div id="active-<%= h user.id -%>" class="staffed-column pane active user-<%= h user.id -%>">
       <%= render(:partial => 'active', :locals => {:user => user}) %>
     </div>
+    <% end %>
+    <% if pane_configured?('testing') %>
     <div id="testing-<%= h user.id -%>" class="staffed-column pane testing user-<%= h user.id -%>">
       <%= render(:partial => 'testing', :locals => {:user => user}) %>
     </div>
+    <% end %>
+    <% if pane_configured?('finished') %>
     <div id="finished-<%= h user.id -%>" class="staffed-column pane finished user-<%= h user.id -%>">
       <%= render(:partial => 'finished', :locals => {:user => user}) %>
     </div>
+    <% end %>
     <div style="clear:both"></div>
   </div>

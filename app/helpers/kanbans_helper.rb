@@ -29,4 +29,8 @@ module KanbansHelper
       return ''
     end
   end
+
+  def pane_configured?(pane)
+    (@settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
+  end
 end
