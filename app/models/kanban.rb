@@ -79,9 +79,10 @@ class Kanban
 
   # TODO: similar to backlog issues
   def get_finished_issues
+    days = @settings['panes']['finished']['limit'] || 7
     issues = Issue.visible.all(:include => :assigned_to,
                                :order => "#{Issue.table_name}.updated_on DESC",
-                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['finished']['status'], 7.days.ago])
+                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['finished']['status'], days.to_i.days.ago])
 
     return issues.group_by(&:assigned_to)
   end

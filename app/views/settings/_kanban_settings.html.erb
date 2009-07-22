@@ -61,6 +61,7 @@ end
   <%= issue_status_pane('testing') %>
   <p>
     <% finished_status = @settings['panes']['finished'] && @settings['panes']['finished']['status'] ? @settings['panes']['finished']['status'].to_i : ''    %>
+    <% finished_limit = @settings['panes']['finished'] && @settings['panes']['finished']['limit'] ? @settings['panes']['finished']['limit'].to_i : '' %>
 
     <%= content_tag(:label, l("kanban_label_finished_pane".to_sym)) + 
       select_tag("settings[panes][finished][status]",
@@ -69,6 +70,9 @@ end
                                                     :id,
                                                     :name,
                                                     finished_status)) %>
+
+    <%= content_tag(:span, l(:kanban_label_day_limit), :style => "padding: 0 0.5em 0 3em;") %>
+    <%= text_field_tag("settings[panes][finished][limit]", finished_limit ) %>
   </p>
 
 </fieldset>

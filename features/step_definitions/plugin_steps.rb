@@ -45,7 +45,8 @@ Given /^the plugin is configured$/ do
         "limit"=>"5"
       },
       "finished"=>{
-        "status"=> IssueStatus.find_by_name('Closed').id
+        "status"=> IssueStatus.find_by_name('Closed').id,
+        "limit"=>"7"
       }
     }}
     
