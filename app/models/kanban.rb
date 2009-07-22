@@ -90,6 +90,8 @@ class Kanban
   def get_users
     role = Role.find_by_id(@settings["staff_role"])
     @users = role.members.collect(&:user).uniq.sort if role
+    @users ||= []
+    @users = move_current_user_to_front
     @users << UnknownUser.instance
     @users
   end
@@ -192,6 +194,16 @@ class Kanban
           end
         end
       end
+    end
+  end
+
+  private
+
+  def move_current_user_to_front
+    if user = @users.delete(User.current)
+      @users.unshift(user)
+    else
+      @users
     end
   end
 end
