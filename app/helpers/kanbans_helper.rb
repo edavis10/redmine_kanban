@@ -33,4 +33,12 @@ module KanbansHelper
   def pane_configured?(pane)
     (@settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
   end
+
+  def kanban_issue_css_classes(issue)
+    css = 'kanban-issue ' + issue.css_classes
+    if User.current.logged? && !issue.assigned_to_id.nil? && issue.assigned_to_id != User.current.id
+      css << ' assigned-to-other'
+    end
+    css
+  end
 end

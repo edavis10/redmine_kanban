@@ -33,7 +33,8 @@ ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15
 
 /* Issue rows */
 li.issue { cursor: move; }
-
+li.issue.assigned-to-me { font-weight: bolder;}
+li.issue.assigned-to-other { color: #888888; }
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; width: 100%; border: 1px solid #000000; }
 .general-help {font-size: 90%; font-style: italic;}
