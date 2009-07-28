@@ -6,13 +6,14 @@
 
 #incoming {min-height: 200px;}
 #backlog { }
+#staffed-requests { padding: 0; }
 #staffed-requests .user { width: 10%;}
 #staffed-requests .active { width: 29%;}
 #staffed-requests .testing { width: 29%;}
 #staffed-requests .finished { width: 29%;}
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
-.staff { border: 2px solid #333333; padding: 5px; min-height: 60px; }
+.staff { border-top: 2px solid #333333; padding: 5px; min-height: 60px; }
 .staffed-column { float:left; }
 .active-header { width:33%; display: inline;}
 .active-header h3 { display:inline }
@@ -23,7 +24,7 @@
 #staffed-requests-header { min-height: 1.5em; border: none; text-align: center;}
 
 div.pane ol { list-style: none; padding-left: 0px; }
-div.pane ol li { padding: 1px 0; }
+div.pane ol li { padding: 1px 5px; }
 div.pane ol li:hover { background-color:#ffffdd; }
 div.pane li.over-limit { background-color: #ffb4b4; }
 div.pane li.over-limit:hover { background-color: #ffd4d4; }
