@@ -61,7 +61,7 @@ end
   <%= issue_status_pane('testing') %>
   <p>
     <% finished_status = @settings['panes']['finished'] && @settings['panes']['finished']['status'] ? @settings['panes']['finished']['status'].to_i : ''    %>
-    <% finished_limit = @settings['panes']['finished'] && @settings['panes']['finished']['limit'] ? @settings['panes']['finished']['limit'].to_i : '' %>
+    <% finished_limit = @settings['panes']['finished'] && @settings['panes']['finished']['limit'] ? @settings['panes']['finished']['limit'].to_f : '' %>
 
     <%= content_tag(:label, l("kanban_label_finished_pane".to_sym)) + 
       select_tag("settings[panes][finished][status]",
