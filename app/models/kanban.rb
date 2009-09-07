@@ -31,7 +31,7 @@ class Kanban
     kanban.users = kanban.get_users
     kanban.incoming_issues = kanban.get_incoming_issues
     kanban.quick_issues = kanban.get_quick_issues
-    kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.values.flatten.collect(&:id))
+    kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.to_a.flatten.collect(&:id))
     kanban.selected_issues = KanbanIssue.find_selected
     kanban.active_issues = kanban.get_active
     kanban.testing_issues = kanban.get_testing
