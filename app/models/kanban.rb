@@ -89,7 +89,7 @@ class Kanban
 
   def get_users
     role = Role.find_by_id(@settings["staff_role"])
-    @users = role.members.collect(&:user).uniq.sort if role
+    @users = role.members.collect(&:user).uniq.compact.sort if role
     @users ||= []
     @users = move_current_user_to_front
     @users << UnknownUser.instance
