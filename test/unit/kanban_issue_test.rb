@@ -3,11 +3,11 @@ require File.dirname(__FILE__) + '/../test_helper'
 class KanbanIssueTest < ActiveSupport::TestCase
   def shared_setup
     @project = make_project_with_trackers
-    @issue = Issue.make(:project => @project, :tracker => @project.trackers.first)
-    @user = User.make
+    @issue = Issue.generate!(:project => @project, :tracker => @project.trackers.first)
+    @user = User.generate_with_protected!
     @role = Role.find_by_name('KanbanRole')
     if @role.nil?
-      @role = Role.make(:name => 'KanbanRole')
+      @role = Role.generate!(:name => 'KanbanRole')
     end
     
     @member = make_member({
@@ -124,7 +124,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
       should 'remove all KanbanIssues for the issue' do
         
         setup_kanban_issues
-        unconfigured_status = IssueStatus.make(:name => 'NoKanban')
+        unconfigured_status = IssueStatus.generate!(:name => 'NoKanban')
         kanban = KanbanIssue.last
         assert kanban
         assert kanban.issue
@@ -141,7 +141,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
     context 'to a status with a kanban status' do
       should 'create a new KanbanIssue if there is not one already' do
         assert_difference('KanbanIssue.count') do
-          @issue = Issue.make(:tracker => @public_project.trackers.first,
+          @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                               :project => @public_project,
                               :status => IssueStatus.find_by_name('Selected'))
         end
@@ -168,7 +168,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
         assert_equal 'selected', kanban_issue.state
 
         issue = kanban_issue.issue
-        issue.assigned_to = User.make
+        issue.assigned_to = User.generate_with_protected!
         issue.status = IssueStatus.find_by_name('Active')
         issue.save
         kanban_issue.reload
@@ -179,7 +179,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
 
     should 'return true' do
       @public_project = make_project_with_trackers(:is_public => true)
-      issue = Issue.make(:tracker => @public_project.trackers.first,
+      issue = Issue.generate!(:tracker => @public_project.trackers.first,
                          :project => @public_project)
 
       assert KanbanIssue.update_from_issue(issue)

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class KanbanTest < ActiveSupport::TestCase
   def shared_setup
 
-    @user = User.make
+    @user = User.generate_with_protected!
     User.current = @user
   end
 
@@ -213,7 +213,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "with a new KanbanIssue" do
       should "create a new KanbanIssue" do
         KanbanIssue.destroy_all
-        issue = Issue.make({
+        issue = Issue.generate!({
                              :tracker => @public_project.trackers.first,
                              :project => @public_project
                            })
@@ -231,11 +231,11 @@ class KanbanTest < ActiveSupport::TestCase
 
     context "with an existing KanbanIssue" do
       setup {
-        @issue = Issue.make({
+        @issue = Issue.generate!({
                              :tracker => @public_project.trackers.first,
                              :project => @public_project
                            })
-        @kanban_issue = KanbanIssue.make({
+        @kanban_issue = KanbanIssue.generate!({
                                            :issue => @issue,
                                            :user => nil,
                                            :state => 'none',
@@ -264,9 +264,9 @@ class KanbanTest < ActiveSupport::TestCase
       @from = "incoming"
       @to = "active"
       @high_priority = IssuePriority.find_by_name("High")
-      @high_priority ||= IssuePriority.make(:name => "High") if @high_priority.nil?
+      @high_priority ||= IssuePriority.generate!(:name => "High") if @high_priority.nil?
 
-      @issue = Issue.make(:tracker => @public_project.trackers.first,
+      @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                           :project => @public_project,
                           :priority => @high_priority,
                           :status => IssueStatus.find_by_name('New'))

@@ -9,7 +9,7 @@ class IssueTest < ActiveSupport::TestCase
     should 'destroy any associated KanbanIssues' do
       shared_setup
       project = make_project_with_trackers
-      issue = Issue.make(:project => project,
+      issue = Issue.generate!(:project => project,
                          :tracker => project.trackers.first,
                          :status => IssueStatus.find_by_name('Active')
                          )

@@ -8,18 +8,18 @@ require 'faker'
 
 module KanbanTestHelper
   def make_issue_statuses
-    IssueStatus.make(:name => 'New') if IssueStatus.find_by_name('New').nil?
-    IssueStatus.make(:name => 'Unstaffed') if IssueStatus.find_by_name('Unstaffed').nil?
-    IssueStatus.make(:name => 'Selected') if IssueStatus.find_by_name('Selected').nil?
-    IssueStatus.make(:name => 'Active') if IssueStatus.find_by_name('Active').nil?
-    IssueStatus.make(:name => 'Test-N-Doc') if IssueStatus.find_by_name('Test-N-Doc').nil?
-    IssueStatus.make(:name => 'Closed', :is_closed => true) if IssueStatus.find_by_name('Closed').nil?
-    IssueStatus.make(:name => 'Rejected', :is_closed => true) if IssueStatus.find_by_name('Rejected').nil?
+    IssueStatus.generate!(:name => 'New') if IssueStatus.find_by_name('New').nil?
+    IssueStatus.generate!(:name => 'Unstaffed') if IssueStatus.find_by_name('Unstaffed').nil?
+    IssueStatus.generate!(:name => 'Selected') if IssueStatus.find_by_name('Selected').nil?
+    IssueStatus.generate!(:name => 'Active') if IssueStatus.find_by_name('Active').nil?
+    IssueStatus.generate!(:name => 'Test-N-Doc') if IssueStatus.find_by_name('Test-N-Doc').nil?
+    IssueStatus.generate!(:name => 'Closed', :is_closed => true) if IssueStatus.find_by_name('Closed').nil?
+    IssueStatus.generate!(:name => 'Rejected', :is_closed => true) if IssueStatus.find_by_name('Rejected').nil?
   end
 
   def make_roles(count = 5)
     count.times do
-      Role.make
+      Role.generate!
     end
   end
 
@@ -27,23 +27,36 @@ module KanbanTestHelper
     role = Role.find(:last)
     @users = []
     count.times do
-      user = User.make
+      user = User.generate_with_protected!
       make_member({:user => user, :project => @public_project}, [role])
       @users << user
     end
   end
 
   def make_project
-    incoming_project = Project.make(:name => 'Incoming project')
-    tracker = Tracker.make(:name => 'Feature')
+    incoming_project = Project.generate!(:name => 'Incoming project')
+    tracker = Tracker.generate!(:name => 'Feature')
     assign_tracker_to_project tracker, incoming_project
 
     return incoming_project
   end
-  
+
+  def setup_anonymous_role
+    @anon_role = Role.generate!
+    @anon_role.update_attribute(:builtin, Role::BUILTIN_ANONYMOUS)
+  end
+
+  def setup_non_member_role
+    @non_member_role = Role.generate!
+    @non_member_role.update_attribute(:builtin, Role::BUILTIN_NON_MEMBER)
+  end
+
+
   def configure_plugin(configuration_change = {})
+    setup_anonymous_role
+    setup_non_member_role
     make_issue_statuses
-    Role.make(:name => 'KanbanRole') if Role.find_by_name('KanbanRole').nil?
+    Role.generate!(:name => 'KanbanRole') if Role.find_by_name('KanbanRole').nil?
 
     Setting.plugin_redmine_kanban = {
     "staff_role"=> Role.find(:last),
@@ -93,9 +106,9 @@ module KanbanTestHelper
 
     make_users
     
-    @high_priority = IssuePriority.make(:name => "High") if IssuePriority.find_by_name("High").nil?
-    @medium_priority = IssuePriority.make(:name => "Medium") if IssuePriority.find_by_name("Medium").nil?
-    @low_priority = IssuePriority.make(:name => "Low") if IssuePriority.find_by_name("Low").nil?
+    @high_priority = IssuePriority.generate!(:name => "High") if IssuePriority.find_by_name("High").nil?
+    @medium_priority = IssuePriority.generate!(:name => "Medium") if IssuePriority.find_by_name("Medium").nil?
+    @low_priority = IssuePriority.generate!(:name => "Low") if IssuePriority.find_by_name("Low").nil?
 
   end
 
@@ -113,13 +126,13 @@ module KanbanTestHelper
     new_status = IssueStatus.find_by_name('New')
     # Incoming
     5.times do
-      Issue.make(:tracker => @private_tracker,
+      Issue.generate!(:tracker => @private_tracker,
                  :project => @private_project,
                  :status => new_status)
     end
 
     6.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => new_status)
     end
@@ -129,7 +142,7 @@ module KanbanTestHelper
     unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Quick tasks
     4.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @high_priority,
                  :status => unstaffed_status,
@@ -137,7 +150,7 @@ module KanbanTestHelper
     end
 
     1.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @medium_priority,
                  :status => unstaffed_status,
@@ -145,7 +158,7 @@ module KanbanTestHelper
     end
 
     2.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @low_priority,
                  :status => unstaffed_status,
@@ -158,7 +171,7 @@ module KanbanTestHelper
     unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Backlog tasks
     5.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @high_priority,
                  :status => unstaffed_status,
@@ -166,7 +179,7 @@ module KanbanTestHelper
     end
 
     7.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @medium_priority,
                  :status => unstaffed_status,
@@ -174,7 +187,7 @@ module KanbanTestHelper
     end
 
     5.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @low_priority,
                  :status => unstaffed_status,
@@ -187,7 +200,7 @@ module KanbanTestHelper
     selected_status = IssueStatus.find_by_name('Selected')
     # Selected tasks
     10.times do
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => selected_status)
     end
@@ -199,7 +212,7 @@ module KanbanTestHelper
     # Active tasks
     @users.each do |user|
       5.times do
-        Issue.make(:tracker => @public_tracker,
+        Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :assigned_to => user,
                    :status => active_status)
@@ -213,7 +226,7 @@ module KanbanTestHelper
     # Testing tasks
     @users.each do |user|
       5.times do
-        Issue.make(:tracker => @public_tracker,
+        Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :assigned_to => user,
                    :status => testing_status)
@@ -229,14 +242,14 @@ module KanbanTestHelper
     # Finished tasks
     @users.each do |user|
       5.times do
-        Issue.make(:tracker => @public_tracker,
+        Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :status => closed_status,
                    :assigned_to => user)
       end
 
       # Extra issues that should not show up
-      Issue.make(:tracker => @public_tracker,
+      Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :status => rejected_status,
                  :assigned_to => user)
@@ -250,18 +263,42 @@ module KanbanTestHelper
     active_status = IssueStatus.find_by_name('Active')
     testing_status = IssueStatus.find_by_name('Test-N-Doc')
     3.times do
-      i = Issue.make(:tracker => @public_tracker,
+      i = Issue.generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
                      :status => active_status)
     end
 
     4.times do
-      i = Issue.make(:tracker => @public_tracker,
+      i = Issue.generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
                      :status => testing_status)
     end
+  end
+
+
+  # Extracted out of the Machinist files, might not be needed now
+  #
+  def make_project_with_enabled_modules(attributes = {})
+    Project.generate!(attributes)
+  end
+
+  def make_project_with_trackers(attributes = {}, tracker_name = 'Feature')
+    project = make_project_with_enabled_modules(attributes)
+    tracker = Tracker.find_by_name(tracker_name)
+    tracker = Tracker.generate!(:name => tracker_name) if tracker.nil?
+    assign_tracker_to_project tracker, project
+    project
+  end
+
+  def assign_tracker_to_project(tracker, project)
+    project.trackers << tracker
+    project.save!
+  end
+
+  def make_member(attributes, roles)
+    Member.generate!(attributes.merge(:roles => roles))
   end
 
 end
