@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class SanityTest < Test::Unit::TestCase
+class SanityTest < ActiveSupport::TestCase
   def test_is_sane
     assert true
   end

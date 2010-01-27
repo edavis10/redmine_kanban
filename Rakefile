@@ -6,14 +6,11 @@ Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each
 RedminePluginSupport::Base.setup do |plugin|
   plugin.project_name = 'redmine_kanban'
   plugin.default_task = [:test, :features]
-  plugin.tasks = [:doc, :release, :clean, :test, :cucumber]
+  plugin.tasks = [:doc, :release, :clean, :test, :db, :cucumber]
   # TODO: gem not getting this automaticly
   plugin.redmine_root = File.expand_path(File.dirname(__FILE__) + '/../../../')
 end
 
-task :environment do
-  require(File.join(File.expand_path(File.dirname(__FILE__) + '/../../../config'), 'environment'))
-end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|

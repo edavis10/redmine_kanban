@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class KanbanTest < Test::Unit::TestCase
+class KanbanTest < ActiveSupport::TestCase
   def shared_setup
 
     @user = User.make

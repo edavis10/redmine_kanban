@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class KanbanIssueTest < Test::Unit::TestCase
+class KanbanIssueTest < ActiveSupport::TestCase
   def shared_setup
     @project = make_project_with_trackers
     @issue = Issue.make(:project => @project, :tracker => @project.trackers.first)
