@@ -42,13 +42,21 @@ module KanbanTestHelper
   end
 
   def setup_anonymous_role
-    @anon_role = Role.generate!
-    @anon_role.update_attribute(:builtin, Role::BUILTIN_ANONYMOUS)
+    begin
+      @anon_role = Role.anonymous
+    rescue
+      @anon_role = Role.generate!
+      @anon_role.update_attribute(:builtin, Role::BUILTIN_ANONYMOUS)
+    end
   end
 
   def setup_non_member_role
-    @non_member_role = Role.generate!
-    @non_member_role.update_attribute(:builtin, Role::BUILTIN_NON_MEMBER)
+    begin
+      @anon_role = Role.non_member
+    rescue
+      @non_member_role = Role.generate!
+      @non_member_role.update_attribute(:builtin, Role::BUILTIN_NON_MEMBER)
+    end
   end
 
 
