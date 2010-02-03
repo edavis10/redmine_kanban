@@ -7,8 +7,8 @@ class KanbansControllerTest < ActionController::TestCase
     @public_project = make_project_with_trackers(:is_public => true)
     @user = User.generate_with_protected!
     @request.session[:user_id] = @user.id
-    @role = Role.generate!
-    @member = make_member({:user => @user, :project => @public_project}, [@role])
+    @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
+    @member = make_member({:principal => @user, :project => @public_project}, [@role])
   end
 
   context "permissions" do
@@ -51,6 +51,10 @@ class KanbansControllerTest < ActionController::TestCase
       shared_setup
       setup_kanban_issues
       setup_all_issues
+
+      # Bloody hack since @public_project is redefined....
+      @member = make_member({:principal => @user, :project => @public_project}, [@role])
+      assert @user.allowed_to?(:view_kanban, @public_project)
 
       get :show
     }

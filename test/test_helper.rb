@@ -24,7 +24,7 @@ module KanbanTestHelper
   end
 
   def make_users(count = 3)
-    role = Role.find(:last)
+    role = make_kanban_role
     @users = []
     count.times do
       user = User.generate_with_protected!
@@ -72,7 +72,7 @@ module KanbanTestHelper
     make_kanban_role
 
     Setting.plugin_redmine_kanban = {
-    "staff_role"=> Role.find(:last),
+    "staff_role"=> make_kanban_role,
     "panes"=>
     {
       "selected"=>{
