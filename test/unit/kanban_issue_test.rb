@@ -5,10 +5,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
     @project = make_project_with_trackers
     @issue = Issue.generate!(:project => @project, :tracker => @project.trackers.first)
     @user = User.generate_with_protected!
-    @role = Role.find_by_name('KanbanRole')
-    if @role.nil?
-      @role = Role.generate!(:name => 'KanbanRole')
-    end
+    @role = make_kanban_role
     
     @member = make_member({
                             :user => @user,

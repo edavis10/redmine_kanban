@@ -70,6 +70,7 @@ class Kanban
                                :include => :priority,
                                :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
 
+    # Returns as nested arrays
     return issues.group_by {|issue|
       issue.priority
     }.sort {|a,b|
@@ -113,7 +114,7 @@ class Kanban
   end
   
   def quick_issue_ids
-    return @quick_issues.values.flatten.collect(&:id)
+    return @quick_issues.collect {|ary| ary[1] }.flatten.collect(&:id)
   end
 
   # Updates the Issue with +issue_id+ to change it's

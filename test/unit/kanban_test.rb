@@ -11,6 +11,7 @@ class KanbanTest < ActiveSupport::TestCase
     setup {
       shared_setup
       setup_kanban_issues
+      make_member({:principal => @user, :project => @public_project}, [Role.last])
     }
 
     context "for incoming issues" do
@@ -38,7 +39,7 @@ class KanbanTest < ActiveSupport::TestCase
 
       should "only get backlog issues up to the limit" do
         assert_equal 3, @kanban.backlog_issues.size # Priorities
-        assert_equal 15, @kanban.backlog_issues.values.collect.flatten.size # Issues
+        assert_equal 15, @kanban.backlog_issues.collect {|a| a[1]}.flatten.size # Issues
       end
 
       should "only get backlog issues with the configured status" do
@@ -58,9 +59,9 @@ class KanbanTest < ActiveSupport::TestCase
       end
 
       should "group backlog issues by IssuePriority" do
-        assert_equal IssuePriority.find_by_name("High"),  @kanban.backlog_issues.keys[0]
-        assert_equal IssuePriority.find_by_name("Medium"),  @kanban.backlog_issues.keys[1]
-        assert_equal IssuePriority.find_by_name("Low"),  @kanban.backlog_issues.keys[2]
+        assert_equal IssuePriority.find_by_name("High"),  @kanban.backlog_issues.first.first
+        assert_equal IssuePriority.find_by_name("Medium"),  @kanban.backlog_issues[1].first
+        assert_equal IssuePriority.find_by_name("Low"),  @kanban.backlog_issues[2].first
       end
     end
 
@@ -72,7 +73,7 @@ class KanbanTest < ActiveSupport::TestCase
       
       should "only get quick issues up to the limit" do
         assert_equal 2, @kanban.quick_issues.size # Priorities
-        assert_equal 5, @kanban.quick_issues.values.collect.flatten.size # Issues
+        assert_equal 5, @kanban.quick_issues.collect {|a| a[1]}.flatten.size # Issues
       end
 
       should "only get quick issues with the configured Backlog status" do
@@ -84,8 +85,8 @@ class KanbanTest < ActiveSupport::TestCase
       end
 
       should "group quick issues by IssuePriority" do
-        assert_equal IssuePriority.find_by_name("High"),  @kanban.quick_issues.keys[0]
-        assert_equal IssuePriority.find_by_name("Medium"),  @kanban.quick_issues.keys[1]
+        assert_equal IssuePriority.find_by_name("High"),  @kanban.quick_issues.first.first
+        assert_equal IssuePriority.find_by_name("Medium"),  @kanban.quick_issues[1].first
       end
     end
 
@@ -114,7 +115,7 @@ class KanbanTest < ActiveSupport::TestCase
       }
       
       should "only get all active issues" do
-        assert_equal 4, @kanban.active_issues.size # Users + Unknown
+        assert_equal 5, @kanban.active_issues.size # Users + Unknown
         assert_equal 18, @kanban.active_issues.values.collect.flatten.size # Issues
       end
 
@@ -141,7 +142,7 @@ class KanbanTest < ActiveSupport::TestCase
       }
       
       should "only get all testing issues" do
-        assert_equal 4, @kanban.testing_issues.size # Users + Unknow
+        assert_equal 5, @kanban.testing_issues.size # Users + Unknow
         assert_equal 19, @kanban.testing_issues.values.collect.flatten.size # Issues
       end
 
@@ -191,7 +192,7 @@ class KanbanTest < ActiveSupport::TestCase
 
     should "set @users based on the configured role" do
       @kanban = Kanban.find
-      assert_equal 4, @kanban.users.length # +1 Unknown
+      assert_equal 5, @kanban.users.length # +1 Unknown
     end
   end
 

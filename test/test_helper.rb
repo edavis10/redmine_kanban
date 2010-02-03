@@ -28,7 +28,7 @@ module KanbanTestHelper
     @users = []
     count.times do
       user = User.generate_with_protected!
-      make_member({:user => user, :project => @public_project}, [role])
+      make_member({:principal => user, :project => @public_project}, [role])
       @users << user
     end
   end
@@ -59,12 +59,17 @@ module KanbanTestHelper
     end
   end
 
+  def make_kanban_role
+    role = Role.find_by_name('KanbanRole')
+    role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues]) if role.nil?
+    role
+  end
 
   def configure_plugin(configuration_change = {})
     setup_anonymous_role
     setup_non_member_role
     make_issue_statuses
-    Role.generate!(:name => 'KanbanRole') if Role.find_by_name('KanbanRole').nil?
+    make_kanban_role
 
     Setting.plugin_redmine_kanban = {
     "staff_role"=> Role.find(:last),
@@ -220,10 +225,11 @@ module KanbanTestHelper
     # Active tasks
     @users.each do |user|
       5.times do
-        Issue.generate!(:tracker => @public_tracker,
-                   :project => @public_project,
-                   :assigned_to => user,
-                   :status => active_status)
+        Issue.generate_for_project!(@public_project,
+                                    :tracker => @public_tracker,
+                                    :assigned_to => user,
+                                    :author => user,
+                                    :status => active_status)
       end
     end
 
