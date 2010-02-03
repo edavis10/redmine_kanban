@@ -180,9 +180,7 @@ jQuery(function($) {
       var from_user_id = null;
     }
 
-    $.ajax({
-      type: "PUT",
-      url: 'kanban.js',
+    $.ajaxQueue.put('kanban.js', {
       data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
       success: function(response) {
         var partials = $.secureEvalJSON(response);
