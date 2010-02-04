@@ -180,24 +180,29 @@ jQuery(function($) {
       var from_user_id = null;
     }
 
-    $.ajaxQueue.put('kanban.js', {
-      data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
-      success: function(response) {
-        var partials = $.secureEvalJSON(response);
-        $(from).parent().html(partials.from);
-        $(to).parent().html(partials.to);
+    // Only fire the Ajax requests if from_pane is set (cross list DnD) or
+    // the new order has the tagert issue (same list DnD)
+    if (from_pane.length > 0 || to_order.indexOf(issue_id) > 0) {
 
-        if (additional_pane.length > 1) {
-          $(additional_pane).parent().html(partials.additional_pane);
+      $.ajaxQueue.put('kanban.js', {
+        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
+        success: function(response) {
+          var partials = $.secureEvalJSON(response);
+          $(from).parent().html(partials.from);
+          $(to).parent().html(partials.to);
+
+          if (additional_pane.length > 1) {
+            $(additional_pane).parent().html(partials.additional_pane);
+          }
+
+          attachSortables();
+
+        },
+        error: function(response) {
+          $("div.error").html("Error saving lists.  Please refresh the page and try again.").show();
         }
-
-        attachSortables();
-
-      },
-      error: function(response) {
-        $("div.error").html("Error saving lists.  Please refresh the page and try again.").show();
-      }
-    });
+      });
+    }
   };
 });
 
