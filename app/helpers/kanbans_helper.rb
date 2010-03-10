@@ -41,4 +41,8 @@ module KanbansHelper
     end
     css
   end
+
+  def issue_icon_link(issue)
+    link_to(image_tag('ticket.png'), :controller => 'issues', :action => 'show', :id => issue)
+  end
 end
