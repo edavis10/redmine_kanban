@@ -7,7 +7,7 @@
 #incoming {min-height: 200px;}
 #backlog { }
 #staffed-requests { padding: 0; }
-#staffed-requests .user { width: 10%;}
+#staffed-requests .user { width: 10%; font-weight: bold; }
 #staffed-requests .active { width: 29%;}
 #staffed-requests .testing { width: 29%;}
 #staffed-requests .finished { width: 29%;}
