@@ -5,6 +5,7 @@
 <p class="general-help"><%= l(:kanban_text_general_help) %></p>
 
 <div id="kanban">
+  <% if pane_configured?('incoming') || pane_configured?('backlog') %>
   <div id="unstaffed-requests" class="column">
     <% if pane_configured?('incoming') %>
     <div id="incoming" class="pane">
@@ -17,6 +18,8 @@
     </div>
     <% end %>
   </div>
+  <% end %>
+  <% if pane_configured?('backlog') || pane_configured?('selected') %>
   <div id="selected-requests" class="column">
     <% if pane_configured?('backlog') %>
     <div id="quick-tasks" class="pane">
@@ -29,12 +32,13 @@
     </div>
     <% end %>
   </div>
+  <% end %>
   <div id="staffed-requests" class="column">
     <div id="staffed-requests-header" class="staff">
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "staffed-column user") %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active") %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "staffed-column testing") %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "staffed-column finished") %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active") if pane_configured?('active') %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "staffed-column testing") if pane_configured?('testing') %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "staffed-column finished") if pane_configured?('finished') %>
     </div>
     <div style="clear:both"></div>
 
