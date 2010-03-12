@@ -6,11 +6,12 @@ class Kanban
   attr_accessor :active_issues
   attr_accessor :testing_issues
   attr_accessor :finished_issues
+  attr_accessor :canceled_issues
   attr_accessor :settings
   attr_accessor :users
 
   def self.non_kanban_issues_panes
-     ["incoming","backlog", "quick","finished"]
+     ["incoming","backlog", "quick","finished","canceled"]
   end
 
   def self.kanban_issues_panes
@@ -22,7 +23,7 @@ class Kanban
   end
 
   def self.staffed_panes
-    ['active','testing','finished']
+    ['active','testing','finished','canceled']
   end
 
   def self.find
@@ -36,6 +37,7 @@ class Kanban
     kanban.active_issues = kanban.get_active
     kanban.testing_issues = kanban.get_testing
     kanban.finished_issues = kanban.get_finished_issues
+    kanban.canceled_issues = kanban.get_canceled_issues
     kanban
   end
 
@@ -84,6 +86,16 @@ class Kanban
     issues = Issue.visible.all(:include => :assigned_to,
                                :order => "#{Issue.table_name}.updated_on DESC",
                                :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['finished']['status'], days.to_f.days.ago])
+
+    return issues.group_by(&:assigned_to)
+  end
+
+  # TODO: similar to backlog issues
+  def get_canceled_issues
+    days = @settings['panes']['canceled']['limit'] || 7
+    issues = Issue.visible.all(:include => :assigned_to,
+                               :order => "#{Issue.table_name}.updated_on DESC",
+                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['canceled']['status'], days.to_f.days.ago])
 
     return issues.group_by(&:assigned_to)
   end

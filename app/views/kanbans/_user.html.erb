@@ -17,5 +17,10 @@
       <%= render(:partial => 'finished', :locals => {:user => user}) %>
     </div>
     <% end %>
+    <% if pane_configured?('canceled') %>
+    <div id="canceled-<%= h user.id -%>" class="staffed-column pane canceled user-<%= h user.id -%>">
+      <%= render(:partial => 'canceled', :locals => {:user => user}) %>
+    </div>
+    <% end %>
     <div style="clear:both"></div>
   </div>

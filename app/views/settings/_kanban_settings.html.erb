@@ -75,4 +75,20 @@ end
     <%= text_field_tag("settings[panes][finished][limit]", finished_limit ) %>
   </p>
 
+  <p>
+    <% canceled_status = @settings['panes']['canceled'] && @settings['panes']['canceled']['status'] ? @settings['panes']['canceled']['status'].to_i : ''    %>
+    <% canceled_limit = @settings['panes']['canceled'] && @settings['panes']['canceled']['limit'] ? @settings['panes']['canceled']['limit'].to_f : '' %>
+
+    <%= content_tag(:label, l("kanban_label_canceled_pane".to_sym)) + 
+      select_tag("settings[panes][canceled][status]",
+                 content_tag(:option, '') +
+                 options_from_collection_for_select(IssueStatus.all(:conditions => {:is_closed => true}),
+                                                    :id,
+                                                    :name,
+                                                    canceled_status)) %>
+
+    <%= content_tag(:span, l(:kanban_label_day_limit), :style => "padding: 0 0.5em 0 3em;") %>
+    <%= text_field_tag("settings[panes][canceled][limit]", canceled_limit ) %>
+  </p>
+
 </fieldset>

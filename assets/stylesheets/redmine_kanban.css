@@ -8,9 +8,10 @@
 #backlog { }
 #staffed-requests { padding: 0; }
 #staffed-requests .user { width: 10%; font-weight: bold; }
-#staffed-requests .active { width: 29%;}
-#staffed-requests .testing { width: 29%;}
-#staffed-requests .finished { width: 29%;}
+#staffed-requests .active { width: 22%;}
+#staffed-requests .testing { width: 22%;}
+#staffed-requests .finished { width: 22%;}
+#staffed-requests .canceled { width: 22%;}
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
 .staff { border-top: 2px solid #333333; padding: 5px; min-height: 60px; }

@@ -190,6 +190,35 @@ class KanbanTest < ActiveSupport::TestCase
       end
     end
 
+    context "for canceled issues" do
+      setup {
+        setup_canceled_issues
+        @kanban = Kanban.find
+      }
+
+      should "only get issues with the configured Canceled status" do
+        @kanban.canceled_issues.each do |user, issues|
+          issues.each do |issue|
+            assert_equal 'Rejected', issue.status.name
+          end
+        end
+      end
+
+      should "only get issues from the last 7 days" do
+        @kanban.canceled_issues.each do |user, issues|
+          issues.each do |issue|
+            assert issue.updated_on > 7.days.ago
+          end
+        end
+      end
+    
+      should "group issues by User" do
+        @kanban.canceled_issues.keys.each do |key|
+          assert key.is_a?(UnknownUser) || key.is_a?(User)
+        end
+      end
+    end
+
     should "set @users based on the configured role" do
       @kanban = Kanban.find
       assert_equal 5, @kanban.users.length # +1 Unknown

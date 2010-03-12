@@ -39,6 +39,7 @@
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active") if pane_configured?('active') %>
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "staffed-column testing") if pane_configured?('testing') %>
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "staffed-column finished") if pane_configured?('finished') %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_canceled_requests)), :class => "staffed-column canceled") if pane_configured?('canceled') %>
     </div>
     <div style="clear:both"></div>
 

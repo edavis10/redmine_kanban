@@ -9,6 +9,7 @@ en:
   kanban_text_active: Active
   kanban_text_testing: Testing
   kanban_text_finished_requests: Finished Requests
+  kanban_text_canceled_requests: Canceled Requests
   kanban_text_general_settings: General Settings
   kanban_text_pane_settings: Pane Settings
   kanban_text_pane_settings_description: "Select the Issue status you would like to associate with each pane.  The issues will be updated to these statuses when they are dragged and dropped."
@@ -21,6 +22,7 @@ en:
   kanban_label_active_pane: Active
   kanban_label_testing_pane: Testing
   kanban_label_finished_pane: Finished
+  kanban_label_canceled_pane: Canceled
   kanban_label_limit: Maximum number of items
   kanban_label_day_limit: Number of days
 

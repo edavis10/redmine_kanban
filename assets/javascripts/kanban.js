@@ -13,7 +13,8 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       placeholder: 'drop-accepted',
       dropOnEmpty: true
@@ -25,7 +26,8 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -41,7 +43,8 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -57,7 +60,8 @@ jQuery(function($) {
         '#backlog-issues',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -80,7 +84,8 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -104,7 +109,8 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -126,7 +132,25 @@ jQuery(function($) {
         '#selected-issues.allowed',
         '.active-issues.allowed',
         '.testing-issues.allowed',
-        '.finished-issues.allowed'
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
+      ],
+      items: 'li.issue',
+      placeholder: 'drop-accepted',
+      dropOnEmpty: true,
+      receive: function (event, ui) {
+        updatePanes(ui.item,ui.sender,$(this), {});
+      }
+    });
+
+    $(".canceled-issues").sortable({
+      cancel: 'a',
+      connectWith: [
+        '#selected-issues.allowed',
+        '.active-issues.allowed',
+        '.testing-issues.allowed',
+        '.finished-issues.allowed',
+        '.canceled-issues.allowed'
       ],
       items: 'li.issue',
       placeholder: 'drop-accepted',
@@ -168,13 +192,13 @@ jQuery(function($) {
     }
 
     // Active panes needs to send which user was modified
-    if (to_pane == 'active' || to_pane == 'testing' || to_pane == 'finished') {
+    if (to_pane == 'active' || to_pane == 'testing' || to_pane == 'finished' || to_pane == 'canceled') {
       var to_user_id = to.attr('id').split('-')[3];
     } else {
-      var from_user_id = null;
+      var to_user_id = null;
     }
 
-    if (from_pane == 'active' || from_pane == 'testing' || from_pane == 'finished'){
+    if (from_pane == 'active' || from_pane == 'testing' || from_pane == 'finished' || from_pane == 'canceled'){
       var from_user_id = from.attr('id').split('-')[3];
     } else {
       var from_user_id = null;

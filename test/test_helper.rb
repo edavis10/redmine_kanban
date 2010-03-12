@@ -15,6 +15,7 @@ module KanbanTestHelper
     IssueStatus.generate!(:name => 'Test-N-Doc') if IssueStatus.find_by_name('Test-N-Doc').nil?
     IssueStatus.generate!(:name => 'Closed', :is_closed => true) if IssueStatus.find_by_name('Closed').nil?
     IssueStatus.generate!(:name => 'Rejected', :is_closed => true) if IssueStatus.find_by_name('Rejected').nil?
+    IssueStatus.generate!(:name => 'Closed Hide', :is_closed => true) if IssueStatus.find_by_name('Closed Hide').nil?
   end
 
   def make_roles(count = 5)
@@ -101,6 +102,10 @@ module KanbanTestHelper
       "finished"=>{
         "status"=> IssueStatus.find_by_name('Closed').id,
         "limit"=>"7"
+      },
+      "canceled"=>{
+        "status"=> IssueStatus.find_by_name('Rejected').id,
+        "limit" => '7'
       }
       }}.merge(configuration_change)
 
@@ -251,7 +256,7 @@ module KanbanTestHelper
   
   def setup_finished_issues
     closed_status = IssueStatus.find_by_name('Closed')
-    rejected_status = IssueStatus.find_by_name('Rejected')
+    hidden_status = IssueStatus.find_by_name('Closed Hide')
 
     # Finished tasks
     @users.each do |user|
@@ -265,11 +270,27 @@ module KanbanTestHelper
       # Extra issues that should not show up
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :status => rejected_status,
+                 :status => hidden_status,
                  :assigned_to => user)
     end
 
   end
+
+  def setup_canceled_issues
+    canceled_status = IssueStatus.find_by_name('Rejected')
+
+    # Finished tasks
+    @users.each do |user|
+      2.times do
+        Issue.generate!(:tracker => @public_tracker,
+                   :project => @public_project,
+                   :status => canceled_status,
+                   :assigned_to => user)
+      end
+    end
+
+  end
+    
 
   # Unknow user issues are KanbanIssues that should have a user
   # assigned but somehow didn't as the result of bad data.
