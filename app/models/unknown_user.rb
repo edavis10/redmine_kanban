@@ -8,4 +8,5 @@ class UnknownUser
   def name
     "Unknown User"
   end
+  alias :to_s :name
 end
