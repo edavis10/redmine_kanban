@@ -34,6 +34,16 @@ module KanbansHelper
     (@settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
   end
 
+  def display_pane?(pane)
+    if pane == 'quick-tasks'
+      pane_configured?('backlog') &&
+        @settings['panes']['quick-tasks']['limit'].present? &&
+        @settings['panes']['quick-tasks']['limit'].to_i > 0
+    else
+      pane_configured?
+    end
+  end
+
   def kanban_issue_css_classes(issue)
     css = 'kanban-issue ' + issue.css_classes
     if User.current.logged? && !issue.assigned_to_id.nil? && issue.assigned_to_id != User.current.id

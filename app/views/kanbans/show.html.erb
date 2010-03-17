@@ -25,9 +25,9 @@
     <% end %>
   </div>
   <% end %>
-  <% if pane_configured?('backlog') || pane_configured?('selected') %>
+  <% if display_pane?('quick-tasks') || pane_configured?('selected') %>
   <div id="selected-requests" class="column">
-    <% if pane_configured?('backlog') %>
+    <% if display_pane?('quick-tasks') %>
     <div id="quick-tasks" class="pane">
       <%= render :partial => 'quick' %>
     </div>
