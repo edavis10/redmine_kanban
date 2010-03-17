@@ -40,7 +40,7 @@ module KanbansHelper
         @settings['panes']['quick-tasks']['limit'].present? &&
         @settings['panes']['quick-tasks']['limit'].to_i > 0
     else
-      pane_configured?
+      pane_configured?(pane)
     end
   end
 
