@@ -12,7 +12,11 @@ class KanbanIssue < ActiveRecord::Base
 
   # For acts_as_list
   def scope_condition
-    "state = #{connection.quote(state)} AND user_id = #{connection.quote(user_id)}"
+    if user_id
+      "state = #{connection.quote(state)} AND user_id = #{connection.quote(user_id)}"
+    else
+      "state = #{connection.quote(state)} AND user_id IS NULL"
+    end
   end
 
   validates_presence_of :position
