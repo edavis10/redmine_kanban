@@ -2,6 +2,12 @@
 
 <h2><%= l(:kanban_title) %></h2>
 
+<div class="contextual">
+  <% if User.current.allowed_to?(:edit_kanban, nil, :global => true) %>
+  <%= link_to(l(:kanban_text_sync), sync_kanban_url, :method => :put, :class => 'icon icon-reload') %>
+  <% end %>
+</div>
+
 <p class="general-help"><%= l(:kanban_text_general_help) %></p>
 
 <div id="kanban">

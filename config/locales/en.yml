@@ -14,6 +14,7 @@ en:
   kanban_text_pane_settings: Pane Settings
   kanban_text_pane_settings_description: "Select the Issue status you would like to associate with each pane.  The issues will be updated to these statuses when they are dragged and dropped."
   kanban_text_general_help: "Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings."
+  kanban_text_sync: "Sync"
   kanban_label_incoming_pane: Incoming
   kanban_label_backlog_pane: Backlog
   kanban_label_selected-requests_pane: Selected Requests
@@ -29,6 +30,7 @@ en:
   kanban_label_staff_role: Role to use for Staffed Requests
   kanban_label_incoming_project: Project to use for the Incoming pane
   kanban_text_error_saving: Error saving lists.  Please refresh the page and try again.
+  kanban_text_notice_sync: Kanban lists synced.
   kanban_text_saved: Updated lists.
   field_state: "State"
   kanban_text_nothing: "(No issues)"

@@ -47,6 +47,20 @@ class KanbansController < ApplicationController
     end
   end
 
+  def sync
+    # Brute force update :)
+    Issue.all.each do |issue|
+      KanbanIssue.update_from_issue(issue)
+    end
+    
+    respond_to do |format|
+      format.html {
+        flash[:notice] = l(:kanban_text_notice_sync)
+        redirect_to kanban_path
+      }
+    end
+  end
+
   private
   # Override the default authorize and add in the global option. This will allow
   # the user in if they have any roles with the correct permission

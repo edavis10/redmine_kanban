@@ -189,5 +189,115 @@ class KanbansControllerTest < ActionController::TestCase
     
   end
 
+  context "on PUT to :sync" do
+    setup do
+      shared_setup
+      setup_kanban_issues
+      setup_all_issues
+    end
+
+    context "" do
+      setup do
+        put :sync
+      end
+      
+      should_respond_with :redirect
+      should_set_the_flash_to /sync/i
+      should_redirect_to("main page") { kanban_path }
+    end
+
+    should "update outdated selected records" do
+      selected_status = IssueStatus.find_by_name('Selected')
+      unstaffed_status = IssueStatus.find_by_name('Unstaffed')
+      issue_moved_from_selected = Issue.first(:conditions => {:status_id => selected_status.id})
+      issue_moved_from_selected.update_attributes(:status_id => IssueStatus.find_by_name('Active').id,
+                                                  :assigned_to => @user)
+
+      issue_moved_into_selected = Issue.first(:conditions => {:status_id => unstaffed_status.id})
+      issue_moved_into_selected.update_attributes(:status_id => selected_status.id)
+
+      assert KanbanIssue.find_by_issue_id(issue_moved_from_selected.id).destroy
+      assert KanbanIssue.find_by_issue_id(issue_moved_into_selected.id).destroy
+
+      put :sync
+
+      issue_moved_from_selected.reload
+      assert_equal IssueStatus.find_by_name('Active'), issue_moved_from_selected.status
+      kanban_issue_moved_from = KanbanIssue.find_by_issue_id(issue_moved_from_selected.id)
+      assert_equal 'active', kanban_issue_moved_from.state
+      assert_equal @user, kanban_issue_moved_from.user
+      assert_equal 1, kanban_issue_moved_from.position # First for user
+
+      issue_moved_into_selected.reload
+      assert_equal IssueStatus.find_by_name('Selected'), issue_moved_into_selected.status
+      kanban_issue_moved_into = KanbanIssue.find_by_issue_id(issue_moved_into_selected.id)
+      assert_equal 'selected', kanban_issue_moved_into.state
+      assert_equal 11, kanban_issue_moved_into.position
+    end
+
+    should "update outdated active records xxx" do
+      selected_status = IssueStatus.find_by_name('Selected')
+      unstaffed_status = IssueStatus.find_by_name('Unstaffed')
+      active_status = IssueStatus.find_by_name('Active')
+      issue_moved_from_active = Issue.first(:conditions => {:status_id => active_status.id})
+      issue_moved_from_active.update_attributes(:status_id => selected_status.id)
+
+      issue_moved_into_active = Issue.first(:conditions => {:status_id => unstaffed_status.id})
+      issue_moved_into_active.update_attributes(:status_id => active_status.id, :assigned_to => @user)
+
+      assert KanbanIssue.find_by_issue_id(issue_moved_from_active.id).destroy
+      assert KanbanIssue.find_by_issue_id(issue_moved_into_active.id).destroy
+
+      put :sync
+
+      issue_moved_from_active.reload
+      assert_equal selected_status, issue_moved_from_active.status
+      kanban_issue_moved_from = KanbanIssue.find_by_issue_id(issue_moved_from_active.id)
+      assert_equal 'selected', kanban_issue_moved_from.state
+      assert_equal nil, kanban_issue_moved_from.user
+      assert_equal 11, kanban_issue_moved_from.position
+
+      issue_moved_into_active.reload
+      assert_equal active_status, issue_moved_into_active.status
+      kanban_issue_moved_into = KanbanIssue.find_by_issue_id(issue_moved_into_active.id)
+      assert_equal 'active', kanban_issue_moved_into.state
+      assert_equal @user, kanban_issue_moved_into.user
+      assert_equal 1, kanban_issue_moved_into.position # First for user
+
+    end
+    
+    should "update outdated testing records xxx" do
+      selected_status = IssueStatus.find_by_name('Selected')
+      unstaffed_status = IssueStatus.find_by_name('Unstaffed')
+      active_status = IssueStatus.find_by_name('Active')
+      testing_status = IssueStatus.find_by_name('Test-N-Doc')
+
+      issue_moved_from_testing = Issue.first(:conditions => {:status_id => testing_status.id})
+      issue_moved_from_testing.update_attributes(:status_id => selected_status.id)
+
+      issue_moved_into_testing = Issue.first(:conditions => {:status_id => unstaffed_status.id})
+      issue_moved_into_testing.update_attributes(:status_id => testing_status.id, :assigned_to => @user)
+
+      assert KanbanIssue.find_by_issue_id(issue_moved_from_testing.id).destroy
+      assert KanbanIssue.find_by_issue_id(issue_moved_into_testing.id).destroy
+
+      put :sync
+
+      issue_moved_from_testing.reload
+      assert_equal selected_status, issue_moved_from_testing.status
+      kanban_issue_moved_from = KanbanIssue.find_by_issue_id(issue_moved_from_testing.id)
+      assert_equal 'selected', kanban_issue_moved_from.state
+      assert_equal nil, kanban_issue_moved_from.user
+      assert_equal 11, kanban_issue_moved_from.position
+
+      issue_moved_into_testing.reload
+      assert_equal testing_status, issue_moved_into_testing.status
+      kanban_issue_moved_into = KanbanIssue.find_by_issue_id(issue_moved_into_testing.id)
+      assert_equal 'testing', kanban_issue_moved_into.state
+      assert_equal @user, kanban_issue_moved_into.user
+      assert_equal 1, kanban_issue_moved_into.position # First for user
+
+    end
+  end
 end
 

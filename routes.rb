@@ -1,1 +1,1 @@
-resource :kanban
+resource :kanban, :member => {:sync => :put}
