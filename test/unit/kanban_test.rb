@@ -294,7 +294,7 @@ class KanbanTest < ActiveSupport::TestCase
       @from = "incoming"
       @to = "active"
       @high_priority = IssuePriority.find_by_name("High")
-      @high_priority ||= IssuePriority.generate!(:name => "High") if @high_priority.nil?
+      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority') if @high_priority.nil?
 
       @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                           :project => @public_project,
