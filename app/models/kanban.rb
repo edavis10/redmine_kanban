@@ -42,6 +42,8 @@ class Kanban
   end
 
   def get_incoming_issues
+    return [[]] if missing_settings('incoming')
+    
     return Issue.visible.find(:all,
                               :limit => @settings['panes']['incoming']['limit'],
                               :order => "#{Issue.table_name}.created_on ASC",
@@ -49,6 +51,8 @@ class Kanban
   end
 
   def get_backlog_issues(exclude_ids=[])
+    return [[]] if missing_settings('backlog')
+    
     conditions = ARCondition.new
     conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
     conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
@@ -67,6 +71,8 @@ class Kanban
 
   # TODO: similar to backlog issues
   def get_quick_issues
+    return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
+
     issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
                                :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                :include => :priority,
@@ -82,6 +88,8 @@ class Kanban
 
   # TODO: similar to backlog issues
   def get_finished_issues
+    return [[]] if missing_settings('finished')
+    
     days = @settings['panes']['finished']['limit'] || 7
     issues = Issue.visible.all(:include => :assigned_to,
                                :order => "#{Issue.table_name}.updated_on DESC",
@@ -92,6 +100,8 @@ class Kanban
 
   # TODO: similar to backlog issues
   def get_canceled_issues
+    return [[]] if missing_settings('canceled')
+    
     days = @settings['panes']['canceled']['limit'] || 7
     issues = Issue.visible.all(:include => :assigned_to,
                                :order => "#{Issue.table_name}.updated_on DESC",
@@ -204,5 +214,17 @@ class Kanban
     else
       @users
     end
+  end
+
+  def missing_settings(pane, options={})
+    skip_status = options.delete(:skip_status)
+    
+    !(
+      @settings.present? &&
+      @settings['panes'].present? &&
+      @settings['panes'][pane].present? &&
+      (skip_status || @settings['panes'][pane]['status'].present?) &&
+      @settings['panes'][pane]['limit'].present?
+      )
   end
 end
