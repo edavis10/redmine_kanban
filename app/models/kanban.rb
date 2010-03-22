@@ -218,13 +218,11 @@ class Kanban
 
   def missing_settings(pane, options={})
     skip_status = options.delete(:skip_status)
-    
-    !(
-      @settings.present? &&
-      @settings['panes'].present? &&
-      @settings['panes'][pane].present? &&
-      (skip_status || @settings['panes'][pane]['status'].present?) &&
-      @settings['panes'][pane]['limit'].present?
-      )
+
+    @settings.blank? ||
+      @settings['panes'].blank? ||
+      @settings['panes'][pane].blank? ||
+      @settings['panes'][pane]['limit'].blank? ||
+      (@settings['panes'][pane]['status'].blank? && !skip_status)
   end
 end
