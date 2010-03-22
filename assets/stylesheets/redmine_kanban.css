@@ -1,8 +1,7 @@
 #kanban {width: 100%;}
-#unstaffed-requests { width: 17%; background-color: #E6E6FF; }
-#selected-requests { width: 17%; background-color: #E6E6FF; }
-#staffed-requests { width: 62%; background-color: #FFFFCC; }
-#finished-requests { width: 17%; background-color: #C2C29B; }
+#unstaffed-requests { background-color: #E6E6FF; }
+#selected-requests { background-color: #E6E6FF; }
+#staffed-requests { background-color: #FFFFCC; }
 
 #incoming {min-height: 200px;}
 #backlog { }

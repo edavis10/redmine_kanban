@@ -31,7 +31,7 @@ module KanbansHelper
   end
 
   def pane_configured?(pane)
-    (@settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
+    (@settings['panes'] && @settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
   end
 
   def display_pane?(pane)
@@ -63,5 +63,36 @@ module KanbansHelper
     else
       link_to(image_tag('ticket.png'), :controller => 'issues', :action => 'show', :id => issue)
     end
+  end
+
+  def column_configured?(column)
+    case column
+    when :unstaffed
+      pane_configured?('incoming') || pane_configured?('backlog')
+    when :selected
+      display_pane?('quick-tasks') || pane_configured?('selected')
+    when :staffed
+      true # always
+    end
+  end
+
+  # Calculates the width of the column.  Max of 96 since they need
+  # some extra for the borders.
+  def column_width(column)
+    # weights of the columns
+    column_ratios = {
+      :unstaffed => 1,
+      :selected => 1,
+      :staffed => 4
+    }
+    return 0.0 if column == :unstaffed && !column_configured?(:unstaffed)
+    return 0.0 if column == :selected && !column_configured?(:selected)
+    
+    visible = 0
+    visible += column_ratios[:unstaffed] if column_configured?(:unstaffed)
+    visible += column_ratios[:selected] if column_configured?(:selected)
+    visible += column_ratios[:staffed] if column_configured?(:staffed)
+    
+    return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
 end

@@ -12,7 +12,7 @@
 
 <div id="kanban">
   <% if pane_configured?('incoming') || pane_configured?('backlog') %>
-  <div id="unstaffed-requests" class="column">
+  <div id="unstaffed-requests" class="column" style="width: <%= column_width(:unstaffed) %>%">
     <% if pane_configured?('incoming') %>
     <div id="incoming" class="pane">
       <%= render :partial => 'incoming' %>
@@ -26,7 +26,7 @@
   </div>
   <% end %>
   <% if display_pane?('quick-tasks') || pane_configured?('selected') %>
-  <div id="selected-requests" class="column">
+  <div id="selected-requests" class="column" style="width: <%= column_width(:selected) %>%">
     <% if display_pane?('quick-tasks') %>
     <div id="quick-tasks" class="pane">
       <%= render :partial => 'quick' %>
@@ -39,7 +39,7 @@
     <% end %>
   </div>
   <% end %>
-  <div id="staffed-requests" class="column">
+  <div id="staffed-requests" class="column" style="width: <%= column_width(:staffed) %>%">
     <div id="staffed-requests-header" class="staff">
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "staffed-column user") %>
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active") if pane_configured?('active') %>
