@@ -30,6 +30,10 @@ module KanbansHelper
     end
   end
 
+  def updated_note_on_issue?(issue)
+    issue && issue.journals.present? && issue.assigned_to_id != issue.journals.last.user_id
+  end
+
   def pane_configured?(pane)
     (@settings['panes'] && @settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
   end

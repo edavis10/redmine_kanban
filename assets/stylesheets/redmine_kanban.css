@@ -39,3 +39,10 @@ li.issue.assigned-to-other { color: #888888; }
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; width: 100%; border: 1px solid #000000; }
 .general-help {font-size: 90%; font-style: italic;}
+
+.updated-note {
+   position:relative;
+   left: -9px;
+   top: -7px;
+   float: left;
+}
