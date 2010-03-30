@@ -62,11 +62,7 @@ class Kanban
                                :include => :priority,
                                :conditions => conditions.conditions)
 
-    return issues.group_by {|issue|
-      issue.priority
-    }.sort {|a,b|
-      a[0].position <=> b[0].position # Sorted based on IssuePriority#position
-    }
+    return group_by_priority_position(issues)
   end
 
   # TODO: similar to backlog issues
@@ -78,12 +74,7 @@ class Kanban
                                :include => :priority,
                                :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
 
-    # Returns as nested arrays
-    return issues.group_by {|issue|
-      issue.priority
-    }.sort {|a,b|
-      a[0].position <=> b[0].position # Sorted based on IssuePriority#position
-    }
+    return group_by_priority_position(issues)
   end
 
   # TODO: similar to backlog issues
@@ -224,5 +215,14 @@ class Kanban
       @settings['panes'][pane].blank? ||
       @settings['panes'][pane]['limit'].blank? ||
       (@settings['panes'][pane]['status'].blank? && !skip_status)
+  end
+
+  # Sort and group a set of issues based on IssuePriority#position
+  def group_by_priority_position(issues)
+    return issues.group_by {|issue|
+      issue.priority
+    }.sort {|a,b|
+      a[0].position <=> b[0].position
+    }
   end
 end
