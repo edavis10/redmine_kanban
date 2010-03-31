@@ -77,28 +77,12 @@ class Kanban
     return group_by_priority_position(issues)
   end
 
-  # TODO: similar to backlog issues
   def get_finished_issues
-    return [[]] if missing_settings('finished')
-    
-    days = @settings['panes']['finished']['limit'] || 7
-    issues = Issue.visible.all(:include => :assigned_to,
-                               :order => "#{Issue.table_name}.updated_on DESC",
-                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['finished']['status'], days.to_f.days.ago])
-
-    return issues.group_by(&:assigned_to)
+    get_issues_for_pane(:finished)
   end
 
-  # TODO: similar to backlog issues
   def get_canceled_issues
-    return [[]] if missing_settings('canceled')
-    
-    days = @settings['panes']['canceled']['limit'] || 7
-    issues = Issue.visible.all(:include => :assigned_to,
-                               :order => "#{Issue.table_name}.updated_on DESC",
-                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", @settings['panes']['canceled']['status'], days.to_f.days.ago])
-
-    return issues.group_by(&:assigned_to)
+    get_issues_for_pane(:canceled)
   end
 
   def get_users
@@ -224,5 +208,19 @@ class Kanban
     }.sort {|a,b|
       a[0].position <=> b[0].position
     }
+  end
+
+  def get_issues_for_pane(pane)
+    return [[]] unless [:finished, :canceled].include?(pane)
+    return [[]] if missing_settings(pane.to_s)
+
+    status_id = @settings['panes'][pane.to_s]['status']
+    days = @settings['panes'][pane.to_s]['limit'] || 7
+    
+    issues = Issue.visible.all(:include => :assigned_to,
+                               :order => "#{Issue.table_name}.updated_on DESC",
+                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", status_id, days.to_f.days.ago])
+
+    return issues.group_by(&:assigned_to)
   end
 end
