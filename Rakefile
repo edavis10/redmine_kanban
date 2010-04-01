@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 require 'redmine_plugin_support'
 
+parallel_tests = (File.join(File.dirname(__FILE__), '..', 'parallel_tests','lib','tasks','parallel_tests.rake'))
+if File.exists? parallel_tests
+  RAILS_ROOT = File.dirname(__FILE__)
+  import parallel_tests
+end
+
 Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each { |ext| load ext }
 
 RedminePluginSupport::Base.setup do |plugin|
