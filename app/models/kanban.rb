@@ -95,19 +95,11 @@ class Kanban
   end
 
   def get_active
-    active = {}
-    @users.each do |user|
-      active[user] = KanbanIssue.find_active(user.id)
-    end unless @users.blank?
-    active
+    issues_from_kanban_issue(:active)
   end
 
   def get_testing
-    testing = {}
-    @users.each do |user|
-      testing[user] = KanbanIssue.find_testing(user.id)
-    end unless @users.blank?
-    testing
+    issues_from_kanban_issue(:testing)
   end
   
   def quick_issue_ids
@@ -222,5 +214,16 @@ class Kanban
                                :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", status_id, days.to_f.days.ago])
 
     return issues.group_by(&:assigned_to)
+  end
+
+  def issues_from_kanban_issue(pane)
+    return {} unless [:active, :testing].include?(pane)
+    
+    issues = {}
+    @users.each do |user|
+      issues[user] = KanbanIssue.send('find_' + pane.to_s, user.id)
+    end unless @users.blank?
+    issues
+
   end
 end
