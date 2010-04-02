@@ -42,39 +42,15 @@ class Kanban
   end
 
   def get_incoming_issues
-    return [[]] if missing_settings('incoming')
-    
-    return Issue.visible.find(:all,
-                              :limit => @settings['panes']['incoming']['limit'],
-                              :order => "#{Issue.table_name}.created_on ASC",
-                              :conditions => {:status_id => @settings['panes']['incoming']['status']})
+    get_issues_for_pane(:incoming)
   end
 
   def get_backlog_issues(exclude_ids=[])
-    return [[]] if missing_settings('backlog')
-    
-    conditions = ARCondition.new
-    conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
-    conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
-
-    issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
-                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
-                               :include => :priority,
-                               :conditions => conditions.conditions)
-
-    return group_by_priority_position(issues)
+    get_issues_for_pane(:backlog, :exclude_ids => exclude_ids)
   end
 
-  # TODO: similar to backlog issues
   def get_quick_issues
-    return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
-
-    issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
-                               :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
-                               :include => :priority,
-                               :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
-
-    return group_by_priority_position(issues)
+    get_issues_for_pane(:quick)
   end
 
   def get_finished_issues
@@ -202,18 +178,58 @@ class Kanban
     }
   end
 
-  def get_issues_for_pane(pane)
-    return [[]] unless [:finished, :canceled].include?(pane)
-    return [[]] if missing_settings(pane.to_s)
-
-    status_id = @settings['panes'][pane.to_s]['status']
-    days = @settings['panes'][pane.to_s]['limit'] || 7
+  def get_issues_for_pane(pane, options = {})
+    case pane
+    when :finished, :canceled
     
-    issues = Issue.visible.all(:include => :assigned_to,
-                               :order => "#{Issue.table_name}.updated_on DESC",
-                               :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", status_id, days.to_f.days.ago])
+      return [[]] if missing_settings(pane.to_s)
 
-    return issues.group_by(&:assigned_to)
+      status_id = @settings['panes'][pane.to_s]['status']
+      days = @settings['panes'][pane.to_s]['limit'] || 7
+      
+      issues = Issue.visible.all(:include => :assigned_to,
+                                 :order => "#{Issue.table_name}.updated_on DESC",
+                                 :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", status_id, days.to_f.days.ago])
+
+      return issues.group_by(&:assigned_to)
+      
+    when :quick
+      return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
+
+      issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
+                                 :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                                 :include => :priority,
+                                 :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
+
+      return group_by_priority_position(issues)
+      
+    when :backlog
+      return [[]] if missing_settings('backlog')
+
+      exclude_ids = options.delete(:exclude_ids)
+      
+      conditions = ARCondition.new
+      conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
+      conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
+
+      issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
+                                 :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
+                                 :include => :priority,
+                                 :conditions => conditions.conditions)
+
+      return group_by_priority_position(issues)
+      
+    when :incoming
+      return [[]] if missing_settings('incoming')
+    
+      return Issue.visible.find(:all,
+                                :limit => @settings['panes']['incoming']['limit'],
+                                :order => "#{Issue.table_name}.created_on ASC",
+                                :conditions => {:status_id => @settings['panes']['incoming']['status']})
+    else
+      return [[]]
+    end
+    
   end
 
   def issues_from_kanban_issue(pane)
