@@ -1,6 +1,8 @@
   <div class="staff">
     <div id="user-<%= h user.id -%>" class="staffed-column pane user">
       <%= link_to_user(user) %>
+      
+      <%= call_hook(:view_kanbans_user_name, :user => user) %>
     </div>
     <% if pane_configured?('active') %>
     <div id="active-<%= h user.id -%>" class="staffed-column pane active user-<%= h user.id -%>">
