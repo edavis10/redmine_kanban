@@ -179,6 +179,8 @@ class Kanban
   end
 
   def get_issues_for_pane(pane, options = {})
+    conditions = ARCondition.new
+
     case pane
     when :finished, :canceled
     
@@ -186,20 +188,26 @@ class Kanban
 
       status_id = @settings['panes'][pane.to_s]['status']
       days = @settings['panes'][pane.to_s]['limit'] || 7
+
+      conditions.add ["#{Issue.table_name}.status_id = ?", status_id]
+      conditions.add ["#{Issue.table_name}.updated_on > ?", days.to_f.days.ago]
       
       issues = Issue.visible.all(:include => :assigned_to,
                                  :order => "#{Issue.table_name}.updated_on DESC",
-                                 :conditions => ["#{Issue.table_name}.status_id = ? AND #{Issue.table_name}.updated_on > ?", status_id, days.to_f.days.ago])
+                                 :conditions => conditions.conditions)
 
       return issues.group_by(&:assigned_to)
       
     when :quick
       return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
 
+      conditions.add ["status_id = ?", @settings['panes']['backlog']['status']]
+      conditions.add "estimated_hours IS null"
+
       issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
                                  :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
                                  :include => :priority,
-                                 :conditions => {:status_id => @settings['panes']['backlog']['status'], :estimated_hours => nil})
+                                 :conditions => conditions.conditions)
 
       return group_by_priority_position(issues)
       
@@ -208,7 +216,6 @@ class Kanban
 
       exclude_ids = options.delete(:exclude_ids)
       
-      conditions = ARCondition.new
       conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
       conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
 
@@ -222,10 +229,12 @@ class Kanban
     when :incoming
       return [[]] if missing_settings('incoming')
     
+      conditions.add ["status_id = ?", @settings['panes']['incoming']['status']]
+
       return Issue.visible.find(:all,
                                 :limit => @settings['panes']['incoming']['limit'],
                                 :order => "#{Issue.table_name}.created_on ASC",
-                                :conditions => {:status_id => @settings['panes']['incoming']['status']})
+                                :conditions => conditions.conditions)
     else
       return [[]]
     end
