@@ -44,5 +44,5 @@ li.issue.assigned-to-other { color: #888888; }
    position:relative;
    left: -9px;
    top: -7px;
-   float: left;
+   margin-right: -18px; /* Clears the 'gap' between the icons */
 }
