@@ -30,8 +30,13 @@ module KanbansHelper
     end
   end
 
+  # Was the last journal with a note created by someone other than the
+  # assigned to user?
   def updated_note_on_issue?(issue)
-    issue && issue.journals.present? && issue.assigned_to_id != issue.journals.last.user_id
+    if issue && issue.journals.present?
+      last_journal_with_note = issue.journals.select {|journal| journal.notes.present?}.last
+      last_journal_with_note && issue.assigned_to_id != last_journal_with_note.user_id
+    end
   end
 
   def pane_configured?(pane)
