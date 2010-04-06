@@ -71,11 +71,11 @@ class Kanban
   end
 
   def get_active
-    issues_from_kanban_issue(:active)
+    KanbanPane::ActivePane.new.get_issues(:users => @users)
   end
 
   def get_testing
-    issues_from_kanban_issue(:testing)
+    KanbanPane::TestingPane.new.get_issues(:users => @users)
   end
   
   def quick_issue_ids
@@ -194,16 +194,5 @@ class Kanban
       return [[]]
     end
     
-  end
-
-  def issues_from_kanban_issue(pane)
-    return {} unless [:active, :testing].include?(pane)
-    
-    issues = {}
-    @users.each do |user|
-      issues[user] = KanbanIssue.send('find_' + pane.to_s, user.id)
-    end unless @users.blank?
-    issues
-
   end
 end
