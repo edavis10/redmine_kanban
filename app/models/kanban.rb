@@ -227,14 +227,7 @@ class Kanban
       return group_by_priority_position(issues)
       
     when :incoming
-      return [[]] if missing_settings('incoming')
-    
-      conditions.add ["status_id = ?", @settings['panes']['incoming']['status']]
-
-      return Issue.visible.find(:all,
-                                :limit => @settings['panes']['incoming']['limit'],
-                                :order => "#{Issue.table_name}.created_on ASC",
-                                :conditions => conditions.conditions)
+      KanbanPane::IncomingPane.new.get_issues(options)
     else
       return [[]]
     end
