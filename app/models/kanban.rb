@@ -179,25 +179,11 @@ class Kanban
   end
 
   def get_issues_for_pane(pane, options = {})
-    conditions = ARCondition.new
-
     case pane
-    when :finished, :canceled
-    
-      return [[]] if missing_settings(pane.to_s)
-
-      status_id = @settings['panes'][pane.to_s]['status']
-      days = @settings['panes'][pane.to_s]['limit'] || 7
-
-      conditions.add ["#{Issue.table_name}.status_id = ?", status_id]
-      conditions.add ["#{Issue.table_name}.updated_on > ?", days.to_f.days.ago]
-      
-      issues = Issue.visible.all(:include => :assigned_to,
-                                 :order => "#{Issue.table_name}.updated_on DESC",
-                                 :conditions => conditions.conditions)
-
-      return issues.group_by(&:assigned_to)
-      
+    when :finished
+      KanbanPane::FinishedPane.new.get_issues(options)
+    when :canceled
+      KanbanPane::CanceledPane.new.get_issues(options)
     when :quick
       KanbanPane::QuickPane.new.get_issues(options)
     when :backlog
