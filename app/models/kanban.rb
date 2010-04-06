@@ -199,33 +199,9 @@ class Kanban
       return issues.group_by(&:assigned_to)
       
     when :quick
-      return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
-
-      conditions.add ["status_id = ?", @settings['panes']['backlog']['status']]
-      conditions.add "estimated_hours IS null"
-
-      issues = Issue.visible.all(:limit => @settings['panes']['quick-tasks']['limit'],
-                                 :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
-                                 :include => :priority,
-                                 :conditions => conditions.conditions)
-
-      return group_by_priority_position(issues)
-      
+      KanbanPane::QuickPane.new.get_issues(options)
     when :backlog
-      return [[]] if missing_settings('backlog')
-
-      exclude_ids = options.delete(:exclude_ids)
-      
-      conditions.add ["#{Issue.table_name}.status_id IN (?)", @settings['panes']['backlog']['status']]
-      conditions.add ["#{Issue.table_name}.id NOT IN (?)", exclude_ids] unless exclude_ids.empty?
-
-      issues = Issue.visible.all(:limit => @settings['panes']['backlog']['limit'],
-                                 :order => "#{RedmineKanban::KanbanCompatibility::IssuePriority.klass.table_name}.position ASC, #{Issue.table_name}.created_on ASC",
-                                 :include => :priority,
-                                 :conditions => conditions.conditions)
-
-      return group_by_priority_position(issues)
-      
+      KanbanPane::BacklogPane.new.get_issues(options)
     when :incoming
       KanbanPane::IncomingPane.new.get_issues(options)
     else
