@@ -360,39 +360,4 @@ class KanbanTest < ActiveSupport::TestCase
     end
   end
 
-  context "#get_incoming_issues" do
-    should_not_raise_an_exception_if_the_settings_are_missing do
-      @kanban = Kanban.new
-      @kanban.get_incoming_issues
-    end
-  end
-
-  context "#get_backlog_issues" do
-    should_not_raise_an_exception_if_the_settings_are_missing do
-      @kanban = Kanban.new
-      @kanban.get_backlog_issues
-    end
-  end
-
-  context "#get_quick_issues" do
-    should_not_raise_an_exception_if_the_settings_are_missing do
-      @kanban = Kanban.new
-      @kanban.get_quick_issues
-    end
-  end
-
-  context "#get_finished_issues" do
-    should_not_raise_an_exception_if_the_settings_are_missing do
-      @kanban = Kanban.new
-      @kanban.get_finished_issues
-    end
-  end
-
-  context "#get_canceled_issues" do
-    should_not_raise_an_exception_if_the_settings_are_missing do
-      @kanban = Kanban.new
-      @kanban.get_canceled_issues
-    end
-  end
-
 end

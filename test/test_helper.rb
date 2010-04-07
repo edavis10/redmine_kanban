@@ -357,7 +357,7 @@ class Test::Unit::TestCase
 
   def self.should_not_raise_an_exception_if_the_settings_are_missing(&block)
     should "not raise an exception if the settings are missing" do
-      @kanban = Kanban.new
+      Setting.plugin_redmine_kanban = {}
 
       assert_nothing_thrown do
         block.call

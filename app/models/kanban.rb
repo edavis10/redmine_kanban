@@ -1,4 +1,6 @@
 class Kanban
+  attr_reader :incoming_pane, :backlog_pane, :quick_pane, :canceled_pane, :finished_pane, :active_pane, :testing_pane
+  
   attr_accessor :incoming_issues
   attr_accessor :quick_issues
   attr_accessor :backlog_issues
@@ -9,6 +11,16 @@ class Kanban
   attr_accessor :canceled_issues
   attr_accessor :settings
   attr_accessor :users
+
+  def initialize
+    @incoming_pane = KanbanPane::IncomingPane.new
+    @backlog_pane = KanbanPane::BacklogPane.new
+    @quick_pane = KanbanPane::QuickPane.new
+    @canceled_pane = KanbanPane::CanceledPane.new
+    @finished_pane = KanbanPane::FinishedPane.new
+    @active_pane = KanbanPane::ActivePane.new
+    @testing_pane = KanbanPane::TestingPane.new
+  end
 
   def self.non_kanban_issues_panes
      ["incoming","backlog", "quick","finished","canceled"]
@@ -30,35 +42,15 @@ class Kanban
     kanban = Kanban.new
     kanban.settings = Setting.plugin_redmine_kanban
     kanban.users = kanban.get_users
-    kanban.incoming_issues = kanban.get_incoming_issues
-    kanban.quick_issues = kanban.get_quick_issues
-    kanban.backlog_issues = kanban.get_backlog_issues(kanban.quick_issues.to_a.flatten.collect(&:id))
+    kanban.incoming_issues = kanban.incoming_pane.get_issues
+    kanban.quick_issues = kanban.quick_pane.get_issues
+    kanban.backlog_issues = kanban.backlog_pane.get_issues(:exclude_ids => kanban.quick_issue_ids)
     kanban.selected_issues = KanbanIssue.find_selected
-    kanban.active_issues = kanban.get_active
-    kanban.testing_issues = kanban.get_testing
-    kanban.finished_issues = kanban.get_finished_issues
-    kanban.canceled_issues = kanban.get_canceled_issues
+    kanban.active_issues = kanban.active_pane.get_issues(:users => kanban.users)
+    kanban.testing_issues = kanban.testing_pane.get_issues(:users => kanban.users)
+    kanban.finished_issues = kanban.finished_pane.get_issues
+    kanban.canceled_issues = kanban.canceled_pane.get_issues
     kanban
-  end
-
-  def get_incoming_issues
-    get_issues_for_pane(:incoming)
-  end
-
-  def get_backlog_issues(exclude_ids=[])
-    get_issues_for_pane(:backlog, :exclude_ids => exclude_ids)
-  end
-
-  def get_quick_issues
-    get_issues_for_pane(:quick)
-  end
-
-  def get_finished_issues
-    get_issues_for_pane(:finished)
-  end
-
-  def get_canceled_issues
-    get_issues_for_pane(:canceled)
   end
 
   def get_users
@@ -68,14 +60,6 @@ class Kanban
     @users = move_current_user_to_front
     @users << UnknownUser.instance
     @users
-  end
-
-  def get_active
-    KanbanPane::ActivePane.new.get_issues(:users => @users)
-  end
-
-  def get_testing
-    KanbanPane::TestingPane.new.get_issues(:users => @users)
   end
   
   def quick_issue_ids
@@ -176,23 +160,5 @@ class Kanban
     }.sort {|a,b|
       a[0].position <=> b[0].position
     }
-  end
-
-  def get_issues_for_pane(pane, options = {})
-    case pane
-    when :finished
-      KanbanPane::FinishedPane.new.get_issues(options)
-    when :canceled
-      KanbanPane::CanceledPane.new.get_issues(options)
-    when :quick
-      KanbanPane::QuickPane.new.get_issues(options)
-    when :backlog
-      KanbanPane::BacklogPane.new.get_issues(options)
-    when :incoming
-      KanbanPane::IncomingPane.new.get_issues(options)
-    else
-      return [[]]
-    end
-    
   end
 end
