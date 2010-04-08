@@ -6,11 +6,11 @@
 #incoming {min-height: 200px;}
 #backlog { }
 #staffed-requests { padding: 0; }
-#staffed-requests .user { width: 10%; font-weight: bold; }
-#staffed-requests .active { width: 22%;}
-#staffed-requests .testing { width: 22%;}
-#staffed-requests .finished { width: 22%;}
-#staffed-requests .canceled { width: 22%;}
+#staffed-requests .user { font-weight: bold; }
+#staffed-requests .active { }
+#staffed-requests .testing { }
+#staffed-requests .finished { }
+#staffed-requests .canceled { }
 
 .column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
 .staff { border-top: 2px solid #333333; padding: 5px; min-height: 60px; }

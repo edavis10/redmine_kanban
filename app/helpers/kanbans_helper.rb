@@ -104,4 +104,31 @@ module KanbansHelper
     
     return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
+
+  # Calculates the width of the column.  Max of 96 since they need
+  # some extra for the borders.
+  def staffed_column_width(column)
+    # weights of the columns
+    column_ratios = {
+      :user => 1,
+      :active => 2,
+      :testing => 2,
+      :finished => 2,
+      :canceled => 2
+    }
+    return 0.0 if column == :active && !pane_configured?(:active)
+    return 0.0 if column == :testing && !pane_configured?(:testing)
+    return 0.0 if column == :finished && !pane_configured?(:finished)
+    return 0.0 if column == :canceled && !pane_configured?(:canceled)
+
+    visible = 0
+    visible += column_ratios[:user]
+    visible += column_ratios[:active] if pane_configured?(:active)
+    visible += column_ratios[:testing] if pane_configured?(:testing)
+    visible += column_ratios[:finished] if pane_configured?(:finished)
+    visible += column_ratios[:canceled] if pane_configured?(:canceled)
+    
+    return ((column_ratios[column].to_f / visible) * 96).round(2)
+  end
+    
 end

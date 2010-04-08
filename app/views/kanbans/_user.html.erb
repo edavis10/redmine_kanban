@@ -1,26 +1,26 @@
   <div class="staff">
-    <div id="user-<%= h user.id -%>" class="staffed-column pane user">
+    <div id="user-<%= h user.id -%>" class="staffed-column pane user" style="width: <%= staffed_column_width(:user) %>%">
       <%= link_to_user(user) %>
       
       <%= call_hook(:view_kanbans_user_name, :user => user) %>
     </div>
     <% if pane_configured?('active') %>
-    <div id="active-<%= h user.id -%>" class="staffed-column pane active user-<%= h user.id -%>">
+    <div id="active-<%= h user.id -%>" class="staffed-column pane active user-<%= h user.id -%>" style="width: <%= staffed_column_width(:active) %>%">
       <%= render(:partial => 'active', :locals => {:user => user}) %>
     </div>
     <% end %>
     <% if pane_configured?('testing') %>
-    <div id="testing-<%= h user.id -%>" class="staffed-column pane testing user-<%= h user.id -%>">
+    <div id="testing-<%= h user.id -%>" class="staffed-column pane testing user-<%= h user.id -%>" style="width: <%= staffed_column_width(:testing) %>%">
       <%= render(:partial => 'testing', :locals => {:user => user}) %>
     </div>
     <% end %>
     <% if pane_configured?('finished') %>
-    <div id="finished-<%= h user.id -%>" class="staffed-column pane finished user-<%= h user.id -%>">
+    <div id="finished-<%= h user.id -%>" class="staffed-column pane finished user-<%= h user.id -%>" style="width: <%= staffed_column_width(:finished) %>%">
       <%= render(:partial => 'finished', :locals => {:user => user}) %>
     </div>
     <% end %>
     <% if pane_configured?('canceled') %>
-    <div id="canceled-<%= h user.id -%>" class="staffed-column pane canceled user-<%= h user.id -%>">
+    <div id="canceled-<%= h user.id -%>" class="staffed-column pane canceled user-<%= h user.id -%>" style="width: <%= staffed_column_width(:canceled) %>%">
       <%= render(:partial => 'canceled', :locals => {:user => user}) %>
     </div>
     <% end %>
