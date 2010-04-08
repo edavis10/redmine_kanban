@@ -20,6 +20,9 @@ class Kanban
     @finished_pane = KanbanPane::FinishedPane.new
     @active_pane = KanbanPane::ActivePane.new
     @testing_pane = KanbanPane::TestingPane.new
+
+    @settings = Setting.plugin_redmine_kanban
+    @users = get_users
   end
 
   def self.non_kanban_issues_panes
@@ -39,18 +42,40 @@ class Kanban
   end
 
   def self.find
-    kanban = Kanban.new
-    kanban.settings = Setting.plugin_redmine_kanban
-    kanban.users = kanban.get_users
-    kanban.incoming_issues = kanban.incoming_pane.get_issues
-    kanban.quick_issues = kanban.quick_pane.get_issues
-    kanban.backlog_issues = kanban.backlog_pane.get_issues(:exclude_ids => kanban.quick_issue_ids)
-    kanban.selected_issues = KanbanIssue.find_selected
-    kanban.active_issues = kanban.active_pane.get_issues(:users => kanban.users)
-    kanban.testing_issues = kanban.testing_pane.get_issues(:users => kanban.users)
-    kanban.finished_issues = kanban.finished_pane.get_issues
-    kanban.canceled_issues = kanban.canceled_pane.get_issues
-    kanban
+    Kanban.new
+  end
+
+  def incoming_issues
+    @incoming_issues ||= incoming_pane.get_issues
+  end
+
+  def quick_issues
+    @quick_issues ||= quick_pane.get_issues
+  end
+
+  def backlog_issues
+    quick_issues # Needs to load quick_issues
+    @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids)
+  end
+
+  def selected_issues
+    @selected_issues ||= KanbanIssue.find_selected
+  end
+
+  def active_issues
+    @active_issues ||= active_pane.get_issues(:users => get_users)
+  end
+
+  def testing_issues
+    @testing_issues ||= testing_pane.get_issues(:users => get_users)
+  end
+
+  def finished_issues
+    @finished_issues ||= finished_pane.get_issues
+  end
+
+  def canceled_issues
+    @canceled_issues ||= canceled_pane.get_issues
   end
 
   def get_users
