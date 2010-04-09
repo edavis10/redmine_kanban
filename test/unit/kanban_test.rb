@@ -18,7 +18,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for incoming issues" do
       setup {
         setup_incoming_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
 
       should "only get incoming issues up to the limit" do
@@ -35,7 +35,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for backlog issues" do
       setup {
         setup_backlog_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
 
       should "only get backlog issues up to the limit" do
@@ -69,7 +69,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for quick issues" do
       setup {
         setup_quick_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
       
       should "only get quick issues up to the limit" do
@@ -94,7 +94,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for selected issues" do
       setup {
         setup_selected_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
 
       should "get all selected issues" do
@@ -112,7 +112,7 @@ class KanbanTest < ActiveSupport::TestCase
       setup {
         setup_active_issues
         setup_unknown_user_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
       
       should "only get all active issues" do
@@ -139,7 +139,7 @@ class KanbanTest < ActiveSupport::TestCase
       setup {
         setup_testing_issues
         setup_unknown_user_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
       
       should "only get all testing issues" do
@@ -165,7 +165,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for finished issues" do
       setup {
         setup_finished_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
 
       should "only get issues with the configured Finished status" do
@@ -194,7 +194,7 @@ class KanbanTest < ActiveSupport::TestCase
     context "for canceled issues" do
       setup {
         setup_canceled_issues
-        @kanban = Kanban.find
+        @kanban = Kanban.new
       }
 
       should "only get issues with the configured Canceled status" do
@@ -221,7 +221,7 @@ class KanbanTest < ActiveSupport::TestCase
     end
 
     should "set @users based on the configured role" do
-      @kanban = Kanban.find
+      @kanban = Kanban.new
       assert_equal 5, @kanban.users.length # +1 Unknown
     end
   end

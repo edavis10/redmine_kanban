@@ -41,10 +41,6 @@ class Kanban
     ['active','testing','finished','canceled']
   end
 
-  def self.find
-    Kanban.new
-  end
-
   def incoming_issues
     @incoming_issues ||= incoming_pane.get_issues
   end

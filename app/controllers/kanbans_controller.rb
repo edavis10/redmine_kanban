@@ -7,7 +7,7 @@ class KanbansController < ApplicationController
 
   def show
     @settings = Setting.plugin_redmine_kanban
-    @kanban = Kanban.find
+    @kanban = Kanban.new
   end
 
   def update
@@ -20,7 +20,7 @@ class KanbansController < ApplicationController
 
     saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @to_user)
 
-    @kanban = Kanban.find
+    @kanban = Kanban.new
     respond_to do |format|
 
       if saved
