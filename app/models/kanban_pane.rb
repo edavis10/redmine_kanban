@@ -9,10 +9,13 @@ class KanbanPane
 
   private
 
-  # TODO: Wrapper until moved from Kanban
   def missing_settings(pane, options={})
-    kanban = Kanban.new
-    kanban.settings = Setting.plugin_redmine_kanban
-    kanban.send(:missing_settings, pane, options)
+    skip_status = options.delete(:skip_status)
+
+    settings.blank? ||
+      settings['panes'].blank? ||
+      settings['panes'][pane].blank? ||
+      settings['panes'][pane]['limit'].blank? ||
+      (settings['panes'][pane]['status'].blank? && !skip_status)
   end
 end

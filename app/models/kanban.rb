@@ -164,16 +164,6 @@ class Kanban
     end
   end
 
-  def missing_settings(pane, options={})
-    skip_status = options.delete(:skip_status)
-
-    @settings.blank? ||
-      @settings['panes'].blank? ||
-      @settings['panes'][pane].blank? ||
-      @settings['panes'][pane]['limit'].blank? ||
-      (@settings['panes'][pane]['status'].blank? && !skip_status)
-  end
-
   # Sort and group a set of issues based on IssuePriority#position
   def group_by_priority_position(issues)
     return issues.group_by {|issue|
