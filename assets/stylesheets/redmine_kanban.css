@@ -45,7 +45,5 @@ li.issue.assigned-to-other { color: #888888; }
 
 .updated-note {
    position:relative;
-   left: -9px;
-   top: -7px;
-   margin-right: -18px; /* Clears the 'gap' between the icons */
+   float:right;
 }
