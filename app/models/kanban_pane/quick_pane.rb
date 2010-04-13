@@ -12,9 +12,7 @@ class KanbanPane::QuickPane < KanbanPane
                                :include => :priority,
                                :conditions => conditions.conditions)
 
-    # TODO: Remove wrapper
-    kanban = Kanban.new
-    return kanban.send(:group_by_priority_position, issues)
+    return group_by_priority_position(issues)
   end
   
 end
