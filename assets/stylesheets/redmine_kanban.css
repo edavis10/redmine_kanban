@@ -37,7 +37,7 @@ li.issue { cursor: move; }
 li.issue.assigned-to-me { font-weight: bolder;}
 li.issue.assigned-to-other { color: #888888; }
 
-.drop-accepted { background-color:#FFFFEE; height: 32px; width: 100%; border: 1px solid #000000; }
+.drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
 .general-help {font-size: 90%; font-style: italic;}
 
 .updated-note {
