@@ -21,11 +21,12 @@
 .pane { }
 
 #staffed-requests .column { padding: 0; }
-#staffed-requests-header { min-height: 1.5em; border: none; text-align: center;}
+#staffed-requests-header { border: none; min-height:0; text-align: center;}
+#staffed-requests ol { width:96%; }
 
-div.pane ol { list-style: none; padding-left: 0px; }
-div.pane ol li { padding: 1px 5px; }
-div.pane ol li:hover { background-color:#ffffdd; }
+div.pane ol { margin:0 0 10px; list-style: none; padding-left: 0px; min-height:30px; }
+div.pane ol li { padding: 0; }
+.issue-details-header { background-color:#c6c6ff; }
 div.pane li.over-limit { background-color: #ffb4b4; }
 div.pane li.over-limit:hover { background-color: #ffd4d4; }
 
