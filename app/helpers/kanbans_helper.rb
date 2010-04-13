@@ -131,4 +131,7 @@ module KanbansHelper
     return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
     
+  def issue_url(issue)
+    url_for(:controller => 'issues', :action => 'show', :id => issue)
+  end
 end

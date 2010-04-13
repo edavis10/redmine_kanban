@@ -1,12 +1,13 @@
 <% if issue %>
 <li id="issue_<%= issue.id %>" class="<%= over_pane_limit?(limit, issue_counter) if defined?(limit) -%> <%= kanban_issue_css_classes(issue) %>">
   <div class="issue-details">
-    <%= issue_icon_link(issue) %>
-    <%# TODO: This is leaving a small gap %>
-    <%= image_tag('comment.png', :class => 'updated-note') if updated_note_on_issue?(issue) %>
 
     <%= call_hook(:view_kanbans_issue_details, :issue => issue) %>
-    #<%= h(issue.id) %> - <%= h(issue.project.name) %> - <%= h(issue.subject) %>
+    <div class="issue-details-header"><%= issue_icon_link(issue) %>
+      <a href="<%= issue_url(issue) %>">#<%= h(issue.id) %></a> - <%= h(issue.project.name) %>
+    </div>
+    <%= image_tag('comment.png', :class => 'updated-note') if updated_note_on_issue?(issue) %>
+    <div class="issue-details-body"><%= h(issue.subject) %></div>
   </div>
 </li>
 <% end %>
