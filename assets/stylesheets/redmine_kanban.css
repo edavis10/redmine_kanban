@@ -12,7 +12,7 @@
 #staffed-requests .finished { }
 #staffed-requests .canceled { }
 
-.column { min-height: 600px; float:left; border: 2px solid #333333; padding: 5px;}
+.column { min-height: 600px; float:left; margin-left:-2px; border: 2px solid #333333; padding: 5px;}
 .staff { border-top: 2px solid #333333; padding: 5px; min-height: 60px; }
 .staffed-column { float:left; }
 .active-header { width:33%; display: inline;}
