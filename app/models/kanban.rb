@@ -1,5 +1,5 @@
 class Kanban
-  attr_reader :incoming_pane, :backlog_pane, :quick_pane, :canceled_pane, :finished_pane, :active_pane, :testing_pane
+  attr_reader :incoming_pane, :backlog_pane, :quick_pane, :canceled_pane, :finished_pane, :active_pane, :testing_pane, :selected_pane
   
   attr_accessor :incoming_issues
   attr_accessor :quick_issues
@@ -20,7 +20,8 @@ class Kanban
     @finished_pane = KanbanPane::FinishedPane.new
     @active_pane = KanbanPane::ActivePane.new
     @testing_pane = KanbanPane::TestingPane.new
-
+    @selected_pane = KanbanPane::SelectedPane.new
+    
     @settings = Setting.plugin_redmine_kanban
     @users = get_users
   end
@@ -55,7 +56,7 @@ class Kanban
   end
 
   def selected_issues
-    @selected_issues ||= KanbanIssue.find_selected
+    @selected_issues ||= selected_pane.get_issues
   end
 
   def active_issues
