@@ -42,11 +42,8 @@ li.issue.assigned-to-other { color: #888888; }
 .issue-details { background-color:#f0f0ff; }
 .issue-details-header { padding: 1px 3px; }
 .issue-details-body { padding: 3px 3px; }
+div.icons {display: inline;}
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
 .general-help {font-size: 90%; font-style: italic;}
 
-.updated-note {
-   position:relative;
-   float:right;
-}
