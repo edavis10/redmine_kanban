@@ -1,6 +1,6 @@
 #kanban {width: 100%;}
-#unstaffed-requests { background-color: #E6E6FF; }
-#selected-requests { background-color: #E6E6FF; }
+#unstaffed-requests { background-color: #F7F7FF; }
+#selected-requests { background-color: #F7F7FF; }
 #staffed-requests { background-color: #FFFFCC; }
 
 #incoming {min-height: 200px;}
@@ -26,7 +26,6 @@
 
 div.pane ol { margin:0 0 10px; list-style: none; padding-left: 0px; min-height:30px; }
 div.pane ol li { padding: 0; }
-.issue-details-header { background-color:#c6c6ff; }
 div.pane li.over-limit { background-color: #ffb4b4; }
 div.pane li.over-limit:hover { background-color: #ffd4d4; }
 
@@ -35,13 +34,19 @@ ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15
 
 /* Issue rows */
 li.issue { cursor: move; border:1px dashed #ccc; margin-bottom:5px; }
-li.issue.assigned-to-me { background:#fdd; }
-li.issue.assigned-to-me .issue-details-header { font-weight:bolder; background-color:#fcc; }
-li.issue.assigned-to-me .issue-details-body { background-color:#fee; }
-li.issue.assigned-to-other { color: #888888; }
-.issue-details { background-color:#f0f0ff; }
-.issue-details-header { padding: 1px 3px; }
-.issue-details-body { padding: 3px 3px; }
+li.issue .issue-details-body { padding: 3px 3px; }
+li.issue .issue-details-header {padding: 1px 3px; }
+
+/* based on #9393ff */
+li.issue.assigned-to-other { }
+li.issue.assigned-to-other .issue-details-header { background-color:#9393ff;} /* 79% */
+li.issue.assigned-to-other .issue-details { background-color:#e8e8ff; } /* 95% */
+
+/* based on #a2eeac */
+li.issue.assigned-to-me {  }
+li.issue.assigned-to-me .issue-details-header { background-color:#a2eeac; } /* 78% */
+li.issue.assigned-to-me .issue-details-body { background-color:#eafbec; } /* 95% */
+
 div.icons {display: inline;}
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
