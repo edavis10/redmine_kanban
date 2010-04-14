@@ -1,5 +1,9 @@
 class KanbanPane
   def settings
+    KanbanPane.settings
+  end
+
+  def self.settings
     Setting.plugin_redmine_kanban
   end
 
@@ -7,6 +11,15 @@ class KanbanPane
     nil
   end
 
+  def self.pane_name
+    self.to_s.demodulize.gsub(/pane/i, '').downcase
+  end
+
+  def self.configured?
+    pane = self.pane_name
+    (settings['panes'] && settings['panes'][pane] && !settings['panes'][pane]['status'].blank?)
+  end
+  
   private
 
   def missing_settings(pane, options={})

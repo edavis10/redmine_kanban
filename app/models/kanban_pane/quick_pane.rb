@@ -14,6 +14,18 @@ class KanbanPane::QuickPane < KanbanPane
 
     return group_by_priority_position(issues)
   end
+
+  def self.pane_name
+    'quick-tasks'
+  end
+
+  # QuickPane uses different configuration logic since it requires the
+  # backlog pane and doesn't have it's own status
+  def self.configured?
+    KanbanPane::BacklogPane.configured? &&
+      settings['panes']['quick-tasks']['limit'].present? &&
+      settings['panes']['quick-tasks']['limit'].to_i > 0
+  end
   
 end
 

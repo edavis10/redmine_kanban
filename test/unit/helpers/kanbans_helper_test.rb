@@ -8,12 +8,15 @@ class KanbansHelperTest < HelperTestCase
   
   def setup
     super
+    # Stub KanbanPane#settings so it will bypass the Settings cache.
+    def KanbanPane.settings
+      return Setting['plugin_redmine_kanban']
+    end
   end
 
   def enable_pane(pane)
     new_panes = Setting['plugin_redmine_kanban']['panes'].merge({pane.to_s => {'status' => '1'}})
     reconfigure_plugin(Setting['plugin_redmine_kanban'].merge('panes' => new_panes))
-    @settings = Setting['plugin_redmine_kanban']
   end
 
   context "#column_width" do
@@ -28,9 +31,6 @@ class KanbansHelperTest < HelperTestCase
                              'finished' => {},
                              'canceled' => {}
                            }})
-
-      @settings = Setting['plugin_redmine_kanban']
-
     end
     
     context "for unstaffed" do
@@ -42,9 +42,9 @@ class KanbansHelperTest < HelperTestCase
         enable_pane(:incoming)
         enable_pane(:backlog)
 
-        assert pane_configured?('incoming')
-        assert pane_configured?('backlog')
-        assert !pane_configured?('selected')
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
+        assert !KanbanPane::SelectedPane.configured?
 
         assert_equal 19.2, column_width(:unstaffed)
       end
@@ -54,9 +54,9 @@ class KanbansHelperTest < HelperTestCase
         enable_pane(:backlog)
         enable_pane(:selected)
 
-        assert pane_configured?('incoming')
-        assert pane_configured?('backlog')
-        assert pane_configured?('selected')
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
+        assert KanbanPane::SelectedPane.configured?
 
         assert_equal 16.0, column_width(:unstaffed)
       end
@@ -70,9 +70,9 @@ class KanbansHelperTest < HelperTestCase
       should "be 19.2 if selected and staffed are enabled" do
         enable_pane(:selected)
 
-        assert !pane_configured?('incoming')
-        assert !pane_configured?('backlog')
-        assert pane_configured?('selected')
+        assert !KanbanPane::IncomingPane.configured?
+        assert !KanbanPane::BacklogPane.configured?
+        assert KanbanPane::SelectedPane.configured?
 
         assert_equal 19.2, column_width(:selected)
       end
@@ -82,9 +82,9 @@ class KanbansHelperTest < HelperTestCase
         enable_pane(:backlog)
         enable_pane(:selected)
 
-        assert pane_configured?('incoming')
-        assert pane_configured?('backlog')
-        assert pane_configured?('selected')
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
+        assert KanbanPane::SelectedPane.configured?
 
         assert_equal 16.0, column_width(:selected)
       end
@@ -99,8 +99,8 @@ class KanbansHelperTest < HelperTestCase
         enable_pane(:incoming)
         enable_pane(:backlog)
 
-        assert pane_configured?('incoming')
-        assert pane_configured?('backlog')
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
 
         assert_equal 76.8, column_width(:staffed)
       end
@@ -108,7 +108,7 @@ class KanbansHelperTest < HelperTestCase
       should "be 76.8 if selected and staffed are enabled" do
         enable_pane(:selected)
 
-        assert pane_configured?('selected')
+        assert KanbanPane::SelectedPane.configured?
 
         assert_equal 76.8, column_width(:staffed)
       end
@@ -118,9 +118,9 @@ class KanbansHelperTest < HelperTestCase
         enable_pane(:backlog)
         enable_pane(:selected)
 
-        assert pane_configured?('incoming')
-        assert pane_configured?('backlog')
-        assert pane_configured?('selected')
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
+        assert KanbanPane::SelectedPane.configured?
 
         assert_equal 64.0, column_width(:staffed)
       end

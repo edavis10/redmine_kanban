@@ -39,20 +39,6 @@ module KanbansHelper
     end
   end
 
-  def pane_configured?(pane)
-    (@settings['panes'] && @settings['panes'][pane] && !@settings['panes'][pane]['status'].blank?)
-  end
-
-  def display_pane?(pane)
-    if pane == 'quick-tasks'
-      pane_configured?('backlog') &&
-        @settings['panes']['quick-tasks']['limit'].present? &&
-        @settings['panes']['quick-tasks']['limit'].to_i > 0
-    else
-      pane_configured?(pane)
-    end
-  end
-
   def kanban_issue_css_classes(issue)
     css = 'kanban-issue ' + issue.css_classes
     if User.current.logged? && !issue.assigned_to_id.nil? && issue.assigned_to_id != User.current.id
@@ -77,9 +63,9 @@ module KanbansHelper
   def column_configured?(column)
     case column
     when :unstaffed
-      pane_configured?('incoming') || pane_configured?('backlog')
+      KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured?
     when :selected
-      display_pane?('quick-tasks') || pane_configured?('selected')
+      KanbanPane::QuickPane.configured? || KanbanPane::SelectedPane.configured?
     when :staffed
       true # always
     end
@@ -116,17 +102,17 @@ module KanbansHelper
       :finished => 2,
       :canceled => 2
     }
-    return 0.0 if column == :active && !pane_configured?(:active)
-    return 0.0 if column == :testing && !pane_configured?(:testing)
-    return 0.0 if column == :finished && !pane_configured?(:finished)
-    return 0.0 if column == :canceled && !pane_configured?(:canceled)
+    return 0.0 if column == :active && !KanbanPane::ActivePane.configured?
+    return 0.0 if column == :testing && !KanbanPane::TestingPane.configured?
+    return 0.0 if column == :finished && !KanbanPane::FinishedPane.configured?
+    return 0.0 if column == :canceled && !KanbanPane::CanceledPane.configured?
 
     visible = 0
     visible += column_ratios[:user]
-    visible += column_ratios[:active] if pane_configured?(:active)
-    visible += column_ratios[:testing] if pane_configured?(:testing)
-    visible += column_ratios[:finished] if pane_configured?(:finished)
-    visible += column_ratios[:canceled] if pane_configured?(:canceled)
+    visible += column_ratios[:active] if KanbanPane::ActivePane.configured?
+    visible += column_ratios[:testing] if KanbanPane::TestingPane.configured?
+    visible += column_ratios[:finished] if KanbanPane::FinishedPane.configured?
+    visible += column_ratios[:canceled] if KanbanPane::CanceledPane.configured?
     
     return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
