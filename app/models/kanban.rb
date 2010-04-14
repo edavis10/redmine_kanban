@@ -84,7 +84,11 @@ class Kanban
   end
   
   def quick_issue_ids
-    return @quick_issues.collect {|ary| ary[1] }.flatten.collect(&:id)
+    if quick_issues.present?
+      quick_issues.collect {|ary| ary[1] }.flatten.collect(&:id)
+    else
+      []
+    end
   end
 
   # Updates the Issue with +issue_id+ to change it's
