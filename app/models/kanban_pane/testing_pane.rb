@@ -2,11 +2,10 @@ class KanbanPane::TestingPane < KanbanPane
   def get_issues(options={})
     users = options.delete(:users)
     
-    issues = {}
-    users.each do |user|
-      issues[user] = KanbanIssue.find_testing(user.id)
-    end unless users.blank?
-    issues
+    users.inject({}) do |result, user|
+      result[user] = KanbanIssue.find_testing(user.id)
+      result
+    end
   end
 end
 
