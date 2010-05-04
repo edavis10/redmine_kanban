@@ -2,6 +2,10 @@ jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
 
+  receiveCrossListDrop = function(event, ui, list) {
+    updatePanes(ui.item,ui.sender,list, {});    
+  },
+
   attachSortables = function() {
     // connectWith means that this item can be drug out of it's
     // sortable list and into an item in connectWith
@@ -50,7 +54,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
@@ -67,7 +71,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -91,7 +95,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -116,7 +120,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -139,7 +143,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
@@ -156,7 +160,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
