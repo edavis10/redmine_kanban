@@ -44,6 +44,8 @@ module KanbansHelper
     if User.current.logged? && !issue.assigned_to_id.nil? && issue.assigned_to_id != User.current.id
       css << ' assigned-to-other'
     end
+    css << ' issue-behind-schedule' if issue.behind_schedule?
+    css << ' issue-overdue' if issue.overdue?
     css
   end
 

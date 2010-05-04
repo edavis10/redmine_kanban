@@ -46,6 +46,11 @@ li.issue.assigned-to-me {  }
 li.issue.assigned-to-me .issue-details-header { background-color:#dcf8df; }
 li.issue.assigned-to-me .issue-details-body { }
 
+/* Overdue and behind schedule */
+li.issue.issue-behind-schedule .issue-details-header {background-color: #f66914; color: #FFFFFF}
+li.issue.issue-behind-schedule .issue-details-header a {color: #FFFFFF}
+li.issue.issue-overdue .issue-details-header {background-color: #f00;}
+
 div.icons {display: inline;}
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }

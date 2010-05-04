@@ -36,6 +36,18 @@ module RedmineKanban
       def remove_kanban_issues
         KanbanIssue.destroy_all(['issue_id = (?)', self.id]) if self.id
       end
+
+      # Returns true if the issue is overdue
+      def overdue?
+        !due_date.nil? && (due_date < Date.today) && !status.is_closed?
+      end
+      
+      # Is the amount of work done less than it should for the due date
+      def behind_schedule?
+        return false if start_date.nil? || due_date.nil?
+        done_date = start_date + ((due_date - start_date+1)* done_ratio/100).floor
+        return done_date <= Date.today
+      end
     end    
   end
 end
