@@ -51,7 +51,8 @@ li.issue.issue-behind-schedule .issue-details-header {background-color: #f66914;
 li.issue.issue-behind-schedule .issue-details-header a {color: #FFFFFF}
 li.issue.issue-overdue .issue-details-header {background-color: #f00;}
 
-div.icons {display: inline;}
+div.icons {display: inline; position: relative;}
+div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow updated-notes to stack on icons */
 
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
 .general-help {font-size: 90%; font-style: italic;}

@@ -58,7 +58,7 @@ module KanbansHelper
                    })
       link_to(img, :controller => 'issues', :action => 'show', :id => issue)
     else
-      link_to(image_tag('ticket.png'), :controller => 'issues', :action => 'show', :id => issue)
+      link_to(image_tag('ticket.png', :style => 'float:left;'), :controller => 'issues', :action => 'show', :id => issue)
     end
   end
 
