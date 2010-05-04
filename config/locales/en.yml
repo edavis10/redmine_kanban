@@ -34,3 +34,10 @@ en:
   kanban_text_saved: Updated lists.
   field_state: "State"
   kanban_text_nothing: "(No issues)"
+  kanban_text_color_help: "Color Help"
+  kanban_text_normal_color: "Normal - <span>Yellow</span>"
+  kanban_text_assigned_to_me_color: "Assigned to Me - <span>Green header</span>"
+  kanban_text_behind_schedule_color: "Behind schedule - <span>Orange header</span>"
+  kanban_text_overdue_color: "Overdue - <span>Red Header</span>"
+  kanban_text_over_wip_color: "Over Work in Progress Limit - <span>Pink header and details</span>"
+

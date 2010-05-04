@@ -56,3 +56,10 @@ div.icons {display: inline;}
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
 .general-help {font-size: 90%; font-style: italic;}
 
+#color-help .normal-color span { background-color: #FFFFDD; }
+#color-help .assigned-to-me-color span { background-color: #dcf8df; }
+#color-help .behind-schedule-color span { background-color: #f66914; }
+#color-help .overdue-color span { background-color: #f00; }
+#color-help .over-wip-color span { background-color: #ffd6d6; }
+
+.icon-info  { background-image: url(../images/information.png); }
