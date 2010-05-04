@@ -2,8 +2,10 @@ jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
 
-  receiveCrossListDrop = function(event, ui, list) {
-    updatePanes(ui.item,ui.sender,list, {});    
+  receiveCrossListDrop = function(event, ui, list, options) {
+    if (!options) { var options = {}; }
+
+    updatePanes(ui.item,ui.sender,list, options);
   },
 
   attachSortables = function() {
@@ -37,7 +39,10 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this),  {'additional_pane': '#quick-issues'})
+        receiveCrossListDrop(event, ui, $(this),
+                             {
+                               'additional_pane': '#quick-issues'
+                             });
       }
     });
 
