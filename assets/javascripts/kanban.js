@@ -2,6 +2,11 @@ jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
 
+  $("#dialog-window").dialog({
+                               autoOpen: false,
+                               modal: true
+                             });
+
   attachSortables = function() {
     // connectWith means that this item can be drug out of it's
     // sortable list and into an item in connectWith
@@ -33,7 +38,21 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this),  {'additional_pane': '#quick-issues'})
+        if (ui.sender.attr('id').split('-')[0] == 'incoming') {
+          $('#dialog-window').dialog("option","buttons",
+          {
+            "Cancel": function() {
+              $(ui.sender).sortable('cancel');
+              $(this).dialog("close");
+            },
+            "OK": function() {
+              updatePanes(ui.item,ui.sender,$(this),  {'additional_pane': '#quick-issues'})
+            }
+          });
+          $('#dialog-window').dialog('open');
+        } else {
+          updatePanes(ui.item,ui.sender,$(this),  {'additional_pane': '#quick-issues'})
+        }
       }
     });
 
