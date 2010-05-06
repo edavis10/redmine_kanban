@@ -4,14 +4,13 @@ class KanbansController < ApplicationController
   include KanbansHelper
 
   before_filter :authorize
+  before_filter :setup_settings
 
   def show
-    @settings = Setting.plugin_redmine_kanban
     @kanban = Kanban.new
   end
 
   def update
-    @settings = Setting.plugin_redmine_kanban
     @from = params[:from]
     @to = params[:to]
     user_and_user_id
@@ -106,5 +105,9 @@ class KanbansController < ApplicationController
     end
 
     return [user_id, user]
+  end
+
+  def setup_settings
+    @settings = Setting.plugin_redmine_kanban
   end
 end
