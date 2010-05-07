@@ -1,7 +1,7 @@
 jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
-  $("#dialog-window").dialog({ autoOpen: false, modal: true });
+  $("#dialog-window").dialog({ autoOpen: false, modal: true, width: 600 });
 
   receiveCrossListDrop = function(event, ui, list, options) {
     if (!options) { var options = {}; }
