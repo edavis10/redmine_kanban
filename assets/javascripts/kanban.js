@@ -1,11 +1,29 @@
 jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
+  $("#dialog-window").dialog({ autoOpen: false, modal: true });
 
   receiveCrossListDrop = function(event, ui, list, options) {
     if (!options) { var options = {}; }
 
-    updatePanes(ui.item,ui.sender,list, options);
+    // Popup when dragging out of Incoming
+    if (ui.sender.attr('id').split('-')[0] == 'incoming') {
+      $('#dialog-window').
+        dialog("option","buttons",
+               {
+                 "Cancel": function() {
+                   $(ui.sender).sortable('cancel');
+                   $(this).dialog("close");
+                 },
+                 "OK": function() {
+                   updatePanes(ui.item,ui.sender,list, options);
+                   $(this).dialog("close");
+                 }
+               });
+      $('#dialog-window').dialog('open');
+    } else {
+      updatePanes(ui.item,ui.sender,list, options);
+    }
   },
 
   attachSortables = function() {
