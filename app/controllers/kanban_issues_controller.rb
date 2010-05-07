@@ -8,6 +8,9 @@ class KanbanIssuesController < ApplicationController
   before_filter :require_valid_from_pane
 
   def edit
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @allowed_projects = Issue.allowed_target_projects_on_move
+    
     respond_to do |format|
       format.html { render :text => '', :status => :not_acceptable }
       format.js { render :action => 'edit_incoming', :layout => false }
