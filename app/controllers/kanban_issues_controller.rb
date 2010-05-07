@@ -10,7 +10,7 @@ class KanbanIssuesController < ApplicationController
   def edit
     respond_to do |format|
       format.html { render :text => '', :status => :not_acceptable }
-      format.js { render :action => 'edit_incoming' }
+      format.js { render :action => 'edit_incoming', :layout => false }
     end
   end
 

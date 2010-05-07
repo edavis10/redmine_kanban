@@ -8,6 +8,8 @@ jQuery(function($) {
 
     // Popup when dragging out of Incoming
     if (ui.sender.attr('id').split('-')[0] == 'incoming') {
+      var issue_id = ui.item.attr('id').split('_')[1];
+
       $('#dialog-window').
         dialog("option","buttons",
                {
@@ -20,7 +22,10 @@ jQuery(function($) {
                    $(this).dialog("close");
                  }
                });
-      $('#dialog-window').dialog('open');
+      $('#dialog-window').
+        html(''). // Gets cached
+        load('kanban_issues/'+ issue_id + '/edit.js?from_pane=incoming').
+        dialog('open');
     } else {
       updatePanes(ui.item,ui.sender,list, options);
     }
