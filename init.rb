@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_kanban do
   requires_redmine :version_or_higher => '0.8.0'
 
   permission(:view_kanban, {:kanbans => [:show]})
-  permission(:edit_kanban, {:kanbans => [:update, :sync]})
+  permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
   permission(:manage_kanban, {})
   
   settings(:partial => 'settings/kanban_settings',
