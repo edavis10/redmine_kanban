@@ -18,7 +18,8 @@ class KanbanIssuesControllerTest < ActionController::TestCase
 
     context "allow" do
       should ":edit_kanban to view edit" do
-        get :edit, :format => 'js'
+        issue = Issue.generate_for_project!(@public_project)
+        get :edit, :from_pane => 'incoming', :id => issue.id, :format => 'js'
         assert_response :success
       end
     end
@@ -43,7 +44,7 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     
     should "not be allowed" do
       get :edit
-      assert_response 406
+      assert_response 404
     end
   end
 
@@ -53,21 +54,42 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     end
 
     context "without an issue id" do
-      should "return a 404"
+      should "return a 404" do
+        get :edit, :format => 'js'
+        assert_response 404
+      end
     end
 
     context "with an issue id the current user cannot see" do
-      should "return a 404"
+      should "return a 404" do
+        private_issue = Issue.generate_for_project!(@private_project)
+        get :edit, :id => private_issue.id, :format => 'js'
+        assert_response 404
+      end
     end
 
     context "with an issue id the current user can see" do
+      setup do
+        @issue = Issue.generate_for_project!(@public_project)
+      end
+
       context "without coming from incoming" do
-        should "return a 404"
+        should "return a 404" do
+          get :edit, :id => @issue.id, :format => 'js'
+          assert_response 404
+        end
       end
 
       context "coming from the incoming pane" do
-        should "return a 200"
-        should "render the issue form"
+        should "return a 200" do
+          get :edit, :id => @issue.id, :from_pane => 'incoming', :format => 'js'
+          assert_response 200
+        end
+
+        should "render the issue form for incoming" do
+          get :edit, :id => @issue.id, :from_pane => 'incoming', :format => 'js'
+          assert_template 'kanban_issues/edit_incoming'
+        end
       end
     end
 
