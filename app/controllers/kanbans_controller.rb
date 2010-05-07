@@ -47,10 +47,7 @@ class KanbansController < ApplicationController
   end
 
   def sync
-    # Brute force update :)
-    Issue.all.each do |issue|
-      KanbanIssue.update_from_issue(issue)
-    end
+    Issue.sync_with_kanban
     
     respond_to do |format|
       format.html {

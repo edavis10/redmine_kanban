@@ -23,6 +23,13 @@ module RedmineKanban
     end
     
     module ClassMethods
+      # Brute force update :)
+      def sync_with_kanban
+        Issue.all.each do |issue|
+          KanbanIssue.update_from_issue(issue)
+        end
+      end
+
     end
     
     module InstanceMethods
