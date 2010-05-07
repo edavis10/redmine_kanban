@@ -18,7 +18,7 @@ class KanbanIssuesControllerTest < ActionController::TestCase
 
     context "allow" do
       should ":edit_kanban to view edit" do
-        get :edit
+        get :edit, :format => 'js'
         assert_response :success
       end
     end
@@ -29,18 +29,29 @@ class KanbanIssuesControllerTest < ActionController::TestCase
       }
 
       should ":edit_kanban" do
-        get :edit
-        assert_response 403
+        get :edit, :format => 'js'
+        assert_response 406 # TODO: Redmine's not supporting js in render_403
       end
     end
 
   end
 
   context "GET #edit with HTML" do
-    should "not be allowed"
+    setup do
+      shared_setup
+    end
+    
+    should "not be allowed" do
+      get :edit
+      assert_response 406
+    end
   end
 
   context "GET #edit with JS" do
+    setup do
+      shared_setup
+    end
+
     context "without an issue id" do
       should "return a 404"
     end

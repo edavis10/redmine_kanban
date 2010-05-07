@@ -5,7 +5,10 @@ class KanbanIssuesController < ApplicationController
   before_filter :setup_settings
 
   def edit
-    render :text => 'hi'
+    respond_to do |format|
+      format.html { render :text => '', :status => :not_acceptable }
+      format.js { render :text => '' }
+    end
   end
 
   private
