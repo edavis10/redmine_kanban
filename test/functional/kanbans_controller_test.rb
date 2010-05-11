@@ -159,12 +159,23 @@ class KanbansControllerTest < ActionController::TestCase
         @to = "backlog"
         high_priority = IssuePriority.find_by_name("High")
         high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority') if high_priority.nil?
+        @medium_priority = IssuePriority.find_by_name("Medium")
+        @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority')
         @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                             :project => @public_project,
                             :priority => high_priority,
                             :status => IssueStatus.find_by_name('New'))
 
-        xhr :put, :update, {:from => @from, :to => @to, :issue_id => @issue.id}
+        @public_project2 = make_project_with_trackers(:is_public => true)
+        @member2 = make_member({:principal => @user, :project => @public_project2}, [@role])
+        @new_tracker = @public_project2.trackers.first
+
+        xhr(:put, :update, {:from => @from, :to => @to, :issue_id => @issue.id,
+              :issue => {
+                :priority_id => @medium_priority.id,
+                :project_id => @public_project2.id,
+                :tracker_id => @new_tracker.id
+              }})
       }
       
       should_respond_with :success
@@ -184,6 +195,18 @@ class KanbansControllerTest < ActionController::TestCase
       should "return the updated Backlog panes content" do
         json = ActiveSupport::JSON.decode @response.body
         assert json.keys.include?('to')
+      end
+
+      context "with an issue update xxxx" do
+        should "update the assigned project" do
+          @issue.reload
+          assert_equal @public_project2, @issue.project
+        end
+        
+        should "update the priority" do
+          @issue.reload
+          assert_equal @medium_priority, @issue.priority
+        end
       end
     end
     

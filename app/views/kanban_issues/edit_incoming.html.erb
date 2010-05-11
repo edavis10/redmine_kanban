@@ -5,14 +5,6 @@
 <div class="box">
   <p><%= f.select("project_id", project_tree_options_for_select(@allowed_projects), :required => true) %></p>
 
-
-
-  <% if @allowed_statuses.any? %>
-    <p><%= f.select :status_id, (@allowed_statuses.collect {|p| [p.name, p.id]}), :required => true %></p>
-  <% else %>
-    <p><label><%= l(:field_status) %></label> <%= @issue.status.name %></p>
-  <% end %>
-
   <p><%= f.select :priority_id, (IssuePriority.all.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
 
 </div>

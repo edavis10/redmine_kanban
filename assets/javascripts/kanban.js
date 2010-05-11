@@ -18,6 +18,7 @@ jQuery(function($) {
                    $(this).dialog("close");
                  },
                  "OK": function() {
+                   options.issue_update = $('#issue-form').serialize();
                    updatePanes(ui.item,ui.sender,list, options);
                    $(this).dialog("close");
                  }
@@ -236,12 +237,18 @@ jQuery(function($) {
       var from_user_id = null;
     }
 
+    if (options.issue_update) {
+      var issue_update = options.issue_update;
+    } else {
+      var issue_update = '';
+    }
+
     // Only fire the Ajax requests if from_pane is set (cross list DnD) or
     // the new order has the tagert issue (same list DnD)
     if (from_pane.length > 0 || to_order.indexOf(issue_id) > 0) {
 
       $.ajaxQueue.put('kanban.js', {
-        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
+        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name + '&' + issue_update,
         success: function(response) {
           var partials = $.secureEvalJSON(response);
           $(from).parent().html(partials.from);
