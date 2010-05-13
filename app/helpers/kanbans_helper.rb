@@ -46,6 +46,7 @@ module KanbansHelper
     end
     css << ' issue-behind-schedule' if issue.behind_schedule?
     css << ' issue-overdue' if issue.overdue?
+    css << ' parent-issue' if issue.root? && issue.children.count > 0
     css
   end
 

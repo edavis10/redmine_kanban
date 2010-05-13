@@ -39,5 +39,6 @@ en:
   kanban_text_assigned_to_me_color: "Assigned to Me - <span>Green header</span>"
   kanban_text_behind_schedule_color: "Behind schedule - <span>Orange header</span>"
   kanban_text_overdue_color: "Overdue - <span>Red Header</span>"
-  kanban_text_over_wip_color: "Over Work in Progress Limit - <span>Pink header and details</span>"
+  kanban_text_over_wip_color: "Over Work in Progress Limit - <span>Gray body</span>"
+  kanban_text_parent_issue_color: "Parent Issue - <span>Bold subject</span>"
   kanban_text_updated_issue: "Updated issue"
