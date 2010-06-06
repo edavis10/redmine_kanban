@@ -1,0 +1,30 @@
+de:
+  kanban_title: Kanban
+  kanban_text_incoming: Eingang
+  kanban_text_backlog: Backlog
+  kanban_text_selected_requests: Ausgewählte Aufträge
+  kanban_text_quick_tasks: Kurze Aufgaben
+  kanban_text_user: Benutzer
+  kanban_text_active: Aktiv
+  kanban_text_testing: Im Test
+  kanban_text_finished_requests: Abgeschlossene Aufträge
+  kanban_text_general_settings: Allgemeine Einstellungen
+  kanban_text_pane_settings: Fenster Einstellungen
+  kanban_text_pane_settings_description: "Wählen Sie den Vorgangsstatus aus, den sie dem jeweiligen Fenster zuordnen möchten.  Die Vorgänge werden auf diesen Status aktualisiert, wenn sie per Drag and Drop verschoben werden."
+  kanban_text_general_help: "Jede Liste ist ein Fenster von Vorgängen.  Diese Vorgänge können per Drag and Drop in andere Fenster verschoben werden, basierend auf den Einstellungen für Rollen und Berechtigungen."
+  kanban_label_incoming_pane: Eingang
+  kanban_label_backlog_pane: Backlog
+  kanban_label_selected-requests_pane: Ausgewählte Aufträge
+  kanban_label_selected_pane: Ausgewählte Aufträge
+  kanban_label_quick-tasks_pane: Kurze Aufgaben
+  kanban_label_active_pane: Aktiv
+  kanban_label_testing_pane: Im Test
+  kanban_label_finished_pane: Abgeschlossen
+  kanban_label_limit: Maximale Anzahl von Einträgen
+  
+  kanban_label_staff_role: Rolle für Aufträge mit Personal
+  kanban_label_incoming_project: Projekt für das Eingangsfenster
+  kanban_text_error_saving: Fehler beim Speichern der Listen.  Bitten laden Sie die Seite neu und versuchen Sie es noch einmal.
+  kanban_text_saved: Listen aktualisiert.
+  field_state: "Status"
+  kanban_text_nothing: "(Keine Vorgänge)"
