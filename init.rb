@@ -1,5 +1,7 @@
 require 'redmine'
 
+require 'aasm'
+
 # Patches to the Redmine core.
 require 'dispatcher'
 
