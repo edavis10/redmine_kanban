@@ -1,0 +1,31 @@
+# English strings go here for Rails i18n
+ja:
+  kanban_title: かんばん
+  kanban_text_incoming: 新規
+  kanban_text_backlog: 未処理
+  kanban_text_selected_requests: 選択されたチケット
+  kanban_text_quick_tasks: 緊急タスク
+  kanban_text_user: ユーザ
+  kanban_text_active: アクティブ
+  kanban_text_testing: テスト中
+  kanban_text_finished_requests: 完了
+  kanban_text_general_settings: 一般設定
+  kanban_text_pane_settings: ウィンドウ枠設定
+  kanban_text_pane_settings_description: "それぞれのステータスに関連付けるチケットのステータスを選択してください。チケットはドラッグアンドドロップによって移動可能です。移動によってチケットのステータスは更新されます。"
+  kanban_text_general_help: "ステータス別のチケット一覧です。  チケットはドラッグアンドドロップで移動可能です。ロールやパーミッションの違うブロックには移動できません。"
+  kanban_label_incoming_pane: 新規とみなすステータス
+  kanban_label_backlog_pane: 未処理とみなすステータス
+  kanban_label_selected-requests_pane: 選択されたチケット
+  kanban_label_selected_pane: 選択されたチケット
+  kanban_label_quick-tasks_pane: 緊急とみなすステータス
+  kanban_label_active_pane: アクティブとみなすステータス
+  kanban_label_testing_pane: テスト中とみなすステータス
+  kanban_label_finished_pane: 完了とみなすステータス
+  kanban_label_limit: 表示数
+
+  kanban_label_staff_role: 指示したチケットに使用するロール
+  kanban_label_incoming_project: 新規ブロックに使用されるプロジェクト
+  kanban_text_error_saving: 一覧を保存できませんでした。画面を更新して再度試してください。
+  kanban_text_saved: 一覧を更新しました。
+  field_state: "状態"
+  kanban_text_nothing: "(チケットはありません)"
