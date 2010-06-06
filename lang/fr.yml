@@ -1,0 +1,29 @@
+kanban_title: Kanban
+kanban_text_incoming: Entrée
+kanban_text_backlog: En attente
+kanban_text_selected_requests: Demandes choisies
+kanban_text_quick_tasks: Tâches rapides
+kanban_text_user: Utilisateur
+kanban_text_active: En cours
+kanban_text_testing: En tests
+kanban_text_finished_requests: Demandes terminées
+kanban_text_general_settings: Paramètres généraux
+kanban_text_pane_settings: Paramètres d'affichage
+kanban_text_pane_settings_description: "Choisissez le statut de demande que vous voulez assigner à chaque panneau. Les demandes sont mises à jour à ces statuts lorsqu'elles sont déplacées (drag and drop) dans un panneau."
+kanban_text_general_help: "Chaque liste est un Panneau de demandes. Les demandes peuvent être déplacées d'un panneau à l'autre suivant les paramètres des Rôles et permissions."
+kanban_label_incoming_pane: Entrée
+kanban_label_backlog_pane: En attente
+kanban_label_selected-requests_pane: Demandes choisies
+kanban_label_selected_pane: Demandes choisies
+kanban_label_quick-tasks_pane: Tâches rapides
+kanban_label_active_pane: En cours
+kanban_label_testing_pane: En tests
+kanban_label_finished_pane: Terminée
+kanban_label_limit: Nombre maximal d'éléments
+
+kanban_label_staff_role: Rôle utilisé pour les demandes du personnel
+kanban_label_incoming_project: Projet associé au panneau Entrée
+kanban_text_error_saving: Erreur à la sauvegarde des listes. Rafraîchissez la page et essayez de nouveau.
+kanban_text_saved: Listes mises à jour.
+field_state: "État"
+kanban_text_nothing: "(Pas de demande)"
