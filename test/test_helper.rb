@@ -73,6 +73,7 @@ module KanbanTestHelper
     make_kanban_role
 
     incoming_hidden_priority = (hidden = IssuePriority.find_by_name("Hidden")) ? hidden.id.to_s : nil
+    incoming_hidden_project = (hidden = Project.find_by_name("Hidden")) ? hidden.id.to_s : nil
     
     Setting.plugin_redmine_kanban = {
     "staff_role"=> make_kanban_role,
@@ -100,7 +101,8 @@ module KanbanTestHelper
       "incoming"=>{
         "status"=> IssueStatus.find_by_name('New').id,
         "limit"=>"5",
-        "excluded_priorities"=> [incoming_hidden_priority]
+        "excluded_priorities"=> [incoming_hidden_priority],
+        "excluded_projects"=> [incoming_hidden_project],  
       },
       "finished"=>{
         "status"=> IssueStatus.find_by_name('Closed').id,
@@ -124,6 +126,9 @@ module KanbanTestHelper
     @private_tracker = @private_project.trackers.first
     @public_project = make_project_with_trackers(:is_public => true)
     @public_tracker = @public_project.trackers.first
+
+    @hidden_project = Project.find_by_name('Hidden')
+    @hidden_project ||= make_project_with_trackers(:is_public => true, :name => 'Hidden')
 
     make_users
     

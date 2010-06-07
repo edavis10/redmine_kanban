@@ -6,7 +6,7 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     configure_plugin
     @private_project = make_project_with_trackers(:is_public => false)
     @public_project = make_project_with_trackers(:is_public => true)
-    @user = User.generate_with_protected!
+    @user = User.generate_with_protected!(:admin => true)
     @request.session[:user_id] = @user.id
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
     @member = make_member({:principal => @user, :project => @public_project}, [@role])
@@ -100,6 +100,13 @@ class KanbanIssuesControllerTest < ActionController::TestCase
           assert_contains assigns(:priorities), @medium_priority
           assert_contains assigns(:priorities), @low_priority
           assert !assigns(:priorities).include?(@priority_hidden_from_incoming), "Excluded priority is displayed when it should not be"
+        end
+
+        should "assign allowed_projects to exclude the configuration setting" do
+          get :edit, :id => @issue.id, :from_pane => 'incoming', :format => 'js'
+
+          assert assigns(:allowed_projects)
+          assert !assigns(:allowed_projects).include?(@hidden_project), "Excluded project is displayed when it should not be"
         end
       end
     end

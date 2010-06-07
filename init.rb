@@ -30,7 +30,7 @@ Redmine::Plugin.register :redmine_kanban do
   settings(:partial => 'settings/kanban_settings',
            :default => {
              'panes' => {
-               'incoming' => { 'status' => nil, 'limit' => 5, 'excluded_priorities' => nil},
+               'incoming' => { 'status' => nil, 'limit' => 5, 'excluded_priorities' => nil, 'excluded_projects' => nil},
                'backlog' => { 'status' => nil, 'limit' => 15},
                'selected' => { 'status' => nil, 'limit' => 8},
                'quick-tasks' => {'limit' => 5},
