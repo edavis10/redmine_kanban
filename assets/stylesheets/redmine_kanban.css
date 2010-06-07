@@ -73,3 +73,6 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 #color-help .parent-issue-color span { font-weight: bold; }
 
 .icon-info  { background-image: url(../images/information.png); }
+
+/* Popup dialog */
+.short-scroll { max-height: 200px; overflow-y: scroll; }
