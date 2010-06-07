@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class KanbanIssuesControllerTest < ActionController::TestCase
   def shared_setup
+    setup_kanban_issues
     configure_plugin
     @private_project = make_project_with_trackers(:is_public => false)
     @public_project = make_project_with_trackers(:is_public => true)
@@ -89,6 +90,16 @@ class KanbanIssuesControllerTest < ActionController::TestCase
         should "render the issue form for incoming" do
           get :edit, :id => @issue.id, :from_pane => 'incoming', :format => 'js'
           assert_template 'kanban_issues/edit_incoming'
+        end
+
+        should "assign issue priorities to exclude the configuration setting" do
+          get :edit, :id => @issue.id, :from_pane => 'incoming', :format => 'js'
+
+          assert assigns(:priorities)
+          assert_contains assigns(:priorities), @high_priority
+          assert_contains assigns(:priorities), @medium_priority
+          assert_contains assigns(:priorities), @low_priority
+          assert !assigns(:priorities).include?(@priority_hidden_from_incoming), "Excluded priority is displayed when it should not be"
         end
       end
     end

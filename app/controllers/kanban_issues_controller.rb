@@ -10,6 +10,8 @@ class KanbanIssuesController < ApplicationController
   def edit
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
     @allowed_projects = Issue.allowed_target_projects_on_move
+    @priorities = IssuePriority.all
+    @priorities.reject! {|p| @settings['panes']['incoming']['excluded_priorities'] && @settings['panes']['incoming']['excluded_priorities'].include?(p.id.to_s) }
     
     respond_to do |format|
       format.html { render :text => '', :status => :not_acceptable }

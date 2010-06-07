@@ -72,6 +72,8 @@ module KanbanTestHelper
     make_issue_statuses
     make_kanban_role
 
+    incoming_hidden_priority = (hidden = IssuePriority.find_by_name("Hidden")) ? hidden.id.to_s : nil
+    
     Setting.plugin_redmine_kanban = {
     "staff_role"=> make_kanban_role,
     "panes"=>
@@ -97,7 +99,8 @@ module KanbanTestHelper
       },
       "incoming"=>{
         "status"=> IssueStatus.find_by_name('New').id,
-        "limit"=>"5"
+        "limit"=>"5",
+        "excluded_priorities"=> [incoming_hidden_priority]
       },
       "finished"=>{
         "status"=> IssueStatus.find_by_name('Closed').id,
@@ -127,6 +130,7 @@ module KanbanTestHelper
     @high_priority = IssuePriority.generate!(:name => "High", :type => 'IssuePriority') if IssuePriority.find_by_name("High").nil?
     @medium_priority = IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority') if IssuePriority.find_by_name("Medium").nil?
     @low_priority = IssuePriority.generate!(:name => "Low", :type => 'IssuePriority') if IssuePriority.find_by_name("Low").nil?
+    @priority_hidden_from_incoming = IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority') if IssuePriority.find_by_name("Hidden").nil?
 
   end
 

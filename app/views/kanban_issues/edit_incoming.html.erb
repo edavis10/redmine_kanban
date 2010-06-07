@@ -12,7 +12,7 @@
 <div class="box">
   <p><%= f.select("project_id", project_tree_options_for_select(@allowed_projects), :required => true) %></p>
 
-  <p><%= f.select :priority_id, (IssuePriority.all.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
+  <p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
 
 </div>
 <% end %>
