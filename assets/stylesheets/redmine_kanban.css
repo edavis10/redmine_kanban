@@ -26,8 +26,6 @@
 
 div.pane ol { margin:0 0 10px; list-style: none; padding-left: 0px; min-height:30px; }
 div.pane ol li { padding: 0; }
-div.pane li.over-limit { background-color: #ffe7e7; }
-div.pane li.over-limit .issue-details-header { background-color: #ffd6d6; }
 
 #backlog-issues p, #quick-issues p {margin: 0; font-weight: bold; }
 ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15px;}
@@ -37,19 +35,29 @@ li.issue { cursor: move; border:1px dashed #ccc; margin-bottom:5px; background-c
 li.issue .issue-details-body { padding: 3px 3px; font-size: smaller; }
 li.issue .issue-details-header {padding: 1px 3px; border-bottom:1px solid #ccc;}
 
+/* Subtasks */
+li.issue.parent-issue .issue-details-header { font-weight: bold; }
+
+/* over WIP limit */
+li.issue.over-limit { background-color: #eeeeee; }
+li.issue.over-limit .issue-details-header { background-color: #dddddd; }
+
+/* Assignments */ 
 li.issue.assigned-to-other { }
 li.issue.assigned-to-other .issue-details-header { }
 li.issue.assigned-to-other .issue-details {  }
-
-/* based on #a2eeac */
 li.issue.assigned-to-me {  }
-li.issue.assigned-to-me .issue-details-header { background-color:#dcf8df; }
+li.issue.assigned-to-me .issue-details-header { background-color:#dcf8df; } /* based on #a2eeac */
 li.issue.assigned-to-me .issue-details-body { }
 
-/* Overdue and behind schedule */
+/* behind schedule */
 li.issue.issue-behind-schedule .issue-details-header {background-color: #f66914; color: #FFFFFF}
 li.issue.issue-behind-schedule .issue-details-header a {color: #FFFFFF}
+
+/* overdue issues */ 
 li.issue.issue-overdue .issue-details-header {background-color: #f00;}
+
+/* END Issue rows */
 
 div.icons {display: inline; position: relative;}
 div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow updated-notes to stack on icons */
@@ -61,6 +69,10 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 #color-help .assigned-to-me-color span { background-color: #dcf8df; }
 #color-help .behind-schedule-color span { background-color: #f66914; }
 #color-help .overdue-color span { background-color: #f00; }
-#color-help .over-wip-color span { background-color: #ffd6d6; }
+#color-help .over-wip-color span { background-color: #eeeeee; }
+#color-help .parent-issue-color span { font-weight: bold; }
 
 .icon-info  { background-image: url(../images/information.png); }
+
+/* Popup dialog */
+.short-scroll { max-height: 200px; overflow-y: scroll; }

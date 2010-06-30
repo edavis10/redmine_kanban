@@ -26,13 +26,13 @@ Redmine::Plugin.register :redmine_kanban do
   requires_redmine :version_or_higher => '0.9.0'
 
   permission(:view_kanban, {:kanbans => [:show]})
-  permission(:edit_kanban, {:kanbans => [:update, :sync]})
+  permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
   permission(:manage_kanban, {})
   
   settings(:partial => 'settings/kanban_settings',
            :default => {
              'panes' => {
-               'incoming' => { 'status' => nil, 'limit' => 5},
+               'incoming' => { 'status' => nil, 'limit' => 5, 'excluded_priorities' => nil, 'excluded_projects' => nil},
                'backlog' => { 'status' => nil, 'limit' => 15},
                'selected' => { 'status' => nil, 'limit' => 8},
                'quick-tasks' => {'limit' => 5},

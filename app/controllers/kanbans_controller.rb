@@ -17,7 +17,7 @@ class KanbansController < ApplicationController
 
     Kanban.update_sorted_issues(@to, params[:to_issue], @to_user_id) if Kanban.kanban_issues_panes.include?(@to)
 
-    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @to_user)
+    saved = Kanban.update_issue_attributes(params[:issue_id], params[:from], params[:to], User.current, @to_user, params[:issue])
 
     @kanban = Kanban.new
     respond_to do |format|

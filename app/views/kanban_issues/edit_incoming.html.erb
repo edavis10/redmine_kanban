@@ -1,0 +1,18 @@
+<h2><%= link_to_issue(@issue, :project => true) %></h2>
+
+<p><strong><%=l(:field_description)%></strong></p>
+<div class="wiki short-scroll">
+<%= textilizable @issue, :description %>
+</div>
+
+<% labelled_tabular_form_for(:issue, @issue,
+                             :url => {:action => 'update', :id => @issue},
+                             :html => {:id => 'issue-form', :method => :put}) do |f| %>
+
+<div class="box">
+  <p><%= f.select("project_id", project_tree_options_for_select(@allowed_projects), :required => true) %></p>
+
+  <p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
+
+</div>
+<% end %>

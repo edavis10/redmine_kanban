@@ -1,6 +1,36 @@
 jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
+  $("#dialog-window").dialog({ autoOpen: false, modal: true, width: 600 });
+
+  receiveCrossListDrop = function(event, ui, list, options) {
+    if (!options) { var options = {}; }
+
+    // Popup when dragging out of Incoming
+    if (ui.sender.attr('id').split('-')[0] == 'incoming') {
+      var issue_id = ui.item.attr('id').split('_')[1];
+
+      $('#dialog-window').
+        dialog("option","buttons",
+               {
+                 "Cancel": function() {
+                   $(ui.sender).sortable('cancel');
+                   $(this).dialog("close");
+                 },
+                 "OK": function() {
+                   options.issue_update = $('#issue-form').serialize();
+                   updatePanes(ui.item,ui.sender,list, options);
+                   $(this).dialog("close");
+                 }
+               });
+      $('#dialog-window').
+        html(''). // Gets cached
+        load('kanban_issues/'+ issue_id + '/edit.js?from_pane=incoming').
+        dialog('open');
+    } else {
+      updatePanes(ui.item,ui.sender,list, options);
+    }
+  },
 
   attachSortables = function() {
     // connectWith means that this item can be drug out of it's
@@ -33,7 +63,10 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this),  {'additional_pane': '#quick-issues'})
+        receiveCrossListDrop(event, ui, $(this),
+                             {
+                               'additional_pane': '#quick-issues'
+                             });
       }
     });
 
@@ -50,7 +83,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
@@ -67,7 +100,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -91,7 +124,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -116,7 +149,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       },
       update: function (event, ui) {
         // Allow drag and drop inside the list
@@ -139,7 +172,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
@@ -156,7 +189,7 @@ jQuery(function($) {
       placeholder: 'drop-accepted',
       dropOnEmpty: true,
       receive: function (event, ui) {
-        updatePanes(ui.item,ui.sender,$(this), {});
+        receiveCrossListDrop(event, ui, $(this));
       }
     });
 
@@ -204,12 +237,18 @@ jQuery(function($) {
       var from_user_id = null;
     }
 
+    if (options.issue_update) {
+      var issue_update = options.issue_update;
+    } else {
+      var issue_update = '';
+    }
+
     // Only fire the Ajax requests if from_pane is set (cross list DnD) or
     // the new order has the tagert issue (same list DnD)
     if (from_pane.length > 0 || to_order.indexOf(issue_id) > 0) {
 
       $.ajaxQueue.put('kanban.js', {
-        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name,
+        data: 'issue_id=' + issue_id + '&from=' + from_pane + '&to=' + to_pane + '&' + from_order + '&' + to_order + '&from_user_id=' + from_user_id + '&to_user_id=' + to_user_id + '&additional_pane=' + additional_pane_name + '&' + issue_update,
         success: function(response) {
           var partials = $.secureEvalJSON(response);
           $(from).parent().html(partials.from);

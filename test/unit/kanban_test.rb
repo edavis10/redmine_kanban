@@ -297,6 +297,11 @@ class KanbanTest < ActiveSupport::TestCase
       @high_priority = IssuePriority.find_by_name("High")
       @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority') if @high_priority.nil?
 
+      @medium_priority = IssuePriority.find_by_name("Medium")
+      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority')
+
+      @public_project2 = make_project_with_trackers(:is_public => true)
+      @new_tracker = @public_project2.trackers.first
       @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                           :project => @public_project,
                           :priority => @high_priority,
@@ -318,6 +323,31 @@ class KanbanTest < ActiveSupport::TestCase
     end
 
     should "return false if the issue didn't save"
+
+    context "update extra attributes" do
+      setup do
+        Kanban.update_issue_attributes(@issue, @from, @to, @user, @user, {
+                                         :priority_id => @medium_priority.id,
+                                         :project_id => @public_project2.id,
+                                         :tracker_id => @new_tracker.id
+                                       })
+      end
+      
+      should "update the assigned project" do
+        @issue.reload
+        assert_equal @public_project2, @issue.project
+      end
+        
+      should "update the priority" do
+        @issue.reload
+        assert_equal @medium_priority, @issue.priority
+      end
+
+      should "update the tracker" do
+        @issue.reload
+        assert_equal @new_tracker, @issue.tracker
+      end
+    end
 
     context "to a staffed pane" do
       should "assign the issue to the target user if the target user is set" do

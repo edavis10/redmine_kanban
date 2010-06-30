@@ -95,7 +95,7 @@ class Kanban
   # Updates the Issue with +issue_id+ to change it's
   # * Status to the IssueStatus set for the +to+ pane
   # * Assignment to the +target_user+ on staffed panes
-  def self.update_issue_attributes(issue_id, from, to, user=User.current, target_user=nil)
+  def self.update_issue_attributes(issue_id, from, to, user=User.current, target_user=nil, extra_attributes = {})
     @settings = Setting.plugin_redmine_kanban
 
     issue = Issue.find_by_id(issue_id)
@@ -106,6 +106,7 @@ class Kanban
       
     if issue && new_status
       issue.init_journal(user)
+      issue.attributes = extra_attributes if extra_attributes
       issue.status = new_status
 
       if Kanban.staffed_panes.include?(to) && !target_user.nil? && target_user.is_a?(User)
