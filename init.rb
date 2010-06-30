@@ -21,9 +21,9 @@ Redmine::Plugin.register :redmine_kanban do
   url 'https://projects.littlestreamsoftware.com/projects/redmine-kanban'
   author_url 'http://www.littlestreamsoftware.com'
   description 'The Redmine Kanban plugin is used to manage issues according to the Kanban system of project management.'
-  version '0.1.1'
+  version '0.2.0'
 
-  requires_redmine :version_or_higher => '0.8.0'
+  requires_redmine :version_or_higher => '0.9.0'
 
   permission(:view_kanban, {:kanbans => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync]})
