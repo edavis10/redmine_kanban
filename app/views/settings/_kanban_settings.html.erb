@@ -42,7 +42,7 @@ end
   <p>
     <%
       if @settings['panes']['backlog']
-        status = IssueStatus.find_by_id(@settings['panes']['backlog']['status'])
+        status = IssueStatus.find_by_id(@settings['panes']['backlog']['status'].to_i)
       else
         status = nil
       end

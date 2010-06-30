@@ -73,7 +73,7 @@ module KanbanTestHelper
     make_kanban_role
 
     Setting.plugin_redmine_kanban = {
-    "staff_role"=> make_kanban_role,
+    "staff_role"=> make_kanban_role.id,
     "panes"=>
     {
       "selected"=>{

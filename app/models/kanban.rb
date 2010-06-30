@@ -76,7 +76,7 @@ class Kanban
   end
 
   def get_users
-    role = Role.find_by_id(@settings["staff_role"])
+    role = Role.find_by_id(@settings["staff_role"].to_i)
     @users = role.members.collect(&:user).uniq.compact.sort if role
     @users ||= []
     @users = move_current_user_to_front
@@ -101,7 +101,7 @@ class Kanban
     issue = Issue.find_by_id(issue_id)
 
     if @settings['panes'][to] && @settings['panes'][to]['status']
-      new_status = IssueStatus.find_by_id(@settings['panes'][to]['status'])
+      new_status = IssueStatus.find_by_id(@settings['panes'][to]['status'].to_i)
     end
       
     if issue && new_status
