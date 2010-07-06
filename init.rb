@@ -27,7 +27,7 @@ Redmine::Plugin.register :redmine_kanban do
 
   permission(:view_kanban, {:kanbans => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
-  permission(:manage_kanban, {})
+  permission(:manage_kanban, {:user_kanbans => [:create]})
 
   permission(:view_my_kanban_requests, {:user_kanbans => [:show]}, :public => true)
   

@@ -316,6 +316,12 @@ module IntegrationTestHelper
     assert_equal "/kanban/my-requests", current_url
   end
 
+  # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
+  def current_path
+    return nil if current_url.nil?
+    return current_url.gsub("http://www.example.com","")
+  end
+
 end
 
 class ActionController::IntegrationTest

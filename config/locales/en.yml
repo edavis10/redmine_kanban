@@ -47,4 +47,6 @@ en:
   kanban_label_incoming_project_change: "Incoming: Must change issue project when"
   kanban_text_workflow_settings_description: "Restrictions when issues are moved out of panes."
   text_my_kanban_requests_title: "My Kanban Requests"
+  text_user_kanban_requests_title: "{{user}}'s Kanban Requests"
   text_kanban_board: "Kanban Board"
+  label_user_switch: "Switch User"

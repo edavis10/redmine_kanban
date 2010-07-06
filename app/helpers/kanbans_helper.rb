@@ -123,4 +123,8 @@ module KanbansHelper
   def issue_url(issue)
     url_for(:controller => 'issues', :action => 'show', :id => issue)
   end
+
+  def showing_current_user_kanban?
+    @user == User.current
+  end
 end
