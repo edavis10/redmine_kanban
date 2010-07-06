@@ -32,7 +32,7 @@ class KanbanIssuesControllerTest < ActionController::TestCase
 
       should ":edit_kanban" do
         get :edit, :format => 'js'
-        assert_response 406 # TODO: Redmine's not supporting js in render_403
+        assert_response 404
       end
     end
 
