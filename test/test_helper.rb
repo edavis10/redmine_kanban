@@ -42,24 +42,6 @@ module KanbanTestHelper
     return incoming_project
   end
 
-  def setup_anonymous_role
-    begin
-      @anon_role = Role.anonymous
-    rescue
-      @anon_role = Role.generate!
-      @anon_role.update_attribute(:builtin, Role::BUILTIN_ANONYMOUS)
-    end
-  end
-
-  def setup_non_member_role
-    begin
-      @anon_role = Role.non_member
-    rescue
-      @non_member_role = Role.generate!
-      @non_member_role.update_attribute(:builtin, Role::BUILTIN_NON_MEMBER)
-    end
-  end
-
   def make_kanban_role
     role = Role.find_by_name('KanbanRole')
     role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues]) if role.nil?
@@ -67,8 +49,6 @@ module KanbanTestHelper
   end
 
   def configure_plugin(configuration_change = {})
-    setup_anonymous_role
-    setup_non_member_role
     make_issue_statuses
     make_kanban_role
 
