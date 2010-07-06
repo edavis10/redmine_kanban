@@ -29,7 +29,7 @@ module KanbanTestHelper
     @users = []
     count.times do
       user = User.generate_with_protected!
-      make_member({:principal => user, :project => @public_project}, [role])
+      Member.generate!({:principal => user, :project => @public_project, :roles => [role]})
       @users << user
     end
   end
@@ -301,14 +301,6 @@ module KanbanTestHelper
                      :status => testing_status)
     end
   end
-
-
-  # Extracted out of the Machinist files, might not be needed now
-  #
-  def make_member(attributes, roles)
-    Member.generate!(attributes.merge(:roles => roles))
-  end
-
 end
 include KanbanTestHelper
 

@@ -8,7 +8,7 @@ class KanbansControllerTest < ActionController::TestCase
     @user = User.generate_with_protected!
     @request.session[:user_id] = @user.id
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
-    @member = make_member({:principal => @user, :project => @public_project}, [@role])
+    @member = Member.generate!(:principal => @user, :project => @public_project, :roles => [@role])
   end
 
   context "permissions" do
@@ -53,7 +53,7 @@ class KanbansControllerTest < ActionController::TestCase
       setup_all_issues
 
       # Bloody hack since @public_project is redefined....
-      @member = make_member({:principal => @user, :project => @public_project}, [@role])
+      @member = Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
       assert @user.allowed_to?(:view_kanban, @public_project)
 
       get :show
@@ -167,7 +167,7 @@ class KanbansControllerTest < ActionController::TestCase
                             :status => IssueStatus.find_by_name('New'))
 
         @public_project2 = Project.generate!(:is_public => true)
-        @member2 = make_member({:principal => @user, :project => @public_project2}, [@role])
+        @member2 = Member.generate!({:principal => @user, :project => @public_project2, :roles => [@role]})
         @new_tracker = @public_project2.trackers.first
 
         xhr(:put, :update, {:from => @from, :to => @to, :issue_id => @issue.id,

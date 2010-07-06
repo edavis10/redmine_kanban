@@ -12,7 +12,7 @@ class KanbanTest < ActiveSupport::TestCase
       shared_setup
       configure_plugin
       setup_kanban_issues
-      make_member({:principal => @user, :project => @public_project}, [Role.last])
+      Member.generate!({:principal => @user, :project => @public_project, :roles => [Role.last]})
     }
 
     context "for incoming issues" do

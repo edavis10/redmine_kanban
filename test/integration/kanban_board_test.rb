@@ -9,7 +9,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
     @public_project = Project.generate!(:is_public => true)
     @user = User.generate_with_protected!(:login => 'user', :password => 'password', :password_confirmation => 'password')
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
-    @member = make_member({:principal => @user, :project => @public_project}, [@role])
+    @member = Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
   end
 
   context "viewing the board" do

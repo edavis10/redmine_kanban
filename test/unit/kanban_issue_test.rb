@@ -7,11 +7,10 @@ class KanbanIssueTest < ActiveSupport::TestCase
     @user = User.generate_with_protected!
     @role = make_kanban_role
     
-    @member = make_member({
-                            :user => @user,
-                            :project => @project
-                          },
-                          [@role])
+    @member = Member.generate!({
+                                 :user => @user,
+                                 :project => @project,
+                                 :roles => [@role]})
     @kanban_issue = KanbanIssue.new(:issue => @issue, :user => @user, :state => "none", :position => 1)
   end
 
