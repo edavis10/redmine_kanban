@@ -5,6 +5,5 @@ class UserKanbansController < ApplicationController
   before_filter :authorize_global
 
   def show
-    render :text => 'hi'
   end
 end

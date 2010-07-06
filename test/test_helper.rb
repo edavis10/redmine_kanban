@@ -308,6 +308,14 @@ module IntegrationTestHelper
     assert User.current.logged?
   end
 
+  def visit_my_kanban_requests
+    visit '/'
+    click_link "My Kanban Requests"
+      
+    assert_response :success
+    assert_equal "/kanban/my-requests", current_url
+  end
+
 end
 
 class ActionController::IntegrationTest

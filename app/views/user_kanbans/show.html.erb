@@ -1,0 +1,11 @@
+<div class="flash error" style="display:none"></div>
+
+<h2><%= l(:text_my_kanban_requests_title) %></h2>
+
+<div class="contextual">
+  <% if User.current.allowed_to?(:view_kanban, nil, :global => true) %>
+  <%= link_to(l(:text_kanban_board), kanban_url, :class => 'icon') %>
+  <% end %>
+</div>
+
+<% html_title l(:text_my_kanban_requests_title) %>
