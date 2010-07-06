@@ -28,6 +28,8 @@ Redmine::Plugin.register :redmine_kanban do
   permission(:view_kanban, {:kanbans => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
   permission(:manage_kanban, {})
+
+  permission(:view_my_kanban_requests, {:user_kanbans => [:show]}, :public => true)
   
   settings(:partial => 'settings/kanban_settings',
            :default => {
@@ -50,4 +52,11 @@ Redmine::Plugin.register :redmine_kanban do
        :if => Proc.new {
          User.current.allowed_to?(:view_kanban, nil, :global => true)
        })
+  menu(:top_menu,
+       :my_kanban_requests,
+       {:controller => 'user_kanbans', :action => 'show'},
+       :caption => :text_my_kanban_requests_title,
+       :after => :kanban,
+       :require => :loggedin)
+
 end

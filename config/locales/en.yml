@@ -46,3 +46,4 @@ en:
   kanban_label_incoming_priority_change: "Incoming: Must change issue priority when"
   kanban_label_incoming_project_change: "Incoming: Must change issue project when"
   kanban_text_workflow_settings_description: "Restrictions when issues are moved out of panes."
+  text_my_kanban_requests_title: "My Kanban Requests"

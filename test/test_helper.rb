@@ -6,6 +6,12 @@ Engines::Testing.set_fixture_path
 
 require 'faker'
 
+require "webrat"
+
+Webrat.configure do |config|
+  config.mode = :rails
+end
+
 module KanbanTestHelper
   def make_issue_statuses
     @new_status = IssueStatus.find_by_name('New') || IssueStatus.generate!(:name => 'New')
@@ -292,6 +298,21 @@ include KanbanTestHelper
 
 configure_plugin # Run it once now so each test doesn't need to run it
 
+module IntegrationTestHelper
+  def login_as(user="existing", password="existing")
+    visit "/login"
+    fill_in 'Login', :with => user
+    fill_in 'Password', :with => password
+    click_button 'login'
+    assert_response :success
+    assert User.current.logged?
+  end
+
+end
+
+class ActionController::IntegrationTest
+  include IntegrationTestHelper
+end
 
 class Test::Unit::TestCase
   def self.should_allow_state_change_from(starting_state, options = {:to => nil, :using => :nothing})
