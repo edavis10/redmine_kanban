@@ -112,6 +112,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
 
   context 'update_from_issue' do
     setup {
+      configure_plugin
       setup_kanban_issues
       setup_selected_issues
     }

@@ -8,14 +8,14 @@ require 'faker'
 
 module KanbanTestHelper
   def make_issue_statuses
-    IssueStatus.generate!(:name => 'New') if IssueStatus.find_by_name('New').nil?
-    IssueStatus.generate!(:name => 'Unstaffed') if IssueStatus.find_by_name('Unstaffed').nil?
-    IssueStatus.generate!(:name => 'Selected') if IssueStatus.find_by_name('Selected').nil?
-    IssueStatus.generate!(:name => 'Active') if IssueStatus.find_by_name('Active').nil?
-    IssueStatus.generate!(:name => 'Test-N-Doc') if IssueStatus.find_by_name('Test-N-Doc').nil?
-    IssueStatus.generate!(:name => 'Closed', :is_closed => true) if IssueStatus.find_by_name('Closed').nil?
-    IssueStatus.generate!(:name => 'Rejected', :is_closed => true) if IssueStatus.find_by_name('Rejected').nil?
-    IssueStatus.generate!(:name => 'Closed Hide', :is_closed => true) if IssueStatus.find_by_name('Closed Hide').nil?
+    @new_status = IssueStatus.find_by_name('New') || IssueStatus.generate!(:name => 'New')
+    @unstaffed_status = IssueStatus.find_by_name('Unstaffed') || IssueStatus.generate!(:name => 'Unstaffed')
+    @selected_status = IssueStatus.find_by_name('Selected') || IssueStatus.generate!(:name => 'Selected')
+    @active_status = IssueStatus.find_by_name('Active') || IssueStatus.generate!(:name => 'Active')
+    @testing_status = IssueStatus.find_by_name('Test-N-Doc') || IssueStatus.generate!(:name => 'Test-N-Doc')
+    @finished_status = IssueStatus.find_by_name('Closed') || IssueStatus.generate!(:name => 'Closed', :is_closed => true)
+    @canceled_status = IssueStatus.find_by_name('Rejected') || IssueStatus.generate!(:name => 'Rejected', :is_closed => true)
+    @hidden_status = IssueStatus.find_by_name('Closed Hide') || IssueStatus.generate!(:name => 'Closed Hide', :is_closed => true)
   end
 
   def make_roles(count = 5)
@@ -61,36 +61,36 @@ module KanbanTestHelper
     "panes"=>
     {
       "selected"=>{
-        "status"=> IssueStatus.find_by_name('Selected').id,
+        "status"=> @selected_status.id,
         "limit"=>"8"
       },
       "backlog"=>{
-        "status"=> IssueStatus.find_by_name('Unstaffed').id,
+        "status"=> @unstaffed_status.id,
         "limit"=>"15"
       },
       "quick-tasks"=>{
         "limit"=>"5"
       },
       "testing"=>{
-        "status"=> IssueStatus.find_by_name('Test-N-Doc').id,
+        "status"=> @testing_status.id,
         "limit"=>"5"
       },
       "active"=>{
-        "status"=> IssueStatus.find_by_name('Active').id,
+        "status"=> @active_status.id,
         "limit"=>"5"
       },
       "incoming"=>{
-        "status"=> IssueStatus.find_by_name('New').id,
+        "status"=> @new_status.id,
         "limit"=>"5",
         "excluded_priorities"=> [incoming_hidden_priority],
         "excluded_projects"=> [incoming_hidden_project],  
       },
       "finished"=>{
-        "status"=> IssueStatus.find_by_name('Closed').id,
+        "status"=> @finished_status.id,
         "limit"=>"7"
       },
       "canceled"=>{
-        "status"=> IssueStatus.find_by_name('Rejected').id,
+        "status"=> @canceled_status.id,
         "limit" => '7'
       }
       }}.merge(configuration_change)
@@ -101,7 +101,6 @@ module KanbanTestHelper
     Setting['plugin_redmine_kanban'] = Setting['plugin_redmine_kanban'].merge(configuration_change)
   end
 
-  # Sets up a variety of issues to be used for the tests
   def setup_kanban_issues
     @private_project = Project.generate!(:is_public => false)
     @private_tracker = @private_project.trackers.first
@@ -131,29 +130,27 @@ module KanbanTestHelper
   end
   
   def setup_incoming_issues
-    new_status = IssueStatus.find_by_name('New')
     # Incoming
     5.times do
       Issue.generate!(:tracker => @private_tracker,
                  :project => @private_project,
-                 :status => new_status)
+                 :status => @new_status)
     end
 
     6.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :status => new_status)
+                 :status => @new_status)
     end
   end
 
   def setup_quick_issues
-    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Quick tasks
     4.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @high_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
 
@@ -161,7 +158,7 @@ module KanbanTestHelper
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @medium_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
 
@@ -169,20 +166,19 @@ module KanbanTestHelper
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @low_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
 
   end
 
   def setup_backlog_issues
-    unstaffed_status = IssueStatus.find_by_name('Unstaffed')
     # Backlog tasks
     5.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @high_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
 
@@ -190,7 +186,7 @@ module KanbanTestHelper
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @medium_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
 
@@ -198,25 +194,23 @@ module KanbanTestHelper
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
                  :priority => @low_priority,
-                 :status => unstaffed_status,
+                 :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
 
   end
 
   def setup_selected_issues
-    selected_status = IssueStatus.find_by_name('Selected')
     # Selected tasks
     10.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :status => selected_status)
+                 :status => @selected_status)
     end
 
   end
 
   def setup_active_issues
-    active_status = IssueStatus.find_by_name('Active')
     # Active tasks
     @users.each do |user|
       5.times do
@@ -224,57 +218,51 @@ module KanbanTestHelper
                                     :tracker => @public_tracker,
                                     :assigned_to => user,
                                     :author => user,
-                                    :status => active_status)
+                                    :status => @active_status)
       end
     end
 
   end
   
   def setup_testing_issues
-    testing_status = IssueStatus.find_by_name('Test-N-Doc')
     # Testing tasks
     @users.each do |user|
       5.times do
         Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
                    :assigned_to => user,
-                   :status => testing_status)
+                   :status => @testing_status)
       end
     end
 
   end
   
   def setup_finished_issues
-    closed_status = IssueStatus.find_by_name('Closed')
-    hidden_status = IssueStatus.find_by_name('Closed Hide')
-
     # Finished tasks
     @users.each do |user|
       5.times do
         Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
-                   :status => closed_status,
+                   :status => @finished_status,
                    :assigned_to => user)
       end
 
       # Extra issues that should not show up
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :status => hidden_status,
+                 :status => @hidden_status,
                  :assigned_to => user)
     end
 
   end
 
   def setup_canceled_issues
-    canceled_status = IssueStatus.find_by_name('Rejected')
-
     # Finished tasks
     @users.each do |user|
       2.times do
         Issue.generate!(:tracker => @public_tracker,
                    :project => @public_project,
-                   :status => canceled_status,
+                   :status => @canceled_status,
                    :assigned_to => user)
       end
     end
@@ -285,20 +273,18 @@ module KanbanTestHelper
   # Unknow user issues are KanbanIssues that should have a user
   # assigned but somehow didn't as the result of bad data.
   def setup_unknown_user_issues
-    active_status = IssueStatus.find_by_name('Active')
-    testing_status = IssueStatus.find_by_name('Test-N-Doc')
     3.times do
       i = Issue.generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
-                     :status => active_status)
+                     :status => @active_status)
     end
 
     4.times do
       i = Issue.generate!(:tracker => @public_tracker,
                      :project => @public_project,
                      :assigned_to => nil,
-                     :status => testing_status)
+                     :status => @testing_status)
     end
   end
 end
