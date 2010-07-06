@@ -9,7 +9,7 @@ class KanbanIssuesControllerTest < ActionController::TestCase
     @user = User.generate_with_protected!(:admin => true)
     @request.session[:user_id] = @user.id
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
-    @member = Member.generate!({:principal => @user, :project => @public_project}, [@role])
+    @member = Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
   end
 
   context "permissions" do
