@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class KanbanIssueTest < ActiveSupport::TestCase
   def shared_setup
-    @project = make_project_with_trackers
+    @project = Project.generate!
     @issue = Issue.generate!(:project => @project, :tracker => @project.trackers.first)
     @user = User.generate_with_protected!
     @role = make_kanban_role
@@ -175,7 +175,7 @@ class KanbanIssueTest < ActiveSupport::TestCase
     end
 
     should 'return true' do
-      @public_project = make_project_with_trackers(:is_public => true)
+      @public_project = Project.generate!(:is_public => true)
       issue = Issue.generate!(:tracker => @public_project.trackers.first,
                          :project => @public_project)
 

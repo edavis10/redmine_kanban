@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 class KanbansControllerTest < ActionController::TestCase
   def shared_setup
     configure_plugin
-    @private_project = make_project_with_trackers(:is_public => false)
-    @public_project = make_project_with_trackers(:is_public => true)
+    @private_project = Project.generate!(:is_public => false)
+    @public_project = Project.generate!(:is_public => true)
     @user = User.generate_with_protected!
     @request.session[:user_id] = @user.id
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
@@ -166,7 +166,7 @@ class KanbansControllerTest < ActionController::TestCase
                             :priority => high_priority,
                             :status => IssueStatus.find_by_name('New'))
 
-        @public_project2 = make_project_with_trackers(:is_public => true)
+        @public_project2 = Project.generate!(:is_public => true)
         @member2 = make_member({:principal => @user, :project => @public_project2}, [@role])
         @new_tracker = @public_project2.trackers.first
 

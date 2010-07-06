@@ -300,7 +300,7 @@ class KanbanTest < ActiveSupport::TestCase
       @medium_priority = IssuePriority.find_by_name("Medium")
       @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority')
 
-      @public_project2 = make_project_with_trackers(:is_public => true)
+      @public_project2 = Project.generate!(:is_public => true)
       @new_tracker = @public_project2.trackers.first
       @issue = Issue.generate!(:tracker => @public_project.trackers.first,
                           :project => @public_project,

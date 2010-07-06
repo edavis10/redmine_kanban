@@ -6,7 +6,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
     setup_kanban_issues
     setup_all_issues
 
-    @public_project = make_project_with_trackers(:is_public => true)
+    @public_project = Project.generate!(:is_public => true)
     @user = User.generate_with_protected!(:login => 'user', :password => 'password', :password_confirmation => 'password')
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
     @member = make_member({:principal => @user, :project => @public_project}, [@role])

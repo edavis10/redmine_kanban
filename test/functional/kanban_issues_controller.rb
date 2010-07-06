@@ -4,8 +4,8 @@ class KanbanIssuesControllerTest < ActionController::TestCase
   def shared_setup
     setup_kanban_issues
     configure_plugin
-    @private_project = make_project_with_trackers(:is_public => false)
-    @public_project = make_project_with_trackers(:is_public => true)
+    @private_project = Project.generate!(:is_public => false)
+    @public_project = Project.generate!(:is_public => true)
     @user = User.generate_with_protected!(:admin => true)
     @request.session[:user_id] = @user.id
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])

@@ -37,7 +37,8 @@ module KanbanTestHelper
   def make_project
     incoming_project = Project.generate!(:name => 'Incoming project')
     tracker = Tracker.generate!(:name => 'Feature')
-    assign_tracker_to_project tracker, incoming_project
+    incoming_project.trackers << tracker
+    incoming_project.save!
 
     return incoming_project
   end
@@ -102,13 +103,13 @@ module KanbanTestHelper
 
   # Sets up a variety of issues to be used for the tests
   def setup_kanban_issues
-    @private_project = make_project_with_trackers(:is_public => false)
+    @private_project = Project.generate!(:is_public => false)
     @private_tracker = @private_project.trackers.first
-    @public_project = make_project_with_trackers(:is_public => true)
+    @public_project = Project.generate!(:is_public => true)
     @public_tracker = @public_project.trackers.first
 
     @hidden_project = Project.find_by_name('Hidden')
-    @hidden_project ||= make_project_with_trackers(:is_public => true, :name => 'Hidden')
+    @hidden_project ||= Project.generate!(:is_public => true, :name => 'Hidden')
 
     make_users
     
@@ -304,23 +305,6 @@ module KanbanTestHelper
 
   # Extracted out of the Machinist files, might not be needed now
   #
-  def make_project_with_enabled_modules(attributes = {})
-    Project.generate!(attributes)
-  end
-
-  def make_project_with_trackers(attributes = {}, tracker_name = 'Feature')
-    project = make_project_with_enabled_modules(attributes)
-    tracker = Tracker.find_by_name(tracker_name)
-    tracker = Tracker.generate!(:name => tracker_name) if tracker.nil?
-    assign_tracker_to_project tracker, project
-    project
-  end
-
-  def assign_tracker_to_project(tracker, project)
-    project.trackers << tracker
-    project.save!
-  end
-
   def make_member(attributes, roles)
     Member.generate!(attributes.merge(:roles => roles))
   end
