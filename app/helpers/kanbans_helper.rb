@@ -94,6 +94,24 @@ module KanbansHelper
     return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
 
+  def my_kanban_column_width(column)
+    column_ratios = {
+      :project => 1,
+      :testing => 1,
+      :active => 1
+    }
+
+    return 0.0 if column == :active && !KanbanPane::ActivePane.configured?
+    return 0.0 if column == :testing && !KanbanPane::TestingPane.configured?
+
+    visible = 0
+    visible += column_ratios[:project]
+    visible += column_ratios[:active] if KanbanPane::ActivePane.configured?
+    visible += column_ratios[:testing] if KanbanPane::TestingPane.configured?
+
+    return ((column_ratios[column].to_f / visible) * 96).round(2)
+  end
+
   # Calculates the width of the column.  Max of 96 since they need
   # some extra for the borders.
   def staffed_column_width(column)
