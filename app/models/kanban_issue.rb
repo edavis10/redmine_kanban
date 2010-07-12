@@ -71,6 +71,15 @@ class KanbanIssue < ActiveRecord::Base
       :conditions => { :user_id => user_id, :state => 'testing'}
     }
   }
+
+  named_scope :for_projects, lambda { |projects|
+    project_ids = projects.collect(&:id)
+
+    {
+      :conditions => ["#{Issue.table_name}.project_id IN (?)", project_ids],
+      :include => :issue
+    }
+  }
   
   def remove_user
     self.user = nil

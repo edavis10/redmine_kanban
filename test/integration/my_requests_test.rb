@@ -68,7 +68,27 @@ class MyRequestsTest < ActionController::IntegrationTest
     end
 
     
-    should "show the swimlanes"
+    should "show the swimlanes" do
+      @issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+      @issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+      @not_assigned_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @testing_status)
+      @issue3 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+
+      login_as
+      visit_my_kanban_requests
+
+      # Testing lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#testing-issues-user-#{@user.id}.testing-issues" do
+            assert_select "li#issue_#{@issue1.id}", :count => 1
+            assert_select "li#issue_#{@issue2.id}", :count => 1
+          end
+        end
+      end
+      assert_select "li#issue_#{@not_assigned_issue.id}", :count => 0
+      
+    end
     
     should "group each horizontal lane by project" do
       login_as

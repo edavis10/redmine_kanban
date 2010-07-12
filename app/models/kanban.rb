@@ -68,7 +68,7 @@ class Kanban
   end
 
   def testing_issues
-    @testing_issues ||= testing_pane.get_issues(:users => get_users)
+    @testing_issues ||= testing_pane.get_issues(:users => get_users, :projects => @projects)
   end
 
   def finished_issues
@@ -80,12 +80,16 @@ class Kanban
   end
 
   def get_users
-    role = Role.find_by_id(@settings["staff_role"].to_i)
-    @users = role.members.collect(&:user).uniq.compact.sort if role
-    @users ||= []
-    @users = move_current_user_to_front
-    @users << UnknownUser.instance
-    @users
+    if @user
+      @users = [@user]
+    else
+      role = Role.find_by_id(@settings["staff_role"].to_i)
+      @users = role.members.collect(&:user).uniq.compact.sort if role
+      @users ||= []
+      @users = move_current_user_to_front
+      @users << UnknownUser.instance
+      @users
+    end
   end
 
   def get_projects

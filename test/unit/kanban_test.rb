@@ -220,10 +220,6 @@ class KanbanTest < ActiveSupport::TestCase
       end
     end
 
-    should "set @users based on the configured role" do
-      @kanban = Kanban.new
-      assert_equal 5, @kanban.users.length # +1 Unknown
-    end
   end
 
   context "#update_sorted_issues" do
@@ -390,6 +386,30 @@ class KanbanTest < ActiveSupport::TestCase
     end
   end
 
+  context "get_users" do
+    context "with no user set" do
+      should "set @users based on the configured role" do
+        shared_setup
+        configure_plugin
+        setup_kanban_issues
+        Member.generate!({:principal => @user, :project => @public_project, :roles => [Role.last]})
+
+        @kanban = Kanban.new
+
+        assert_equal 5, @kanban.users.length # +1 Unknown
+      end
+    end
+
+    context "with user set" do
+      should "set @users based on the configured user only" do
+        shared_setup
+        kanban = Kanban.new(:user => @user)
+
+        assert_equal [@user], kanban.users
+      end
+    end
+  end
+  
   context "get_projects" do
     setup do
       shared_setup
