@@ -11,8 +11,11 @@ class Kanban
   attr_accessor :canceled_issues
   attr_accessor :settings
   attr_accessor :users
+  attr_accessor :user
+  attr_accessor :projects
 
-  def initialize
+  def initialize(attributes={})
+    @user = attributes[:user]
     @incoming_pane = KanbanPane::IncomingPane.new
     @backlog_pane = KanbanPane::BacklogPane.new
     @quick_pane = KanbanPane::QuickPane.new
@@ -24,6 +27,7 @@ class Kanban
     
     @settings = Setting.plugin_redmine_kanban
     @users = get_users
+    @projects = get_projects
   end
 
   def self.non_kanban_issues_panes
@@ -82,6 +86,14 @@ class Kanban
     @users = move_current_user_to_front
     @users << UnknownUser.instance
     @users
+  end
+
+  def get_projects
+    if @user
+      @projects = @user.projects.sort
+    else
+      @projects = []
+    end
   end
   
   def quick_issue_ids

@@ -14,6 +14,8 @@ class UserKanbansController < ApplicationController
         !User.current.group_ids.include?(kanban_settings["management_group"].to_i)
       render_403
     end
+    
+    @kanban = Kanban.new(:user => @user)
   end
 
   def create

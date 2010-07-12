@@ -43,6 +43,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       @project = Project.generate!
       @role = Role.generate!(:permissions => [:view_issues, :view_kanban])
       Member.generate!({:principal => @user, :project => @project, :roles => [@role]})
+      Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
       @another_user = User.generate_with_protected!
     end
 
@@ -65,7 +66,22 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_template 'common/403'
 
     end
-      
+
+    
+    should "show the swimlanes"
+    
+    should "group each horizontal lane by project" do
+      login_as
+      visit_my_kanban_requests
+
+      assert_select '#kanban' do
+        assert_select 'div.project-lane' do
+          assert_select '.project-name', :text => /#{@public_project.name}/
+          assert_select '.project-name', :text => /#{@project.name}/
+        end
+      end
+    end
+
   end
 
   context "for logged in users in the management group" do

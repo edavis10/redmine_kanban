@@ -20,6 +20,23 @@
   <% end %>
 </div>
 
+<div class="clear"></div>
+
+<div id="kanban">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header"><%= content_tag(:h3, l(:label_project)) %></div>
+  </div>
+
+  <% @kanban.projects.each do |project| %>
+  <div class="project-lane horizontal-lane">
+    <div class="project">
+      <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}, :class => 'project-name') %>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+
 <% if showing_current_user_kanban? %>
   <% html_title l(:text_my_kanban_requests_title) %>
 <% else %>
