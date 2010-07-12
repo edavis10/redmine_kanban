@@ -77,7 +77,13 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 /* Popup dialog */
 .short-scroll { max-height: 200px; overflow-y: scroll; }
 
-/* My Kanban requests */
-.horizontal-lane { min-height: 100px; paddng: 5px; border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0;}
-.kanban-headers {border-top-width: 2px;}
+/**** My Kanban requests ****/
+/* Positioning */
+.horizontal-lane { min-height: 100px; clear:left;}
+.kanban-headers h3  {float:left;}
+.horizontal-lane .pane, .project-lane div.project {display: inline; float: left; min-height: 100px; }
 
+/* Visual */
+.horizontal-lane { paddng: 5px; border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }
+.kanban-headers {border-top-width: 2px;}
+.horizontal-lane .pane { border-left: 1px solid #333333;}
