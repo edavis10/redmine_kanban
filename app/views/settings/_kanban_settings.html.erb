@@ -29,6 +29,14 @@ end
           content_tag(:option, '') +
           options_from_collection_for_select(Role.all, :id, :name, @settings['staff_role'].to_i)) %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_management_group)) %>
+    <%= select_tag("settings[management_group]",
+          content_tag(:option, '') +
+          options_from_collection_for_select(Group.all, :id, :lastname, @settings['management_group'].to_i)) %>
+    <%= content_tag(:span, l(:kanban_text_management_group_help)) %>
+  </p>
 </fieldset>
 
 <fieldset>

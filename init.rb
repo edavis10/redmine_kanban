@@ -27,9 +27,9 @@ Redmine::Plugin.register :redmine_kanban do
 
   permission(:view_kanban, {:kanbans => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
-  permission(:manage_kanban, {:user_kanbans => [:create]})
+  permission(:manage_kanban, {})
 
-  permission(:view_my_kanban_requests, {:user_kanbans => [:show]}, :public => true)
+  permission(:view_my_kanban_requests, {:user_kanbans => [:show, :create]}, :public => true)
   
   settings(:partial => 'settings/kanban_settings',
            :default => {
@@ -42,7 +42,9 @@ Redmine::Plugin.register :redmine_kanban do
                'testing' => { 'status' => nil, 'limit' => 5},
                'finished' => {'status' => nil, 'limit' => 7},
                'canceled' => {'status' => nil, 'limit' => 7}
-             }
+             },
+             'management_group' => nil,
+             'staff_role' => nil
            })
   
   menu(:top_menu,

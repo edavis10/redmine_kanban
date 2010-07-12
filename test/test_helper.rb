@@ -55,15 +55,21 @@ module KanbanTestHelper
     role
   end
 
+  def make_management_group
+    @management_group ||= Group.find_by_lastname('Kanban Management') || Group.generate!(:lastname => 'Kanban Management')
+  end
+
   def configure_plugin(configuration_change = {})
     make_issue_statuses
     make_kanban_role
+    make_management_group
 
     incoming_hidden_priority = (hidden = IssuePriority.find_by_name("Hidden")) ? hidden.id.to_s : nil
     incoming_hidden_project = (hidden = Project.find_by_name("Hidden")) ? hidden.id.to_s : nil
     
     Setting.plugin_redmine_kanban = {
     "staff_role"=> make_kanban_role.id,
+    "management_group"=> @management_group.id.to_s,  
     "panes"=>
     {
       "selected"=>{
