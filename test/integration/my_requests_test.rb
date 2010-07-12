@@ -69,11 +69,14 @@ class MyRequestsTest < ActionController::IntegrationTest
 
     
     should "show the swimlanes" do
-      @issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
-      @issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
-      @not_assigned_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @testing_status)
-      @issue3 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+      @testing_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+      @testing_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
+      @not_assigned_testing_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @testing_status)
+      @active_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status)
+      @active_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status)
+      @not_assigned_active_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @active_status)
 
+      
       login_as
       visit_my_kanban_requests
 
@@ -81,12 +84,23 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_select '#kanban' do
         assert_select '.project-lane' do
           assert_select "#testing-issues-user-#{@user.id}.testing-issues" do
-            assert_select "li#issue_#{@issue1.id}", :count => 1
-            assert_select "li#issue_#{@issue2.id}", :count => 1
+            assert_select "li#issue_#{@testing_issue1.id}", :count => 1
+            assert_select "li#issue_#{@testing_issue2.id}", :count => 1
           end
         end
       end
-      assert_select "li#issue_#{@not_assigned_issue.id}", :count => 0
+      assert_select "li#issue_#{@not_assigned_testing_issue.id}", :count => 0
+      
+      # Active lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#active-issues-user-#{@user.id}.active-issues" do
+            assert_select "li#issue_#{@active_issue1.id}", :count => 1
+            assert_select "li#issue_#{@active_issue2.id}", :count => 1
+          end
+        end
+      end
+      assert_select "li#issue_#{@not_assigned_active_issue.id}", :count => 0
       
     end
     

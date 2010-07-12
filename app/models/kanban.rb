@@ -64,7 +64,7 @@ class Kanban
   end
 
   def active_issues
-    @active_issues ||= active_pane.get_issues(:users => get_users)
+    @active_issues ||= active_pane.get_issues(:users => get_users, :projects => @projects)
   end
 
   def testing_issues

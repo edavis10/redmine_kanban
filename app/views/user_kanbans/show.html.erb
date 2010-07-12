@@ -26,6 +26,7 @@
   <div class="kanban-headers horizontal-lane">
     <div class="kanban-header"><%= content_tag(:h3, l(:label_project)) %></div>
     <div class="kanban-header"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <div class="kanban-header"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
   </div>
 
   <% @kanban.projects.each do |project| %>
@@ -57,6 +58,31 @@
         <% end %>
       </ol>
     </div>
+
+    <div id="active-<%= h(@user.id) -%>" class="active user-<%= h(@user.id) -%>">
+      <ol id="active-issues-user-<%= h(@user.id) %>" class="active-issues">
+        <% 
+           if @kanban.active_issues[@user].present?
+             issues = @kanban.active_issues[@user].collect {|kanban_issue|
+               if kanban_issue.issue.project_id == project.id
+                 kanban_issue.issue
+               end
+             }
+           else
+             issues = []
+           end
+           %>
+
+        <% if issues.empty? %>
+          <%= render :partial => 'kanbans/empty_issue' %>
+        <% else %>
+          <%= render(:partial => 'kanbans/issue',
+                     :collection => issues,
+                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["active"]["limit"].to_i }) %>
+        <% end %>
+      </ol>
+    </div>
+
   </div>
   <% end %>
 </div>
