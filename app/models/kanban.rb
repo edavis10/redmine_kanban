@@ -82,15 +82,23 @@ class Kanban
     @canceled_issues ||= canceled_pane.get_issues
   end
 
-  # Display the testing issues filtered by user and project
-  [:testing, :active].each do |pane|
+  # Display the testing issues filtered by user and/or project
+  # * :testing - user and project
+  # * :active - user and project
+  # * :selected - project
+  [:testing, :active, :selected].each do |pane|
     define_method("#{pane}_issues_for") {|options|
       project = options[:project]
       user = options[:user]
 
-      all_issues = send("#{pane}_issues")
-      if all_issues[user].present?
-        issues = all_issues[user].collect {|kanban_issue|
+      if pane != :selected
+        all_issues = send("#{pane}_issues")[user]
+      else
+        all_issues = send("#{pane}_issues")
+      end
+
+      if all_issues.present?
+        issues = all_issues.collect {|kanban_issue|
           if kanban_issue.issue.project_id == project.id
             kanban_issue.issue
           end
@@ -99,21 +107,6 @@ class Kanban
       issues ||= []
       issues
     }
-  end
-  
-  def selected_issues_for(options={})
-    project = options[:project]
-    #    user = options[:user]
-    
-    if selected_issues.present?
-      issues = selected_issues.collect {|kanban_issue|
-        if kanban_issue.issue.project_id == project.id
-          kanban_issue.issue
-        end
-      }
-    end
-    issues ||= []
-    issues
   end
 
   def backlog_issues_for(options={})
