@@ -52,6 +52,7 @@
     <% user_kanban_div_helper(:column => :backlog, :user => @user) do |div| %>
       <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
     <% end %>
+    <div style="clear:left;"> </div>
   </div>
   <% end %>
 </div>
