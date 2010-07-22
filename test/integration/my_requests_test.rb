@@ -69,12 +69,16 @@ class MyRequestsTest < ActionController::IntegrationTest
 
     
     should "show the swimlanes" do
-      @testing_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
-      @testing_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
-      @not_assigned_testing_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @testing_status)
-      @active_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status)
-      @active_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status)
-      @not_assigned_active_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @active_status)
+      @testing_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
+      @testing_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
+      @different_author_testing_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
+      @active_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
+      @active_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
+      @different_author_active_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
+
+      # Not a member but created
+      @another_project = Project.generate!
+      @non_member_issue = Issue.generate_for_project!(@another_project, :author => @user, :status => @active_status)
 
       
       login_as
@@ -89,7 +93,7 @@ class MyRequestsTest < ActionController::IntegrationTest
           end
         end
       end
-      assert_select "li#issue_#{@not_assigned_testing_issue.id}", :count => 0
+      assert_select "li#issue_#{@different_author_testing_issue.id}", :count => 0
       
       # Active lane
       assert_select '#kanban' do
@@ -97,21 +101,23 @@ class MyRequestsTest < ActionController::IntegrationTest
           assert_select "#active-issues-user-#{@user.id}.active-issues" do
             assert_select "li#issue_#{@active_issue1.id}", :count => 1
             assert_select "li#issue_#{@active_issue2.id}", :count => 1
+            assert_select "li#issue_#{@non_member_issue.id}", :count => 1
           end
         end
       end
-      assert_select "li#issue_#{@not_assigned_active_issue.id}", :count => 0
+      assert_select "li#issue_#{@different_author_active_issue.id}", :count => 0
       
     end
     
-    should "group each horizontal lane by project" do
+    should "group each horizontal lane by project when there is an issue for it" do
       login_as
+      Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
       visit_my_kanban_requests
 
       assert_select '#kanban' do
         assert_select 'div.project-lane' do
-          assert_select '.project-name', :text => /#{@public_project.name}/
-          assert_select '.project-name', :text => /#{@project.name}/
+          assert_select '.project-name', :text => /#{@public_project.reload.name}/, :count => 0 # No issue
+          assert_select '.project-name', :text => /#{@project.reload.name}/
         end
       end
     end

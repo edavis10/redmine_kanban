@@ -410,32 +410,10 @@ class KanbanTest < ActiveSupport::TestCase
     end
   end
   
-  context "get_projects" do
+  context "projects" do
     setup do
-      shared_setup
     end
     
-    context "with no user set" do
-      should "set projects to an empty array, no restrictions" do
-        kanban = Kanban.new
-        kanban.get_projects
-        
-        assert_equal [], kanban.projects
-      end
-    end
-
-    context "with a user set" do
-      should "set project to an array of projects that the user is on" do
-        @project1 = Project.generate!
-        @project2 = Project.generate!
-        Member.generate!({:principal => @user, :project => @project1, :roles => [Role.last]})
-        Member.generate!({:principal => @user, :project => @project2, :roles => [Role.last]})
-
-        kanban = Kanban.new(:user => @user)
-        kanban.get_projects
-        
-        assert_equal [@project1, @project2], kanban.projects
-      end
-    end
+    should "be tested"
   end
 end

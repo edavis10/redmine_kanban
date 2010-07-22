@@ -50,25 +50,38 @@ class KanbanIssue < ActiveRecord::Base
     }
   }
 
-  named_scope :find_active, lambda { |user_id|
-    # Unknown users
-    if user_id && user_id <= 0
-      user_id = nil
-    end
+  named_scope :find_active, lambda {
     {
       :order => 'user_id ASC, position ASC',
-      :conditions => { :user_id => user_id, :state => 'active'}
+      :conditions => { :state => 'active'}
     }
   }
 
-  named_scope :find_testing, lambda { |user_id|
+  named_scope :find_testing, lambda {
+    {
+      :order => 'user_id ASC, position ASC',
+      :conditions => { :state => 'testing'}
+    }
+  }
+
+  named_scope :assigned, lambda {|user_id|
     # Unknown users
     if user_id && user_id <= 0
       user_id = nil
     end
     {
-      :order => 'user_id ASC, position ASC',
-      :conditions => { :user_id => user_id, :state => 'testing'}
+      :conditions => { :user_id => user_id}
+    }
+  }
+
+  named_scope :authored, lambda {|user_id|
+    # Unknown users
+    if user_id && user_id <= 0
+      user_id = nil
+    end
+    {
+      :conditions => ["#{Issue.table_name}.author_id = ?", user_id],
+      :include => :issue
     }
   }
 

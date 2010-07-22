@@ -12,10 +12,14 @@ class Kanban
   attr_accessor :settings
   attr_accessor :users
   attr_accessor :user
-  attr_accessor :projects
+  # How is this Kanban built:
+  # * :author - by who created the issue
+  # * :assigned_to - by who is assigned the issue
+  attr_reader :for
 
   def initialize(attributes={})
     @user = attributes[:user]
+    @for = @user.present? ? :author : :assigned_to
     @incoming_pane = KanbanPane::IncomingPane.new
     @backlog_pane = KanbanPane::BacklogPane.new
     @quick_pane = KanbanPane::QuickPane.new
@@ -27,7 +31,6 @@ class Kanban
     
     @settings = Setting.plugin_redmine_kanban
     @users = get_users
-    @projects = get_projects
   end
 
   def self.non_kanban_issues_panes
@@ -64,11 +67,11 @@ class Kanban
   end
 
   def active_issues
-    @active_issues ||= active_pane.get_issues(:users => get_users, :projects => @projects)
+    @active_issues ||= active_pane.get_issues(:users => get_users, :for => @for)
   end
 
   def testing_issues
-    @testing_issues ||= testing_pane.get_issues(:users => get_users, :projects => @projects)
+    @testing_issues ||= testing_pane.get_issues(:users => get_users, :for => @for)
   end
 
   def finished_issues
@@ -92,12 +95,19 @@ class Kanban
     end
   end
 
-  def get_projects
-    if @user
-      @projects = @user.projects.sort
-    else
-      @projects = []
-    end
+  # Find all of the projects referenced on the KanbanIssue and Issues
+  def projects
+    projects = [
+                active_issues,
+                testing_issues
+               ].collect do |kanban_issue_set|                           # user => [kanban_issue]
+      kanban_issue_set.values.inject([]) {|projects, kanban_issues|      # [project], kanban_issue
+        projects += kanban_issues.collect {|kanban_issue|
+          kanban_issue.issue.project if kanban_issue.issue
+        }
+        projects.compact
+      }
+    end.flatten.uniq
   end
   
   def quick_issue_ids
