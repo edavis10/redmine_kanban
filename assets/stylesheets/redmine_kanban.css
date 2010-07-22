@@ -90,3 +90,4 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .kanban-headers {border-top-width: 2px; }
 .kanban-header h3 { border: none; text-align: center; width: 100%; }
 .project-lane .pane { border-left: 1px solid #333333;}
+.project-lane .project-name { font-size: larger; }
