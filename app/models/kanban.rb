@@ -92,18 +92,16 @@ class Kanban
       user = options[:user]
 
       if pane != :selected
-        all_issues = send("#{pane}_issues")[user]
+        all_kanban_issues = send("#{pane}_issues")[user]
       else
-        all_issues = send("#{pane}_issues")
+        all_kanban_issues = send("#{pane}_issues")
       end
 
-      if all_issues.present?
-        issues = all_issues.collect {|kanban_issue|
-          if kanban_issue.issue.project_id == project.id
-            kanban_issue.issue
-          end
-        }
-      end
+      issues = all_kanban_issues.collect {|kanban_issue|
+        if kanban_issue.issue.project_id == project.id
+          kanban_issue.issue
+        end
+      }
       issues ||= []
       issues
     }
