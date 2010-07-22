@@ -151,4 +151,32 @@ module KanbansHelper
   def showing_current_user_kanban?
     @user == User.current
   end
+
+  class UserKanbanDivHelper < BlockHelpers::Base
+    include ERB::Util
+
+    def initialize(options={})
+      @column = options[:column]
+      @user = options[:user]
+    end
+
+    def issues(issues)
+      if issues.empty?
+        render :partial => 'kanbans/empty_issue'
+      else
+        render(:partial => 'kanbans/issue',
+               :collection => issues,
+               :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["testing"]["limit"].to_i })
+      end
+    end
+
+    def display(body)
+      content_tag(:div,
+                  content_tag(:ol,
+                              body,
+                              :id => "#{@column}-issues-user-#{h(@user.id)}", :class => "#{@column}-issues"),
+                  :id => "#{@column}-#{h(@user.id)}", :class => "pane #{@column} user-#{h(@user.id)}", :style => "width: #{ helper.my_kanban_column_width(@column)}%")
+    end
+    
+  end
 end

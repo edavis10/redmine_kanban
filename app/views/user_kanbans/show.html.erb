@@ -37,29 +37,19 @@
       <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}, :class => 'project-name') %>
     </div>
 
-    <div id="testing-<%= h(@user.id) -%>" class="pane testing user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:testing) %>%">
-      <ol id="testing-issues-user-<%= h(@user.id) %>" class="testing-issues">
-        <% 
-           if @kanban.testing_issues[@user].present?
-             issues = @kanban.testing_issues[@user].collect {|kanban_issue|
-               if kanban_issue.issue.project_id == project.id
-                 kanban_issue.issue
-               end
-             }
-           else
-             issues = []
-           end
-           %>
-
-        <% if issues.empty? %>
-          <%= render :partial => 'kanbans/empty_issue' %>
-        <% else %>
-          <%= render(:partial => 'kanbans/issue',
-                     :collection => issues,
-                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["testing"]["limit"].to_i }) %>
-        <% end %>
-      </ol>
-    </div>
+    <% user_kanban_div_helper(:column => :testing, :user => @user) do |div| %>
+      <%
+        if @kanban.testing_issues[@user].present?
+          issues = @kanban.testing_issues[@user].collect {|kanban_issue|
+            if kanban_issue.issue.project_id == project.id
+              kanban_issue.issue
+            end
+          }
+        end
+        issues ||= []
+        %>
+        <%= div.issues(issues) %>
+    <% end %>
 
     <div id="active-<%= h(@user.id) -%>" class="pane active user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:active) %>%">
       <ol id="active-issues-user-<%= h(@user.id) %>" class="active-issues">

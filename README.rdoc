@@ -24,7 +24,7 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 
 == Installation and Setup
 
-1. Install the aasm gem: sudo gem install aasm
+1. Install the aasm and block_helpers gems: sudo gem install aasm block_helpers
 2. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
 3. Run the plugin migrations +rake db:migrate_plugins+
 4. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)

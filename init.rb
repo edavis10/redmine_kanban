@@ -2,6 +2,8 @@ require 'redmine'
 
 require 'aasm'
 
+require "block_helpers"
+
 # Patches to the Redmine core.
 require 'dispatcher'
 
