@@ -8,6 +8,8 @@ class KanbanIssue < ActiveRecord::Base
 
   acts_as_list
 
+  delegate :project, :to => :issue, :allow_nil => true
+  
   # For acts_as_list
   def scope_condition
     if user_id
@@ -123,6 +125,10 @@ class KanbanIssue < ActiveRecord::Base
       KanbanIssue.destroy_all(['issue_id = ?', issue.id])
     end
     return true
+  end
+
+  def for_project?(project)
+    self.project == project
   end
 
   private

@@ -98,7 +98,7 @@ class Kanban
       end
 
       issues = all_kanban_issues.collect {|kanban_issue|
-        if kanban_issue.issue.project_id == project.id
+        if kanban_issue.for_project?(project)
           kanban_issue.issue
         end
       }
