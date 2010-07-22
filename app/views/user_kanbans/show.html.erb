@@ -51,8 +51,7 @@
         <%= div.issues(issues) %>
     <% end %>
 
-    <div id="active-<%= h(@user.id) -%>" class="pane active user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:active) %>%">
-      <ol id="active-issues-user-<%= h(@user.id) %>" class="active-issues">
+    <% user_kanban_div_helper(:column => :active, :user => @user) do |div| %>
         <% 
            if @kanban.active_issues[@user].present?
              issues = @kanban.active_issues[@user].collect {|kanban_issue|
@@ -60,23 +59,14 @@
                  kanban_issue.issue
                end
              }
-           else
-             issues = []
            end
+           issues ||= []
            %>
+          <%= div.issues(issues) %>
 
-        <% if issues.empty? %>
-          <%= render :partial => 'kanbans/empty_issue' %>
-        <% else %>
-          <%= render(:partial => 'kanbans/issue',
-                     :collection => issues,
-                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["active"]["limit"].to_i }) %>
-        <% end %>
-      </ol>
-    </div>
+    <% end %>
 
-    <div id="selected-<%= h(@user.id) -%>" class="pane selected user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:selected) %>%">
-      <ol id="selected-issues-user-<%= h(@user.id) %>" class="selected-issues">
+    <% user_kanban_div_helper(:column => :selected, :user => @user) do |div| %>
         <% 
            if @kanban.selected_issues.present?
              issues = @kanban.selected_issues.collect {|kanban_issue|
@@ -84,43 +74,23 @@
                  kanban_issue.issue
                end
              }
-           else
-             issues = []
            end
+           issues ||= []
            %>
+          <%= div.issues(issues) %>
+    <% end %>
 
-        <% if issues.empty? %>
-          <%= render :partial => 'kanbans/empty_issue' %>
-        <% else %>
-          <%= render(:partial => 'kanbans/issue',
-                     :collection => issues,
-                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["selected"]["limit"].to_i }) %>
-        <% end %>
-      </ol>
-    </div>
-
-    <div id="backlog-<%= h(@user.id) -%>" class="pane backlog user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:backlog) %>%">
-      <ol id="backlog-issues-user-<%= h(@user.id) %>" class="backlog-issues">
+    <% user_kanban_div_helper(:column => :backlog, :user => @user) do |div| %>
         <% 
            if @kanban.backlog_issues.present?
              issues = @kanban.backlog_issues.collect {|priority, issues|
                issues.select {|issue| issue.project_id == project.id }
              }.flatten
-           else
-             issues = []
            end
+           issues ||= []
            %>
-
-        <% if issues.empty? %>
-          <%= render :partial => 'kanbans/empty_issue' %>
-        <% else %>
-          <%= render(:partial => 'kanbans/issue',
-                     :collection => issues,
-                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["backlog"]["limit"].to_i }) %>
-        <% end %>
-      </ol>
-    </div>
-
+          <%= div.issues(issues) %>
+    <% end %>
   </div>
   <% end %>
 </div>

@@ -166,7 +166,7 @@ module KanbansHelper
       else
         render(:partial => 'kanbans/issue',
                :collection => issues,
-               :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["testing"]["limit"].to_i })
+               :locals => { :limit => Setting['plugin_redmine_kanban']["panes"][@column.to_s]["limit"].to_i })
       end
     end
 
