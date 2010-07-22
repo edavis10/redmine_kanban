@@ -1,6 +1,11 @@
 class KanbanPane::SelectedPane < KanbanPane
   def get_issues(options={})
-    KanbanIssue.find_selected
+    if options[:for] == :author
+      user = options.delete(:user)
+      KanbanIssue.find_selected.authored(user.id)
+    else
+      KanbanIssue.find_selected
+    end
   end
 end
 

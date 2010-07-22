@@ -63,7 +63,7 @@ class Kanban
   end
 
   def selected_issues
-    @selected_issues ||= selected_pane.get_issues
+    @selected_issues ||= selected_pane.get_issues(:user => @user, :for => @for)
   end
 
   def active_issues
@@ -97,6 +97,7 @@ class Kanban
 
   # Find all of the projects referenced on the KanbanIssue and Issues
   def projects
+    # Grouped by users
     projects = [
                 active_issues,
                 testing_issues
@@ -107,7 +108,16 @@ class Kanban
         }
         projects.compact
       }
-    end.flatten.uniq
+    end
+
+    # No grouping
+    projects += [selected_issues].collect do |kanban_issues|
+      kanban_issues.inject([]) {|projects, kanban_issue|
+        kanban_issue.issue.project if kanban_issue.issue
+      }
+    end
+    
+    projects.flatten.uniq
   end
   
   def quick_issue_ids

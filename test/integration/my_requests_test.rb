@@ -75,6 +75,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       @active_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
       @active_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
       @different_author_active_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
+      @selected_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @selected_status)
+      @different_author_selected_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
 
       # Not a member but created
       @another_project = Project.generate!
@@ -106,7 +108,17 @@ class MyRequestsTest < ActionController::IntegrationTest
         end
       end
       assert_select "li#issue_#{@different_author_active_issue.id}", :count => 0
-      
+
+      # Selected lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#selected-issues-user-#{@user.id}.selected-issues" do
+            assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+          end
+        end
+      end
+      assert_select "li#issue_#{@different_author_selected_issue.id}", :count => 0
+
     end
     
     should "group each horizontal lane by project when there is an issue for it" do
