@@ -9,6 +9,7 @@
 </h2>
 
 <div class="contextual">
+  <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
   <% if User.current.allowed_to?(:view_kanban, nil, :global => true) %>
   <%= link_to(l(:text_kanban_board), kanban_url, :class => 'icon') %>
   <% end %>
@@ -21,6 +22,8 @@
 </div>
 
 <div class="clear"></div>
+
+<%= render :partial => 'kanbans/color_help' %>
 
 <div id="kanban">
   <div class="kanban-headers horizontal-lane">

@@ -11,17 +11,7 @@
 
 <p class="general-help"><%= l(:kanban_text_general_help) %></p>
 
-<div id="color-help" style="display:none;">
-  <%= content_tag(:h3, l(:kanban_text_color_help)) %>
-  <ul>
-    <li class="normal-color"><%= l(:kanban_text_normal_color) %></li>
-    <li class="assigned-to-me-color"><%= l(:kanban_text_assigned_to_me_color) %></li>
-    <li class="behind-schedule-color"><%= l(:kanban_text_behind_schedule_color) %></li>
-    <li class="overdue-color"><%= l(:kanban_text_overdue_color) %></li>
-    <li class="over-wip-color"><%= l(:kanban_text_over_wip_color) %></li>
-    <li class="parent-issue-color"><%= l(:kanban_text_parent_issue_color) %></li>
-  </ul>
-</div>
+<%= render :partial => 'color_help' %>
 
 <div id="kanban">
   <% if KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured? %>
