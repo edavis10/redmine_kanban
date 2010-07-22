@@ -59,7 +59,7 @@ class Kanban
 
   def backlog_issues
     quick_issues # Needs to load quick_issues
-    @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids)
+    @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids, :for => @for, :user => @user)
   end
 
   def selected_issues
@@ -115,6 +115,10 @@ class Kanban
       kanban_issues.inject([]) {|projects, kanban_issue|
         kanban_issue.issue.project if kanban_issue.issue
       }
+    end
+
+    projects += backlog_issues.collect do |priority, issues|
+      issues.collect(&:project)
     end
     
     projects.flatten.uniq

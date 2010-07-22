@@ -28,6 +28,7 @@
     <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
     <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
     <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
+    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
   </div>
 
   <% @kanban.projects.each do |project| %>
@@ -104,6 +105,28 @@
           <%= render(:partial => 'kanbans/issue',
                      :collection => issues,
                      :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["selected"]["limit"].to_i }) %>
+        <% end %>
+      </ol>
+    </div>
+
+    <div id="backlog-<%= h(@user.id) -%>" class="pane backlog user-<%= h(@user.id) -%>" style="width: <%= my_kanban_column_width(:backlog) %>%">
+      <ol id="backlog-issues-user-<%= h(@user.id) %>" class="backlog-issues">
+        <% 
+           if @kanban.backlog_issues.present?
+             issues = @kanban.backlog_issues.collect {|priority, issues|
+               issues.select {|issue| issue.project_id == project.id }
+             }.flatten
+           else
+             issues = []
+           end
+           %>
+
+        <% if issues.empty? %>
+          <%= render :partial => 'kanbans/empty_issue' %>
+        <% else %>
+          <%= render(:partial => 'kanbans/issue',
+                     :collection => issues,
+                     :locals => { :limit => Setting['plugin_redmine_kanban']["panes"]["backlog"]["limit"].to_i }) %>
         <% end %>
       </ol>
     </div>

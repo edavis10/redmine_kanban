@@ -77,6 +77,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       @different_author_active_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
       @selected_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @selected_status)
       @different_author_selected_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
+      @backlog_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
+      @different_author_backlog_issue1 = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
 
       # Not a member but created
       @another_project = Project.generate!
@@ -118,6 +120,16 @@ class MyRequestsTest < ActionController::IntegrationTest
         end
       end
       assert_select "li#issue_#{@different_author_selected_issue.id}", :count => 0
+
+      # Backlog lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#backlog-issues-user-#{@user.id}.backlog-issues" do
+            assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+          end
+        end
+      end
+      assert_select "li#issue_#{@different_author_backlog_issue1.id}", :count => 0
 
     end
     

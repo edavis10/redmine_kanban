@@ -99,18 +99,21 @@ module KanbansHelper
       :project => 1,
       :testing => 1,
       :active => 1,
-      :selected => 1
+      :selected => 1,
+      :backlog => 1
     }
 
     return 0.0 if column == :active && !KanbanPane::ActivePane.configured?
     return 0.0 if column == :testing && !KanbanPane::TestingPane.configured?
     return 0.0 if column == :selected && !KanbanPane::SelectedPane.configured?
+    return 0.0 if column == :backlog && !KanbanPane::BacklogPane.configured?
 
     visible = 0
     visible += column_ratios[:project]
     visible += column_ratios[:active] if KanbanPane::ActivePane.configured?
     visible += column_ratios[:testing] if KanbanPane::TestingPane.configured?
     visible += column_ratios[:selected] if KanbanPane::SelectedPane.configured?
+    visible += column_ratios[:backlog] if KanbanPane::BacklogPane.configured?
 
     return ((column_ratios[column].to_f / visible) * 96).round(2)
   end
