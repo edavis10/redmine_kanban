@@ -82,6 +82,65 @@ class Kanban
     @canceled_issues ||= canceled_pane.get_issues
   end
 
+  # Helper method to display the testing issues for a user/project
+  def testing_issues_for(options={})
+    project = options[:project]
+    user = options[:user]
+    
+    if testing_issues[user].present?
+      issues = testing_issues[user].collect {|kanban_issue|
+        if kanban_issue.issue.project_id == project.id
+          kanban_issue.issue
+        end
+      }
+    end
+    issues ||= []
+    issues
+  end
+
+  def active_issues_for(options={})
+    project = options[:project]
+    user = options[:user]
+    
+    if active_issues[user].present?
+      issues = active_issues[user].collect {|kanban_issue|
+        if kanban_issue.issue.project_id == project.id
+          kanban_issue.issue
+        end
+      }
+    end
+    issues ||= []
+    issues
+  end
+
+  def selected_issues_for(options={})
+    project = options[:project]
+    #    user = options[:user]
+    
+    if selected_issues.present?
+      issues = selected_issues.collect {|kanban_issue|
+        if kanban_issue.issue.project_id == project.id
+          kanban_issue.issue
+        end
+      }
+    end
+    issues ||= []
+    issues
+  end
+
+  def backlog_issues_for(options={})
+    project = options[:project]
+    #    user = options[:user]
+    
+    if backlog_issues.present?
+      issues = backlog_issues.collect {|priority, issues|
+        issues.select {|issue| issue.project_id == project.id }
+      }.flatten
+    end
+    issues ||= []
+    issues
+  end
+
   def get_users
     if @user
       @users = [@user]

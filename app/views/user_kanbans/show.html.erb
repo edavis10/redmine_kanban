@@ -38,58 +38,19 @@
     </div>
 
     <% user_kanban_div_helper(:column => :testing, :user => @user) do |div| %>
-      <%
-        if @kanban.testing_issues[@user].present?
-          issues = @kanban.testing_issues[@user].collect {|kanban_issue|
-            if kanban_issue.issue.project_id == project.id
-              kanban_issue.issue
-            end
-          }
-        end
-        issues ||= []
-        %>
-        <%= div.issues(issues) %>
+        <%= div.issues(@kanban.testing_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
     <% user_kanban_div_helper(:column => :active, :user => @user) do |div| %>
-        <% 
-           if @kanban.active_issues[@user].present?
-             issues = @kanban.active_issues[@user].collect {|kanban_issue|
-               if kanban_issue.issue.project_id == project.id
-                 kanban_issue.issue
-               end
-             }
-           end
-           issues ||= []
-           %>
-          <%= div.issues(issues) %>
-
+        <%= div.issues(@kanban.active_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
     <% user_kanban_div_helper(:column => :selected, :user => @user) do |div| %>
-        <% 
-           if @kanban.selected_issues.present?
-             issues = @kanban.selected_issues.collect {|kanban_issue|
-               if kanban_issue.issue.project_id == project.id
-                 kanban_issue.issue
-               end
-             }
-           end
-           issues ||= []
-           %>
-          <%= div.issues(issues) %>
+        <%= div.issues(@kanban.selected_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
     <% user_kanban_div_helper(:column => :backlog, :user => @user) do |div| %>
-        <% 
-           if @kanban.backlog_issues.present?
-             issues = @kanban.backlog_issues.collect {|priority, issues|
-               issues.select {|issue| issue.project_id == project.id }
-             }.flatten
-           end
-           issues ||= []
-           %>
-          <%= div.issues(issues) %>
+      <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
     <% end %>
   </div>
   <% end %>
