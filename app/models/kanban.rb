@@ -82,37 +82,25 @@ class Kanban
     @canceled_issues ||= canceled_pane.get_issues
   end
 
-  # Helper method to display the testing issues for a user/project
-  def testing_issues_for(options={})
-    project = options[:project]
-    user = options[:user]
-    
-    if testing_issues[user].present?
-      issues = testing_issues[user].collect {|kanban_issue|
-        if kanban_issue.issue.project_id == project.id
-          kanban_issue.issue
-        end
-      }
-    end
-    issues ||= []
-    issues
-  end
+  # Display the testing issues filtered by user and project
+  [:testing, :active].each do |pane|
+    define_method("#{pane}_issues_for") {|options|
+      project = options[:project]
+      user = options[:user]
 
-  def active_issues_for(options={})
-    project = options[:project]
-    user = options[:user]
-    
-    if active_issues[user].present?
-      issues = active_issues[user].collect {|kanban_issue|
-        if kanban_issue.issue.project_id == project.id
-          kanban_issue.issue
-        end
-      }
-    end
-    issues ||= []
-    issues
+      all_issues = send("#{pane}_issues")
+      if all_issues[user].present?
+        issues = all_issues[user].collect {|kanban_issue|
+          if kanban_issue.issue.project_id == project.id
+            kanban_issue.issue
+          end
+        }
+      end
+      issues ||= []
+      issues
+    }
   end
-
+  
   def selected_issues_for(options={})
     project = options[:project]
     #    user = options[:user]
