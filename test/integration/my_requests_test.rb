@@ -80,6 +80,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       @backlog_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
       @different_author_backlog_issue1 = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
 
+      @finished_issue = Issue.generate_for_project!(@project, :author => @user, :status => @finished_status)
+      @different_author_finished_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
       @canceled_issue = Issue.generate_for_project!(@project, :author => @user, :status => @canceled_status)
       @different_author_canceled_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
       
@@ -133,6 +135,16 @@ class MyRequestsTest < ActionController::IntegrationTest
         end
       end
       assert_select "li#issue_#{@different_author_backlog_issue1.id}", :count => 0
+
+      # Finished lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#finished-issues-user-#{@user.id}.finished-issues" do
+            assert_select "li#issue_#{@finished_issue.id}", :count => 1
+          end
+        end
+      end
+      assert_select "li#issue_#{@different_author_finished_issue.id}", :count => 0
 
       # Canceled lane
       assert_select '#kanban' do

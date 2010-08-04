@@ -1,6 +1,8 @@
 class KanbanPane::FinishedPane < KanbanPane
   def get_issues(options={})
     return [[]] if missing_settings('finished')
+    for_option = options.delete(:for)
+    user = options.delete(:user)
 
     status_id = settings['panes']['finished']['status']
     days = settings['panes']['finished']['limit'] || 7
@@ -8,7 +10,8 @@ class KanbanPane::FinishedPane < KanbanPane
     conditions = ARCondition.new
     conditions.add ["#{Issue.table_name}.status_id = ?", status_id]
     conditions.add ["#{Issue.table_name}.updated_on > ?", days.to_f.days.ago]
-      
+    conditions.add ["#{Issue.table_name}.author_id = ?", user] if for_option == :author && user.present?
+
     issues = Issue.visible.all(:include => :assigned_to,
                                :order => "#{Issue.table_name}.updated_on DESC",
                                :conditions => conditions.conditions)

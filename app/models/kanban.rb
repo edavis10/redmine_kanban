@@ -75,7 +75,7 @@ class Kanban
   end
 
   def finished_issues
-    @finished_issues ||= finished_pane.get_issues
+    @finished_issues ||= finished_pane.get_issues(:for => @for, :user => @user)
   end
 
   def canceled_issues
@@ -125,6 +125,17 @@ class Kanban
 
     # Organized by {assigned_user => [issues]}
     issues = canceled_issues.values.flatten.select {|issue|
+      issue.project == project
+    }
+    issues ||= []
+    issues
+  end
+
+  def finished_issues_for(options={})
+    project = options[:project]
+
+    # Organized by {assigned_user => [issues]}
+    issues = finished_issues.values.flatten.select {|issue|
       issue.project == project
     }
     issues ||= []

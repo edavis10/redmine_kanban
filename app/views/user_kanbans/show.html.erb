@@ -40,6 +40,13 @@
       <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}, :class => 'project-name') %>
 
       <div class="inner-pane">
+        <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
+        <% user_kanban_div_helper(:column => :finished, :user => @user) do |div| %>
+          <%= div.issues(@kanban.finished_issues_for(:user => @user, :project => project)) %>
+        <% end %>
+      </div>
+
+      <div class="inner-pane">
         <%= content_tag(:h3, l(:kanban_text_canceled_requests)) %>
         <% user_kanban_div_helper(:column => :canceled, :user => @user) do |div| %>
           <%= div.issues(@kanban.canceled_issues_for(:user => @user, :project => project)) %>
