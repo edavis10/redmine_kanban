@@ -237,6 +237,8 @@ div.icons .updated-note {
     /* Equal height column hack */ }
     .user-kanban .inner-pane .pane {
       border: none; }
+  .user-kanban li.issue {
+    cursor: auto; }
 
 .pane.testing {
   background-color: #eb613d; }

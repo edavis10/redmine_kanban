@@ -144,6 +144,10 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
          border: none;
       }
    }
+
+   li.issue {
+      cursor: auto;
+   }
 }
 .pane.testing {
    background-color: $testing-pane-color;
