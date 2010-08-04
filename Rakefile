@@ -17,6 +17,11 @@ RedminePluginSupport::Base.setup do |plugin|
   plugin.redmine_root = File.expand_path(File.dirname(__FILE__) + '/../../../')
 end
 
+desc "Watch sass file"
+task :sass do
+  system("sass --watch assets/stylesheets/redmine_kanban.scss:assets/stylesheets/redmine_kanban.css")
+end
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
