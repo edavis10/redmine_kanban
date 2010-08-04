@@ -159,30 +159,21 @@ div.icons .updated-note {
   overflow-y: scroll; }
 
 /**** My Kanban requests ****/
-/* Positioning */
 .horizontal-lane {
   min-height: 100px;
   clear: left; }
 
 .kanban-headers {
   min-height: 36px; }
-
-.kanban-headers div.pane {
-  min-height: 36px; }
-
-.kanban-headers h3 {
-  float: left; }
+  .kanban-headers div.pane {
+    min-height: 36px; }
+  .kanban-headers h3 {
+    float: left; }
 
 .horizontal-lane .pane, .project-lane div.project {
   display: inline;
   float: left;
   min-height: 100px; }
-
-.project-lane div.project div.inner-pane {
-  padding: 10px 0; }
-
-.project-lane div.project div.inner-pane h3 {
-  text-align: center; }
 
 #new-requests {
   float: right;
@@ -190,7 +181,6 @@ div.icons .updated-note {
   position: relative;
   width: 19%; }
 
-/* Visual */
 .vertical-lane {
   padding: 0; }
 
@@ -204,9 +194,12 @@ div.icons .updated-note {
   border-bottom-style: solid;
   padding: 2px; }
 
+.project-lane div.project div.inner-pane {
+  padding: 10px 0; }
+.project-lane div.project div.inner-pane h3 {
+  text-align: center; }
 .project-lane .pane {
   border-left: 1px solid #333333; }
-
 .project-lane .project-name {
   font-size: larger; }
 

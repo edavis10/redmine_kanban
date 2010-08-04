@@ -115,22 +115,27 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .short-scroll { max-height: 200px; overflow-y: scroll; }
 
 /**** My Kanban requests ****/
-/* Positioning */
 .horizontal-lane { min-height: 100px; clear:left;}
-.kanban-headers { min-height: 36px; }
-.kanban-headers div.pane { min-height: 36px; }
-.kanban-headers h3  {float:left;}
+.kanban-headers {
+   min-height: 36px;
+   div.pane { min-height: 36px; }
+   h3  {float:left;}
+}
+
 .horizontal-lane .pane, .project-lane div.project {display: inline; float: left; min-height: 100px; }
-.project-lane div.project div.inner-pane { padding: 10px 0; }
-.project-lane div.project div.inner-pane h3 { text-align: center; }
 #new-requests {float: right; left: 0; position: relative; width: 19%;}
 
-/* Visual */
 .vertical-lane {padding: 0;}
 .kanban-header h3, .inner-pane h3 { border: none; text-align: center; width: 100%; }
 .vertical-lane .kanban-headers {border-bottom-width: 2px; border-bottom-style: solid; padding: 2px; }
-.project-lane .pane { border-left: 1px solid #333333;}
-.project-lane .project-name { font-size: larger; }
+
+.project-lane {
+   div.project div.inner-pane { padding: 10px 0; }
+   div.project div.inner-pane h3 { text-align: center; }
+
+   .pane { border-left: 1px solid #333333;}
+   .project-name { font-size: larger; }
+}
 #new-requests { 
    @include standard-border;
 
