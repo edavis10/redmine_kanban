@@ -236,6 +236,9 @@ div.icons .updated-note {
   border-bottom-width: 2px;
   border-top-width: 2px; }
 
+.user-kanban .pane {
+  padding: 3px; }
+
 .pane.testing {
   background-color: #eb613d; }
 
