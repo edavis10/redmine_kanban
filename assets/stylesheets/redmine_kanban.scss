@@ -114,7 +114,7 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 
 /* Visual */
 .vertical-lane {padding: 0;}
-.kanban-header h3 { border: none; text-align: center; width: 100%; }
+.kanban-header h3, .inner-pane h3 { border: none; text-align: center; width: 100%; }
 .vertical-lane .kanban-headers {border-bottom-width: 2px; border-bottom-style: solid; padding: 2px; }
 .project-lane .pane { border-left: 1px solid #333333;}
 .project-lane .project-name { font-size: larger; }
