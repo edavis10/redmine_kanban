@@ -138,19 +138,14 @@ div.icons .updated-note {
 
 #color-help .normal-color span {
   background-color: #ffffdd; }
-
 #color-help .assigned-to-me-color span {
   background-color: #dcf8df; }
-
 #color-help .behind-schedule-color span {
   background-color: #f66914; }
-
 #color-help .overdue-color span {
   background-color: red; }
-
 #color-help .over-wip-color span {
   background-color: #eeeeee; }
-
 #color-help .parent-issue-color span {
   font-weight: bold; }
 

@@ -88,12 +88,14 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .drop-accepted { background-color:#FFFFEE; height: 32px; margin-bottom:5px; border: 1px dashed #000000; }
 .general-help {font-size: 90%; font-style: italic;}
 
-#color-help .normal-color span { background-color: $issue-background-color; }
-#color-help .assigned-to-me-color span { background-color: $assigned-to-me-color; }
-#color-help .behind-schedule-color span { background-color: $behind-schedule-color; }
-#color-help .overdue-color span { background-color: $overdue-color; }
-#color-help .over-wip-color span { background-color: $over-limit-color; }
-#color-help .parent-issue-color span { font-weight: bold; }
+#color-help {
+   .normal-color span { background-color: $issue-background-color; }
+   .assigned-to-me-color span { background-color: $assigned-to-me-color; }
+   .behind-schedule-color span { background-color: $behind-schedule-color; }
+   .overdue-color span { background-color: $overdue-color; }
+   .over-wip-color span { background-color: $over-limit-color; }
+   .parent-issue-color span { font-weight: bold; }
+}
 
 .icon-info  { background-image: url(../images/information.png); }
 
