@@ -79,14 +79,14 @@ class Kanban
   end
 
   def canceled_issues
-    @canceled_issues ||= canceled_pane.get_issues
+    @canceled_issues ||= canceled_pane.get_issues(:users => get_users, :for => @for, :user => @user)
   end
 
   # Display the testing issues filtered by user and/or project
   # * :testing - user and project
   # * :active - user and project
   # * :selected - project
-  [:testing, :active, :selected].each do |pane|
+  [:testing, :active, :selected, :canceled].each do |pane|
     define_method("#{pane}_issues_for") {|options|
       project = options[:project]
       user = options[:user]
@@ -116,6 +116,17 @@ class Kanban
         issues.select {|issue| issue.project_id == project.id }
       }.flatten
     end
+    issues ||= []
+    issues
+  end
+
+  def canceled_issues_for(options={})
+    project = options[:project]
+
+    # Organized by {assigned_user => [issues]}
+    issues = canceled_issues.values.flatten.select {|issue|
+      issue.project == project
+    }
     issues ||= []
     issues
   end
