@@ -108,6 +108,11 @@ module KanbansHelper
       return (KanbanPane::IncomingPane.configured? ? 100.0 : 0.0)
     end
 
+    # Inside of Project, max width
+    if column == :finished || column == :canceled
+      return 100.0
+    end
+
     return 0.0 if column == :active && !KanbanPane::ActivePane.configured?
     return 0.0 if column == :testing && !KanbanPane::TestingPane.configured?
     return 0.0 if column == :selected && !KanbanPane::SelectedPane.configured?
