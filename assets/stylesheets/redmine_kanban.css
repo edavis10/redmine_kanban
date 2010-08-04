@@ -188,10 +188,6 @@ div.icons .updated-note {
 .project-lane div.project div.inner-pane h3 {
   text-align: center; }
 
-.project-lane div.project div.pane {
-  float: none;
-  border: none; }
-
 #new-requests {
   float: right;
   left: 0;
@@ -236,6 +232,11 @@ div.icons .updated-note {
     margin-bottom: -1000px;
     padding-bottom: 1000px;
     /* end hack */ }
+  .user-kanban .inner-pane {
+    overflow: hidden;
+    /* Equal height column hack */ }
+    .user-kanban .inner-pane .pane {
+      border: none; }
 
 .pane.testing {
   background-color: #eb613d; }

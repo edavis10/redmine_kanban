@@ -60,12 +60,16 @@
         <% end %>
       </div>
 
+      <div style="clear:left;"> </div>
+
       <div class="inner-pane">
         <%= content_tag(:h3, l(:kanban_text_canceled_requests)) %>
         <% user_kanban_div_helper(:column => :canceled, :user => @user) do |div| %>
           <%= div.issues(@kanban.canceled_issues_for(:user => @user, :project => project)) %>
         <% end %>
       </div>
+
+  <div style="clear:left;"> </div>
     </div>
 
     <% user_kanban_div_helper(:column => :testing, :user => @user) do |div| %>

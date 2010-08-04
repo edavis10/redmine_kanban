@@ -109,7 +109,6 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .horizontal-lane .pane, .project-lane div.project {display: inline; float: left; min-height: 100px; }
 .project-lane div.project div.inner-pane { padding: 10px 0; }
 .project-lane div.project div.inner-pane h3 { text-align: center; }
-.project-lane div.project div.pane { float: none; border: none; }
 #new-requests {float: right; left: 0; position: relative; width: 19%;}
 
 /* Visual */
@@ -136,6 +135,14 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
       margin-bottom: -1000px;
       padding-bottom: 1000px;
       /* end hack */
+   }
+   
+   .inner-pane {
+      overflow: hidden; /* Equal height column hack */
+
+      .pane {
+         border: none;
+      }
    }
 }
 .pane.testing {
