@@ -25,7 +25,21 @@
 
 <%= render :partial => 'kanbans/color_help' %>
 
-<div id="kanban">
+<div id="new-requests" class="vertical-lane">
+  <div class="kanban-headers">
+    <div class="kanban-header pane"><%= content_tag(:h3, l(:kanban_text_incoming)) %></div>
+  </div>
+
+  <div class="project-lane">
+    <% user_kanban_div_helper(:column => :incoming, :user => @user) do |div| %>
+      <%= div.issues(@kanban.incoming_issues_for) %>
+    <% end %>
+  </div>
+  <div style="clear:left;"> </div>
+
+</div>
+
+<div id="kanban" style="width: 80%">
   <div class="kanban-headers horizontal-lane">
     <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
     <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>

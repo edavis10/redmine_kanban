@@ -87,10 +87,14 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .project-lane div.project div.inner-pane { padding: 10px 0; }
 .project-lane div.project div.inner-pane h3 { text-align: center; }
 .project-lane div.project div.pane { float: none; border: none; }
+#new-requests {float: right; left: 0; position: relative; width: 19%;}
 
 /* Visual */
-.horizontal-lane { paddng: 5px; border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }
+.horizontal-lane, .vertical-lane { padding: 5px; border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }
+.vertical-lane {padding: 0;}
 .kanban-headers {border-top-width: 2px; }
 .kanban-header h3 { border: none; text-align: center; width: 100%; }
+.vertical-lane .kanban-headers {border-bottom-width: 2px; border-bottom-style: solid; padding: 2px; }
 .project-lane .pane { border-left: 1px solid #333333;}
 .project-lane .project-name { font-size: larger; }
+#new-requests { border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 2px; }

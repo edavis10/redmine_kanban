@@ -69,6 +69,10 @@ class MyRequestsTest < ActionController::IntegrationTest
 
     
     should "show the swimlanes" do
+      @new_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
+      @new_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
+      @different_author_new_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
+
       @testing_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
       @testing_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
       @different_author_testing_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
@@ -93,6 +97,15 @@ class MyRequestsTest < ActionController::IntegrationTest
       login_as
       visit_my_kanban_requests
 
+      # New lane
+      assert_select '#new-requests' do
+        assert_select "#incoming-issues-user-#{@user.id}.incoming-issues" do
+          assert_select "li#issue_#{@new_issue1.id}", :count => 1
+          assert_select "li#issue_#{@new_issue2.id}", :count => 1
+        end
+      end
+      assert_select "li#issue_#{@different_author_new_issue.id}", :count => 0
+      
       # Testing lane
       assert_select '#kanban' do
         assert_select '.project-lane' do

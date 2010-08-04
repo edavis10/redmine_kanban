@@ -103,6 +103,11 @@ module KanbansHelper
       :backlog => 1
     }
 
+    # Vertical column
+    if column == :incoming
+      return (KanbanPane::IncomingPane.configured? ? 100.0 : 0.0)
+    end
+
     return 0.0 if column == :active && !KanbanPane::ActivePane.configured?
     return 0.0 if column == :testing && !KanbanPane::TestingPane.configured?
     return 0.0 if column == :selected && !KanbanPane::SelectedPane.configured?

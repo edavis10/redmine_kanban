@@ -50,7 +50,7 @@ class Kanban
   end
 
   def incoming_issues
-    @incoming_issues ||= incoming_pane.get_issues
+    @incoming_issues ||= incoming_pane.get_issues(:user => @user, :for => @for)
   end
 
   def quick_issues
@@ -119,6 +119,11 @@ class Kanban
     issues ||= []
     issues
   end
+
+  def incoming_issues_for(options={})
+    incoming_issues
+  end
+
 
   def canceled_issues_for(options={})
     project = options[:project]
