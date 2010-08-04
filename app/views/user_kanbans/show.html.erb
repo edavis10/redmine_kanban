@@ -41,16 +41,16 @@
 
 <div id="kanban" class="user-kanban" style="width: 80%">
   <div class="kanban-headers horizontal-lane">
-    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
-    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
-    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
-    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
-    <div class="kanban-header pane" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
   </div>
 
   <% @kanban.projects.each do |project| %>
   <div class="project-lane horizontal-lane">
-    <div class="project pane" style="width: <%= my_kanban_column_width(:project) %>%">
+    <div class="project pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%">
       <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}, :class => 'project-name') %>
 
       <div class="inner-pane">

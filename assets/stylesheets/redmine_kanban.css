@@ -1,6 +1,7 @@
-/* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
 /* Variables */
 /* My Kanban colors */
+/* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
+/* Uses the child element of '.equal-column' */
 #kanban {
   width: 100%; }
 
@@ -219,14 +220,15 @@ div.icons .updated-note {
 .user-kanban {
   overflow: hidden;
   /* Equal height column hack */ }
-  .user-kanban .pane {
-    border-width: 2px;
-    border-color: #333333;
-    border-style: solid;
+  .user-kanban .equal-column {
     /* Used to hack the equal height columns*/
     margin-bottom: -1000px;
     padding-bottom: 1000px;
     /* end hack */ }
+  .user-kanban .pane {
+    border-width: 2px;
+    border-color: #333333;
+    border-style: solid; }
   .user-kanban .pane.testing {
     background-color: #eb613d; }
   .user-kanban .pane.finished {
@@ -244,6 +246,11 @@ div.icons .updated-note {
   .user-kanban .inner-pane {
     overflow: hidden;
     /* Equal height column hack */ }
+    .user-kanban .inner-pane .equal-column {
+      /* Used to hack the equal height columns*/
+      margin-bottom: -1000px;
+      padding-bottom: 1000px;
+      /* end hack */ }
     .user-kanban .inner-pane .pane {
       border: none; }
   .user-kanban li.issue {
