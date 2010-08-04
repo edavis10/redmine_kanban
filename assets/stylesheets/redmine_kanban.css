@@ -74,7 +74,7 @@ li.issue {
   cursor: move;
   border: 1px dashed #ccc;
   margin-bottom: 5px;
-  background-color: #FFFFDD; }
+  background-color: #ffffdd; }
 
 li.issue .issue-details-body {
   padding: 3px 3px;
@@ -93,7 +93,7 @@ li.issue.over-limit {
   background-color: #eeeeee; }
 
 li.issue.over-limit .issue-details-header {
-  background-color: #dddddd; }
+  background-color: #dcdcdc; }
 
 /* Assignments */
 li.issue.assigned-to-me .issue-details-header {
@@ -110,7 +110,7 @@ li.issue.issue-behind-schedule .issue-details-header a {
 
 /* overdue issues */
 li.issue.issue-overdue .issue-details-header {
-  background-color: #f00; }
+  background-color: red; }
 
 /* END Issue rows */
 div.icons {
@@ -134,7 +134,7 @@ div.icons .updated-note {
   font-style: italic; }
 
 #color-help .normal-color span {
-  background-color: #FFFFDD; }
+  background-color: #ffffdd; }
 
 #color-help .assigned-to-me-color span {
   background-color: #dcf8df; }
@@ -143,7 +143,7 @@ div.icons .updated-note {
   background-color: #f66914; }
 
 #color-help .overdue-color span {
-  background-color: #f00; }
+  background-color: red; }
 
 #color-help .over-wip-color span {
   background-color: #eeeeee; }
