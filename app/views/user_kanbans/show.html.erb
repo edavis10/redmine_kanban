@@ -50,7 +50,7 @@
 
   <% @kanban.projects.each do |project| %>
   <div class="project-lane horizontal-lane">
-    <div class="project" style="width: <%= my_kanban_column_width(:project) %>%">
+    <div class="project pane" style="width: <%= my_kanban_column_width(:project) %>%">
       <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}, :class => 'project-name') %>
 
       <div class="inner-pane">

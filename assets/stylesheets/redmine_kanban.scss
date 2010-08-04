@@ -1,3 +1,5 @@
+/* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
+/* Variables */
 $issue-background-color: #FFFFDD;
 $over-limit-color: #eeeeee;
 $behind-schedule-color: #f66914;
@@ -106,7 +108,7 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 #new-requests {float: right; left: 0; position: relative; width: 19%;}
 
 /* Visual */
-.horizontal-lane, .vertical-lane { padding: 5px; border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }
+/*.horizontal-lane, .vertical-lane { padding: 5px; } /*border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }*/
 .vertical-lane {padding: 0;}
 .kanban-headers {border-top-width: 2px; }
 .kanban-header h3 { border: none; text-align: center; width: 100%; }
@@ -116,8 +118,15 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 #new-requests { border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 2px; }
 
 .user-kanban {
+   overflow: hidden;    /* Equal height column hack */
+
    .pane {
-      padding: 3px;
+      border: 1px solid #000;
+
+      /* Used to hack the equal height columns*/
+      margin-bottom: -1000px;
+      padding-bottom: 1000px;
+      /* end hack */
    }
 }
 .pane.testing {

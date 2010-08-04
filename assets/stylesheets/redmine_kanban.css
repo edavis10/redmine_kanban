@@ -1,3 +1,5 @@
+/* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
+/* Variables */
 /* My Kanban colors */
 #kanban {
   width: 100%; }
@@ -197,15 +199,7 @@ div.icons .updated-note {
   width: 19%; }
 
 /* Visual */
-.horizontal-lane, .vertical-lane {
-  padding: 5px;
-  border-style: solid;
-  border-color: #333333;
-  border-right-width: 2px;
-  border-left-width: 2px;
-  border-bottom-width: 2px;
-  border-top-width: 0; }
-
+/*.horizontal-lane, .vertical-lane { padding: 5px; } /*border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 0; }*/
 .vertical-lane {
   padding: 0; }
 
@@ -236,8 +230,15 @@ div.icons .updated-note {
   border-bottom-width: 2px;
   border-top-width: 2px; }
 
-.user-kanban .pane {
-  padding: 3px; }
+.user-kanban {
+  overflow: hidden;
+  /* Equal height column hack */ }
+  .user-kanban .pane {
+    border: 1px solid #000;
+    /* Used to hack the equal height columns*/
+    margin-bottom: -1000px;
+    padding-bottom: 1000px;
+    /* end hack */ }
 
 .pane.testing {
   background-color: #eb613d; }
