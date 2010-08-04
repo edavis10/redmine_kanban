@@ -232,6 +232,20 @@ div.icons .updated-note {
     margin-bottom: -1000px;
     padding-bottom: 1000px;
     /* end hack */ }
+  .user-kanban .pane.testing {
+    background-color: #eb613d; }
+  .user-kanban .pane.finished {
+    background-color: #94bd5e; }
+  .user-kanban .pane.canceled {
+    background-color: white; }
+  .user-kanban .pane.active {
+    background-color: #ffcc99; }
+  .user-kanban .pane.selected {
+    background-color: #ffff99; }
+  .user-kanban .pane.backlog {
+    background-color: #ccffff; }
+  .user-kanban .pane.incoming {
+    background-color: #99ccff; }
   .user-kanban .inner-pane {
     overflow: hidden;
     /* Equal height column hack */ }
@@ -239,24 +253,3 @@ div.icons .updated-note {
       border: none; }
   .user-kanban li.issue {
     cursor: auto; }
-
-.pane.testing {
-  background-color: #eb613d; }
-
-.pane.finished {
-  background-color: #94bd5e; }
-
-.pane.canceled {
-  background-color: white; }
-
-.pane.active {
-  background-color: #ffcc99; }
-
-.pane.selected {
-  background-color: #ffff99; }
-
-.pane.backlog {
-  background-color: #ccffff; }
-
-.pane.incoming {
-  background-color: #99ccff; }

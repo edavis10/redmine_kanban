@@ -137,6 +137,35 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
       /* end hack */
    }
    
+   .pane.testing {
+      background-color: $testing-pane-color;
+   }
+
+   .pane.finished {
+      background-color: $finished-pane-color;
+   }
+
+   .pane.canceled {
+      background-color: $canceled-pane-color;
+   }
+
+   .pane.active {
+      background-color: $active-pane-color;
+   }
+
+   .pane.selected {
+      background-color: $selected-pane-color;
+   }
+
+   .pane.backlog {
+      background-color: $backlog-pane-color;
+   }
+
+   .pane.incoming {
+      background-color: $incoming-pane-color;
+   }
+
+   
    .inner-pane {
       overflow: hidden; /* Equal height column hack */
 
@@ -148,31 +177,4 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
    li.issue {
       cursor: auto;
    }
-}
-.pane.testing {
-   background-color: $testing-pane-color;
-}
-
-.pane.finished {
-   background-color: $finished-pane-color;
-}
-
-.pane.canceled {
-   background-color: $canceled-pane-color;
-}
-
-.pane.active {
-   background-color: $active-pane-color;
-}
-
-.pane.selected {
-   background-color: $selected-pane-color;
-}
-
-.pane.backlog {
-   background-color: $backlog-pane-color;
-}
-
-.pane.incoming {
-   background-color: $incoming-pane-color;
 }
