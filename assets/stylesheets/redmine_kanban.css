@@ -76,7 +76,7 @@ ol#backlog-issues ol, ol#quick-issues ol {
 li.issue {
   cursor: move;
   border: 1px dashed #ccc;
-  margin-bottom: 5px;
+  margin: 3px 3px 5px 3px;
   background-color: #ffffdd; }
 
 li.issue .issue-details-body {

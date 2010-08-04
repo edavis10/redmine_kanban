@@ -54,7 +54,7 @@ div.pane ol li { padding: 0; }
 ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15px;}
 
 /* Issue rows */
-li.issue { cursor: move; border:1px dashed #ccc; margin-bottom:5px; background-color: $issue-background-color;}
+li.issue { cursor: move; border:1px dashed #ccc; margin:3px 3px 5px 3px; background-color: $issue-background-color;}
 li.issue .issue-details-body { padding: 3px 3px; font-size: smaller; }
 li.issue .issue-details-header {padding: 1px 3px; border-bottom:1px solid #ccc;}
 
