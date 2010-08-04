@@ -1,3 +1,4 @@
+/* My Kanban colors */
 #kanban {
   width: 100%; }
 
@@ -234,3 +235,24 @@ div.icons .updated-note {
   border-left-width: 2px;
   border-bottom-width: 2px;
   border-top-width: 2px; }
+
+.pane.testing {
+  background-color: #eb613d; }
+
+.pane.finished {
+  background-color: #94bd5e; }
+
+.pane.canceled {
+  background-color: white; }
+
+.pane.active {
+  background-color: #ffcc99; }
+
+.pane.selected {
+  background-color: #ffff99; }
+
+.pane.backlog {
+  background-color: #ccffff; }
+
+.pane.incoming {
+  background-color: #99ccff; }

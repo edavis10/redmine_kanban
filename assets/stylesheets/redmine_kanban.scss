@@ -4,6 +4,16 @@ $behind-schedule-color: #f66914;
 $overdue-color: #f00;
 $assigned-to-me-color: #dcf8df;
 
+/* My Kanban colors */
+$finished-pane-color: #94bd5e;
+$canceled-pane-color: #ffffff;
+$testing-pane-color: #eb613d;
+$active-pane-color: #ffcc99;
+$selected-pane-color: #ffff99;
+$backlog-pane-color: #ccffff;
+$incoming-pane-color: #99ccff;
+
+
 #kanban {width: 100%;}
 #unstaffed-requests { background-color: #F7F7FF; }
 #selected-requests { background-color: #F7F7FF; }
@@ -104,3 +114,31 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 .project-lane .pane { border-left: 1px solid #333333;}
 .project-lane .project-name { font-size: larger; }
 #new-requests { border-style: solid; border-color: #333333; border-right-width: 2px; border-left-width: 2px; border-bottom-width: 2px; border-top-width: 2px; }
+
+.pane.testing {
+   background-color: $testing-pane-color;
+}
+
+.pane.finished {
+   background-color: $finished-pane-color;
+}
+
+.pane.canceled {
+   background-color: $canceled-pane-color;
+}
+
+.pane.active {
+   background-color: $active-pane-color;
+}
+
+.pane.selected {
+   background-color: $selected-pane-color;
+}
+
+.pane.backlog {
+   background-color: $backlog-pane-color;
+}
+
+.pane.incoming {
+   background-color: $incoming-pane-color;
+}
