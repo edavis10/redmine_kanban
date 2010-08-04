@@ -202,9 +202,6 @@ div.icons .updated-note {
 .vertical-lane {
   padding: 0; }
 
-.kanban-headers {
-  border-top-width: 2px; }
-
 .kanban-header h3 {
   border: none;
   text-align: center;
