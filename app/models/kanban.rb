@@ -151,8 +151,15 @@ class Kanban
     if @user
       @users = [@user]
     else
-      role = Role.find_by_id(@settings["staff_role"].to_i)
-      @users = role.members.collect(&:user).uniq.compact.sort if role
+      role_id = @settings["staff_role"].to_i
+      if role_id
+        query_conditions = ARCondition.new
+        query_conditions.add ["#{MemberRole.table_name}.role_id = ?", role_id]
+        query_conditions.add "#{MemberRole.table_name}.member_id = #{Member.table_name}.id"
+        query_conditions.add "#{Member.table_name}.user_id = #{User.table_name}.id"
+        @users = User.all(:conditions => query_conditions.conditions,
+                          :include => [:members => [:project, :roles, :member_roles]])
+      end
       @users ||= []
       @users = move_current_user_to_front
       @users << UnknownUser.instance
