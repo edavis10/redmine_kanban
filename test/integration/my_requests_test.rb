@@ -74,7 +74,15 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select "h3", :text => "Incoming"
       end
     end
-    
+
+    should "show the user help content using the text formatting" do
+        login_as
+        visit_my_kanban_requests
+
+      assert_select '.user-help' do
+        assert_select 'strong', :text => 'This is user help'
+      end
+    end
 
     should "not allow showing another user's User Kanban page" do
       login_as

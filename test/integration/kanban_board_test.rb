@@ -35,6 +35,16 @@ class KanbanBoardTest < ActionController::IntegrationTest
       assert_select "#issue_#{issue_with_note.id}"
       assert_select "#issue_#{issue_with_note.id} .updated-note", :count => 1
     end
+
+    should "show the user help content using the text formatting" do
+      login_as 'user', 'password'
+      visit_kanban_board
+
+      assert_select '.user-help' do
+        assert_select 'strong', :text => 'This is user help'
+      end
+    end
+
   end
 
 end

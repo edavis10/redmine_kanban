@@ -46,7 +46,8 @@ Redmine::Plugin.register :redmine_kanban do
                'canceled' => {'status' => nil, 'limit' => 7}
              },
              'management_group' => nil,
-             'staff_role' => nil
+             'staff_role' => nil,
+             'user_help' => "_Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings._"
            })
   
   menu(:top_menu,

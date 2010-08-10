@@ -10,8 +10,7 @@
   <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
 </div>
 
-<p class="general-help"><%= l(:kanban_text_general_help) %></p>
-
+<%= render :partial => 'kanbans/user_help', :locals => {:kanban_settings => @settings } %>
 <%= render :partial => 'color_help' %>
 
 <div id="kanban">
