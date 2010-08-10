@@ -158,7 +158,7 @@ class Kanban
         query_conditions.add "#{MemberRole.table_name}.member_id = #{Member.table_name}.id"
         query_conditions.add "#{Member.table_name}.user_id = #{User.table_name}.id"
         @users = User.all(:conditions => query_conditions.conditions,
-                          :include => [:members => [:project, :roles, :member_roles]])
+                          :joins => "LEFT  JOIN members ON members.user_id = users.id LEFT  JOIN projects ON projects.id = members.project_id LEFT  JOIN member_roles ON (members.id = member_roles.member_id) LEFT  JOIN roles ON (roles.id = member_roles.role_id) LEFT  JOIN member_roles member_roles_members ON member_roles_members.member_id = members.id")
       end
       @users ||= []
       @users = move_current_user_to_front
