@@ -201,7 +201,7 @@ div.icons .updated-note {
 .project-lane .pane {
   border-left: 1px solid #333333; }
 .project-lane .project-name {
-  font-size: larger; }
+  padding: 0px 3px; }
 
 #new-requests {
   border-width: 2px;

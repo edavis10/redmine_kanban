@@ -134,7 +134,7 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
    div.project div.inner-pane h3 { text-align: center; }
 
    .pane { border-left: 1px solid #333333;}
-   .project-name { font-size: larger; }
+   .project-name { padding: 0px 3px; }
 }
 #new-requests { 
    @include standard-border;
