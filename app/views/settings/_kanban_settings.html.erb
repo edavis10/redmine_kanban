@@ -131,4 +131,9 @@ end
                                                     incoming_excluded_projects),
                    :multiple => true) %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_url)) %>
+    <%= text_field_tag('settings[panes][incoming][url]', @settings['panes']['incoming']['url']) %>
+  </p>
 </fieldset>

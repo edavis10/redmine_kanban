@@ -54,6 +54,28 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_select "a", :text => "Kanban Board"
     end
 
+    context "Incoming title" do
+      should "be linked to the configured url when the url is present" do
+        login_as
+        visit_my_kanban_requests
+
+        assert_select "h3 a[href=?]", Setting.plugin_redmine_kanban['panes']['incoming']['url'], :text => "Incoming"
+      end
+
+      should "not be linked if the url isn't present" do
+        panes = Setting.plugin_redmine_kanban['panes']
+        panes['incoming']['url'] = ''
+        reconfigure_plugin({'panes' => panes})
+        
+        login_as
+        visit_my_kanban_requests
+
+        assert_select "h3 a", :text => "Incoming", :count => 0
+        assert_select "h3", :text => "Incoming"
+      end
+    end
+    
+
     should "not allow showing another user's User Kanban page" do
       login_as
       visit_my_kanban_requests

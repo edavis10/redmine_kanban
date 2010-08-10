@@ -96,6 +96,7 @@ module KanbanTestHelper
         "limit"=>"5",
         "excluded_priorities"=> [incoming_hidden_priority],
         "excluded_projects"=> [incoming_hidden_project],  
+        "url" => "/project/incoming/issues/new"
       },
       "finished"=>{
         "status"=> @finished_status.id,
