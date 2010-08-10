@@ -5,8 +5,9 @@ require 'performance_test_help'
 #
 # 2010-08-10
 # * Pre run: 962ms
-# * Optimize get_users to use one query with include: 958ms
-# * Optimize get_users to use :joins instead of :include: 954ms
+# * Optimize Kanban#get_users to use one query with include: 958ms
+# * Optimize Kanban#get_users to use :joins instead of :include: 954ms
+# * Optimize Kanban#get_users to only select data from the users table: 941ms
 class KanbanBoardTest < ActionController::PerformanceTest
   def setup
     configure_plugin
