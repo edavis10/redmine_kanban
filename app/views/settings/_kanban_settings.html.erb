@@ -24,6 +24,12 @@ end
   <%= content_tag(:legend, l(:kanban_text_general_settings)) %>
 
   <p>
+    <%= content_tag(:label, l(:kanban_label_user_help)) %>
+    <%= text_area_tag('settings[user_help]', @settings['user_help'], :class => 'wiki-edit', :rows => 10) %>
+    <%= wikitoolbar_for 'settings_user_help' %>
+  </p>
+
+  <p>
     <%= content_tag(:label, l(:kanban_label_staff_role)) %>
     <%= select_tag("settings[staff_role]",
           content_tag(:option, '') +
@@ -130,5 +136,10 @@ end
                                                     :name,
                                                     incoming_excluded_projects),
                    :multiple => true) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_url)) %>
+    <%= text_field_tag('settings[panes][incoming][url]', @settings['panes']['incoming']['url']) %>
   </p>
 </fieldset>

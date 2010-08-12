@@ -162,6 +162,16 @@ module KanbansHelper
     @user == User.current
   end
 
+  def incoming_title
+    if Setting.plugin_redmine_kanban['panes'].present? &&
+        Setting.plugin_redmine_kanban['panes']['incoming'].present? &&
+        Setting.plugin_redmine_kanban['panes']['incoming']['url'].present?
+      link_to(l(:kanban_text_incoming), Setting.plugin_redmine_kanban['panes']['incoming']['url'])
+    else
+      l(:kanban_text_incoming)
+    end
+  end
+
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
 

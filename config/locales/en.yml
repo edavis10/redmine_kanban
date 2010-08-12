@@ -11,9 +11,9 @@ en:
   kanban_text_finished_requests: Finished Requests
   kanban_text_canceled_requests: Canceled Requests
   kanban_text_general_settings: General Settings
+  kanban_label_user_help: User Help Content
   kanban_text_pane_settings: Pane Settings
   kanban_text_pane_settings_description: "Select the Issue status you would like to associate with each pane.  The issues will be updated to these statuses when they are dragged and dropped."
-  kanban_text_general_help: "Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings."
   kanban_text_sync: "Sync"
   kanban_label_incoming_pane: Incoming
   kanban_label_backlog_pane: Backlog
@@ -45,6 +45,7 @@ en:
   kanban_text_workflow_settings: "Workflow settings"
   kanban_label_incoming_priority_change: "Incoming: Must change issue priority when"
   kanban_label_incoming_project_change: "Incoming: Must change issue project when"
+  kanban_label_incoming_url: "Incoming: Url to link the Incoming pane title to"
   kanban_text_workflow_settings_description: "Restrictions when issues are moved out of panes."
   text_my_kanban_requests_title: "My Kanban Requests"
   text_user_kanban_requests_title: "{{user}}'s Kanban Requests"

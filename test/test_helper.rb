@@ -68,6 +68,7 @@ module KanbanTestHelper
     incoming_hidden_project = (hidden = Project.find_by_name("Hidden")) ? hidden.id.to_s : nil
     
     Setting.plugin_redmine_kanban = {
+    'user_help' => "*This is user help*",
     "staff_role"=> make_kanban_role.id,
     "management_group"=> @management_group.id.to_s,  
     "panes"=>
@@ -96,6 +97,7 @@ module KanbanTestHelper
         "limit"=>"5",
         "excluded_priorities"=> [incoming_hidden_priority],
         "excluded_projects"=> [incoming_hidden_project],  
+        "url" => "/project/incoming/issues/new"
       },
       "finished"=>{
         "status"=> @finished_status.id,
@@ -320,6 +322,14 @@ module IntegrationTestHelper
       
     assert_response :success
     assert_equal "/kanban/my-requests", current_url
+  end
+
+  def visit_kanban_board
+    visit '/'
+    click_link "Kanban"
+      
+    assert_response :success
+    assert_equal "/kanban", current_url
   end
 
   # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
