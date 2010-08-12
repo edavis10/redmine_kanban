@@ -93,7 +93,20 @@ class MyRequestsTest < ActionController::IntegrationTest
       @another_project = Project.generate!
       @non_member_issue = Issue.generate_for_project!(@another_project, :author => @user, :status => @active_status)
 
-      
+      # Watched issues
+      @new_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
+      @testing_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
+      @active_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
+      @selected_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
+      @backlog_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
+      @finished_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
+      @canceled_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
+
+      [@new_watched_issue, @testing_watched_issue, @active_watched_issue, @selected_watched_issue, @backlog_watched_issue, @finished_watched_issue, @canceled_watched_issue].each do |issue|
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => issue.id, :user => @user)
+        assert issue.watched_by? @user
+      end
+
       login_as
       visit_my_kanban_requests
 
@@ -102,6 +115,7 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select "#incoming-issues-user-#{@user.id}.incoming-issues" do
           assert_select "li#issue_#{@new_issue1.id}", :count => 1
           assert_select "li#issue_#{@new_issue2.id}", :count => 1
+          assert_select "li#issue_#{@new_watched_issue.id}", :count => 1
         end
       end
       assert_select "li#issue_#{@different_author_new_issue.id}", :count => 0
@@ -112,6 +126,7 @@ class MyRequestsTest < ActionController::IntegrationTest
           assert_select "#testing-issues-user-#{@user.id}.testing-issues" do
             assert_select "li#issue_#{@testing_issue1.id}", :count => 1
             assert_select "li#issue_#{@testing_issue2.id}", :count => 1
+            assert_select "li#issue_#{@testing_watched_issue.id}", :count => 1
           end
         end
       end
@@ -123,6 +138,7 @@ class MyRequestsTest < ActionController::IntegrationTest
           assert_select "#active-issues-user-#{@user.id}.active-issues" do
             assert_select "li#issue_#{@active_issue1.id}", :count => 1
             assert_select "li#issue_#{@active_issue2.id}", :count => 1
+            assert_select "li#issue_#{@active_watched_issue.id}", :count => 1
             assert_select "li#issue_#{@non_member_issue.id}", :count => 1
           end
         end
@@ -134,6 +150,7 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select '.project-lane' do
           assert_select "#selected-issues-user-#{@user.id}.selected-issues" do
             assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+            assert_select "li#issue_#{@selected_watched_issue.id}", :count => 1
           end
         end
       end
@@ -144,6 +161,7 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select '.project-lane' do
           assert_select "#backlog-issues-user-#{@user.id}.backlog-issues" do
             assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+            assert_select "li#issue_#{@backlog_watched_issue.id}", :count => 1
           end
         end
       end
@@ -154,6 +172,7 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select '.project-lane' do
           assert_select "#finished-issues-user-#{@user.id}.finished-issues" do
             assert_select "li#issue_#{@finished_issue.id}", :count => 1
+            assert_select "li#issue_#{@finished_watched_issue.id}", :count => 1
           end
         end
       end
@@ -164,6 +183,7 @@ class MyRequestsTest < ActionController::IntegrationTest
         assert_select '.project-lane' do
           assert_select "#canceled-issues-user-#{@user.id}.canceled-issues" do
             assert_select "li#issue_#{@canceled_issue.id}", :count => 1
+            assert_select "li#issue_#{@canceled_watched_issue.id}", :count => 1
           end
         end
       end

@@ -3,18 +3,39 @@ class KanbanPane::FinishedPane < KanbanPane
     return [[]] if missing_settings('finished')
     for_option = options.delete(:for)
     user = options.delete(:user)
+    user_id = user ? user.id : nil
 
     status_id = settings['panes']['finished']['status']
     days = settings['panes']['finished']['limit'] || 7
 
-    conditions = ARCondition.new
-    conditions.add ["#{Issue.table_name}.status_id = ?", status_id]
-    conditions.add ["#{Issue.table_name}.updated_on > ?", days.to_f.days.ago]
-    conditions.add ["#{Issue.table_name}.author_id = ?", user] if for_option == :author && user.present?
+    conditions = ''
+    conditions << " #{Issue.table_name}.status_id = :status"
+    conditions << " AND #{Issue.table_name}.updated_on > :days"
 
-    issues = Issue.visible.all(:include => :assigned_to,
+    if user.present?
+      for_conditions = []
+      if for_option.include?(:author)
+        for_conditions << " #{Issue.table_name}.author_id = :user"
+      end
+
+      if for_option.include?(:watcher)
+        for_conditions << " #{Watcher.table_name}.user_id = :user"
+      end
+
+      if for_conditions.present?
+        conditions << " AND ("
+        conditions << for_conditions.join(" OR ")
+        conditions << " ) "
+      end
+    end
+    
+    issues = Issue.visible.all(:include => [:assigned_to, :watchers],
                                :order => "#{Issue.table_name}.updated_on DESC",
-                               :conditions => conditions.conditions)
+                               :conditions => [conditions, {
+                                                 :status => status_id,
+                                                 :days => days.to_f.days.ago,
+                                                 :user => user_id
+                                               }])
 
     return issues.group_by(&:assigned_to)
   end

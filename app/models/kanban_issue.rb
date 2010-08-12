@@ -54,14 +54,14 @@ class KanbanIssue < ActiveRecord::Base
 
   named_scope :find_active, lambda {
     {
-      :order => 'user_id ASC, position ASC',
+      :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
       :conditions => { :state => 'active'}
     }
   }
 
   named_scope :find_testing, lambda {
     {
-      :order => 'user_id ASC, position ASC',
+      :order => "#{KanbanIssue.table_name}.user_id ASC, position ASC",
       :conditions => { :state => 'testing'}
     }
   }
@@ -77,10 +77,6 @@ class KanbanIssue < ActiveRecord::Base
   }
 
   named_scope :authored, lambda {|user_id|
-    # Unknown users
-    if user_id && user_id <= 0
-      user_id = nil
-    end
     {
       :conditions => ["#{Issue.table_name}.author_id = ?", user_id],
       :include => :issue
@@ -95,6 +91,45 @@ class KanbanIssue < ActiveRecord::Base
       :include => :issue
     }
   }
+
+  def self.find_for(user=nil, for_options=[])
+    user_id = user.id if user
+    user_id = nil if user_id == 0 # Unknown user
+
+    for_conditions = []
+
+    for_options.each do |for_option|
+      case for_option
+      when :author
+        if user_id
+          for_conditions << "#{Issue.table_name}.author_id = :user"
+        else
+          for_conditions << "#{Issue.table_name}.author_id IS NULL"
+        end
+      when :assigned_to
+        if user_id
+          for_conditions << "#{KanbanIssue.table_name}.user_id = :user"
+        else
+          for_conditions << "#{KanbanIssue.table_name}.user_id IS NULL"
+        end
+      when :watcher
+        if user_id
+          for_conditions << "#{Watcher.table_name}.user_id = :user"
+        else
+          for_conditions << "#{Watcher.table_name}.user_id IS NULL"
+        end
+      end
+    end
+
+    if for_conditions.present?
+      conditions = "(" + for_conditions.join(" OR ") + ")"
+    else
+      conditions = ''
+    end
+
+    all(:conditions => [conditions, {:user => user_id}],
+        :include => [:issue => :watchers])
+  end
   
   def remove_user
     self.user = nil

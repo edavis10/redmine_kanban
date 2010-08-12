@@ -15,11 +15,13 @@ class Kanban
   # How is this Kanban built:
   # * :author - by who created the issue
   # * :assigned_to - by who is assigned the issue
-  attr_reader :for
+  # * :watcher - by who is watching the issue
+  attr_accessor :for
 
   def initialize(attributes={})
     @user = attributes[:user]
-    @for = @user.present? ? :author : :assigned_to
+    @for = attributes[:for].to_a
+    @for = [:assigned_to] unless @for.present?
     @incoming_pane = KanbanPane::IncomingPane.new
     @backlog_pane = KanbanPane::BacklogPane.new
     @quick_pane = KanbanPane::QuickPane.new

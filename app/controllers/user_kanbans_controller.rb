@@ -15,7 +15,7 @@ class UserKanbansController < ApplicationController
       render_403
     end
     
-    @kanban = Kanban.new(:user => @user)
+    @kanban = Kanban.new(:user => @user, :for => [:author, :watcher])
   end
 
   def create
