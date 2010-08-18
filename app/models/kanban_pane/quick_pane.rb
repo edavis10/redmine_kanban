@@ -1,6 +1,6 @@
 class KanbanPane::QuickPane < KanbanPane
   def get_issues(options={})
-    return [[]] if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
+    return {} if missing_settings('quick-tasks', :skip_status => true) || missing_settings('backlog')
 
     conditions = ARCondition.new
 

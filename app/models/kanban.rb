@@ -193,14 +193,14 @@ class Kanban
     end
 
     projects += backlog_issues.collect do |priority, issues|
-      issues.collect(&:project)
+      issues.collect(&:project) if issues
     end
     
     projects.flatten.uniq
   end
   
   def quick_issue_ids
-    if quick_issues.present?
+    if quick_issues.present? && quick_issues.flatten.present?
       quick_issues.collect {|ary| ary[1] }.flatten.collect(&:id)
     else
       []

@@ -1,6 +1,6 @@
 class KanbanPane::BacklogPane < KanbanPane
   def get_issues(options={})
-    return [[]] if missing_settings('backlog')
+    return {} if missing_settings('backlog')
 
     for_option = options.delete(:for)
     user = options.delete(:user)

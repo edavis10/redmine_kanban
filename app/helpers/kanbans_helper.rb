@@ -181,11 +181,11 @@ module KanbansHelper
     end
 
     def issues(issues)
-      if issues.empty?
+      if issues.empty? || issues.flatten.empty?
         render :partial => 'kanbans/empty_issue'
       else
         render(:partial => 'kanbans/issue',
-               :collection => issues,
+               :collection => issues.flatten,
                :locals => { :limit => Setting['plugin_redmine_kanban']["panes"][@column.to_s]["limit"].to_i })
       end
     end
