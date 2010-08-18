@@ -1,6 +1,6 @@
 class KanbanPane::FinishedPane < KanbanPane
   def get_issues(options={})
-    return [[]] if missing_settings('finished')
+    return {} if missing_settings('finished')
     for_option = options.delete(:for)
     user = options.delete(:user)
     user_id = user ? user.id : nil

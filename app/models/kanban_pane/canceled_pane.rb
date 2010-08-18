@@ -1,6 +1,6 @@
 class KanbanPane::CanceledPane < KanbanPane
   def get_issues(options={})
-    return [[]] if missing_settings('canceled')
+    return {} if missing_settings('canceled')
     for_option = options.delete(:for)
     user = options.delete(:user)
     user_id = user ? user.id : nil
