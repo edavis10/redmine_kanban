@@ -37,7 +37,7 @@
   </div>
 
   <div class="project-lane">
-    <% user_kanban_div_helper(:column => :incoming, :user => @user) do |div| %>
+    <% user_kanban_div_helper(:project_id => 0, :column => :incoming, :user => @user) do |div| %>
       <%= div.issues(@kanban.incoming_issues_for) %>
     <% end %>
   </div>
@@ -63,7 +63,7 @@
 
       <div class="inner-pane">
         <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
-        <% user_kanban_div_helper(:column => :finished, :user => @user) do |div| %>
+        <% user_kanban_div_helper(:project_id => project.id, :column => :finished, :user => @user) do |div| %>
           <%= div.issues(@kanban.finished_issues_for(:user => @user, :project => project)) %>
         <% end %>
       </div>
@@ -72,7 +72,7 @@
 
       <div class="inner-pane">
         <%= content_tag(:h3, l(:kanban_text_canceled_requests)) %>
-        <% user_kanban_div_helper(:column => :canceled, :user => @user) do |div| %>
+        <% user_kanban_div_helper(:project_id => project.id, :column => :canceled, :user => @user) do |div| %>
           <%= div.issues(@kanban.canceled_issues_for(:user => @user, :project => project)) %>
         <% end %>
       </div>
@@ -80,19 +80,19 @@
   <div style="clear:left;"> </div>
     </div>
 
-    <% user_kanban_div_helper(:column => :testing, :user => @user) do |div| %>
+    <% user_kanban_div_helper(:project_id => project.id, :column => :testing, :user => @user) do |div| %>
         <%= div.issues(@kanban.testing_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
-    <% user_kanban_div_helper(:column => :active, :user => @user) do |div| %>
+    <% user_kanban_div_helper(:project_id => project.id, :column => :active, :user => @user) do |div| %>
         <%= div.issues(@kanban.active_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
-    <% user_kanban_div_helper(:column => :selected, :user => @user) do |div| %>
+    <% user_kanban_div_helper(:project_id => project.id, :column => :selected, :user => @user) do |div| %>
         <%= div.issues(@kanban.selected_issues_for(:user => @user, :project => project)) %>
     <% end %>
 
-    <% user_kanban_div_helper(:column => :backlog, :user => @user) do |div| %>
+    <% user_kanban_div_helper(:project_id => project.id, :column => :backlog, :user => @user) do |div| %>
       <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
     <% end %>
     <div style="clear:left;"> </div>

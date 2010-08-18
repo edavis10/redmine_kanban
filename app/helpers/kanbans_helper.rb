@@ -182,6 +182,7 @@ module KanbansHelper
     def initialize(options={})
       @column = options[:column]
       @user = options[:user]
+      @project_id = options[:project_id]
     end
 
     def issues(issues)
@@ -198,8 +199,8 @@ module KanbansHelper
       content_tag(:div,
                   content_tag(:ol,
                               body,
-                              :id => "#{@column}-issues-user-#{h(@user.id)}", :class => "#{@column}-issues"),
-                  :id => "#{@column}-#{h(@user.id)}", :class => "pane equal-column #{@column} user-#{h(@user.id)}", :style => "width: #{ helper.my_kanban_column_width(@column)}%")
+                              :id => "#{@column}-issues-user-#{h(@user.id)}-project-#{h(@project_id)}", :class => "#{@column}-issues"),
+                  :id => "#{@column}-#{h(@user.id)}-project-#{h(@project_id)}", :class => "pane equal-column #{@column} user-#{h(@user.id)}", :style => "width: #{ helper.my_kanban_column_width(@column)}%")
     end
     
   end
