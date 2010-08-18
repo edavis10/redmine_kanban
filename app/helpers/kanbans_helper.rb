@@ -3,6 +3,10 @@ module KanbansHelper
     name.gsub(' ','-').downcase
   end
 
+  def jquery_dialog_div(title=:field_issue)
+    "<div id='dialog-window' title='#{ l(title) }'></div>"
+  end
+
   def render_pane_to_js(pane, user=nil)
     if Kanban.valid_panes.include?(pane)
       return render_to_string(:partial => pane, :locals => {:user => user })
