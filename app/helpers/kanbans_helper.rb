@@ -185,7 +185,7 @@ module KanbansHelper
     end
 
     def issues(issues)
-      if issues.empty? || issues.flatten.empty?
+      if issues.compact.empty? || issues.flatten.compact.empty?
         render :partial => 'kanbans/empty_issue'
       else
         render(:partial => 'kanbans/issue',
