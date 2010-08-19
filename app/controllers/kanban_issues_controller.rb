@@ -4,8 +4,23 @@ class KanbanIssuesController < ApplicationController
   before_filter :require_js_format
   before_filter :authorize
   before_filter :setup_settings
-  before_filter :find_issue
-  before_filter :require_valid_from_pane
+  before_filter :find_issue, :except => [:new]
+  before_filter :require_valid_from_pane, :except => [:new]
+
+  def new
+    @issue = Issue.new
+     @allowed_projects = User.current.projects.all(:conditions =>
+                                                   Project.allowed_to_condition(User.current, :add_issues))
+    @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
+    @project ||= @allowed_projects.first
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current, true)
+    @priorities = IssuePriority.all
+
+    respond_to do |format|
+      format.html { render :text => '', :status => :not_acceptable }
+      format.js { render :layout => false }
+    end
+  end
 
   def edit
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
