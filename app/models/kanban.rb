@@ -166,6 +166,7 @@ class Kanban
       @users ||= []
       @users = move_current_user_to_front
       @users << UnknownUser.instance
+      @users.uniq!
       @users
     end
   end
