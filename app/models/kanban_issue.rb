@@ -150,9 +150,9 @@ class KanbanIssue < ActiveRecord::Base
       end
 
       if ['active','testing'].include? kanban_issue.state
-        # TODO: Possbile to create KanbanIssue with a null user if the
-        # Issue has no user assigned and is moved to a staffed pane manually
-        kanban_issue.user = issue.assigned_to unless issue.assigned_to.nil?
+        # Copy the assignment over from the user.  nil assignments would become
+        # assigned into the Unknown User
+        kanban_issue.user = issue.assigned_to
       end
       
       return kanban_issue.save
