@@ -172,6 +172,11 @@ module KanbansHelper
     end
   end
 
+  def viewed_user
+    return @user if @user.present?
+    return User.current
+  end
+
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
 
