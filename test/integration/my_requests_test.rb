@@ -142,7 +142,7 @@ class MyRequestsTest < ActionController::IntegrationTest
 
       # New lane
       assert_select '#new-requests' do
-        assert_select "#incoming-issues-user-#{@user.id}.incoming-issues" do
+        assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
           assert_select "li#issue_#{@new_issue1.id}", :count => 1
           assert_select "li#issue_#{@new_issue2.id}", :count => 1
           assert_select "li#issue_#{@new_watched_issue.id}", :count => 1
@@ -153,7 +153,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Testing lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#testing-issues-user-#{@user.id}.testing-issues" do
+          assert_select "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
             assert_select "li#issue_#{@testing_issue1.id}", :count => 1
             assert_select "li#issue_#{@testing_issue2.id}", :count => 1
             assert_select "li#issue_#{@testing_watched_issue.id}", :count => 1
@@ -165,20 +165,24 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Active lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#active-issues-user-#{@user.id}.active-issues" do
+          assert_select "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
             assert_select "li#issue_#{@active_issue1.id}", :count => 1
             assert_select "li#issue_#{@active_issue2.id}", :count => 1
             assert_select "li#issue_#{@active_watched_issue.id}", :count => 1
-            assert_select "li#issue_#{@non_member_issue.id}", :count => 1
           end
         end
       end
       assert_select "li#issue_#{@different_author_active_issue.id}", :count => 0
 
+      # Show an issue on a project that the current user isn't a member of but the current user created the issue (e.g. issue created and then moved)
+      assert_select "#active-issues-user-#{@user.id}-project-#{@another_project.id}.active-issues" do
+        assert_select "li#issue_#{@non_member_issue.id}", :count => 1
+      end
+      
       # Selected lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#selected-issues-user-#{@user.id}.selected-issues" do
+          assert_select "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
             assert_select "li#issue_#{@selected_issue1.id}", :count => 1
             assert_select "li#issue_#{@selected_watched_issue.id}", :count => 1
           end
@@ -189,7 +193,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Backlog lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#backlog-issues-user-#{@user.id}.backlog-issues" do
+          assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
             assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
             assert_select "li#issue_#{@backlog_watched_issue.id}", :count => 1
           end
@@ -200,7 +204,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Finished lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#finished-issues-user-#{@user.id}.finished-issues" do
+          assert_select "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
             assert_select "li#issue_#{@finished_issue.id}", :count => 1
             assert_select "li#issue_#{@finished_watched_issue.id}", :count => 1
           end
@@ -211,7 +215,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Canceled lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#canceled-issues-user-#{@user.id}.canceled-issues" do
+          assert_select "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
             assert_select "li#issue_#{@canceled_issue.id}", :count => 1
             assert_select "li#issue_#{@canceled_watched_issue.id}", :count => 1
           end
