@@ -153,6 +153,9 @@ div.icons .updated-note {
 .icon-info {
   background-image: url(../images/information.png); }
 
+#user_switch {
+  padding-left: 20px; }
+
 /* Popup dialog */
 .short-scroll {
   max-height: 200px;
