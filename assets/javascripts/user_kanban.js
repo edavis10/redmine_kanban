@@ -40,7 +40,7 @@ function registerNewIssueCallbacks() {
     jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
       data: jQuery('#issue-form').serialize(),
       success: function(response) {
-        var another = confirm("Issue created. Create another?");
+        var another = confirm(i18n.kanban_text_notice_issue_created_and_continue);
         if (another) {
           jQuery('#issue-form')[0].reset();
         } else {
@@ -48,7 +48,7 @@ function registerNewIssueCallbacks() {
         }
       },
       error: function(response) {
-        jQuery('#issue-form-errors').html('Error saving issue.').show();
+        jQuery('#issue-form-errors').html(i18n.kanban_text_error_saving_issue).show();
       }
     });
 

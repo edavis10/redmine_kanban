@@ -7,6 +7,8 @@ class KanbanIssuesController < ApplicationController
   before_filter :find_issue, :except => [:new]
   before_filter :require_valid_from_pane, :except => [:new]
 
+  helper :kanbans
+  
   def new
     @issue = Issue.new(:status => IssueStatus.default)
      @allowed_projects = User.current.projects.all(:conditions =>
