@@ -50,9 +50,9 @@ module KanbanTestHelper
   end
 
   def make_kanban_role
-    role = Role.find_by_name('KanbanRole')
-    role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues]) if role.nil?
-    role
+    @kanban_role = Role.find_by_name('KanbanRole')
+    @kanban_role = Role.generate!(:name => 'KanbanRole', :permissions => [:view_issues]) if @kanban_role.nil?
+    @kanban_role
   end
 
   def make_management_group

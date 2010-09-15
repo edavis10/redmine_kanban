@@ -398,6 +398,21 @@ class KanbanTest < ActiveSupport::TestCase
 
         assert_equal 5, @kanban.users.length # +1 Unknown
       end
+
+      should "only include active users" do
+        shared_setup
+        configure_plugin
+        setup_kanban_issues
+        @registered_user = User.generate!(:status => User::STATUS_REGISTERED)
+        @locked_user = User.generate!(:status => User::STATUS_LOCKED)
+        Member.generate!({:principal => @registered_user, :project => @public_project, :roles => [@kanban_role]})
+        Member.generate!({:principal => @locked_user, :project => @public_project, :roles => [@kanban_role]})
+
+        @kanban = Kanban.new
+
+        assert !@kanban.users.include?(@registered_user)
+        assert !@kanban.users.include?(@locked_user)
+      end
     end
 
     context "with user set" do

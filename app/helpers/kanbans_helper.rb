@@ -184,6 +184,11 @@ module KanbansHelper
 
     javascript_tag("var i18n = #{strings.to_json}")
   end
+  
+  def viewed_user
+    return @user if @user.present?
+    return User.current
+  end
 
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
