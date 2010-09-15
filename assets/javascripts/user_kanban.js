@@ -40,7 +40,6 @@ function registerNewIssueCallbacks() {
     jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
       data: jQuery('#issue-form').serialize(),
       success: function(response) {
-        issue = jQuery.secureEvalJSON(response);
         var another = confirm("Issue created. Create another?");
         if (another) {
           jQuery('#issue-form')[0].reset();
