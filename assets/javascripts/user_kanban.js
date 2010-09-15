@@ -37,7 +37,6 @@ function registerNewIssueCallbacks() {
   });
 
   jQuery('#issue-form').submit(function(event) {
-    event.preventDefault();
     jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
       data: jQuery('#issue-form').serialize(),
       success: function(response) {
@@ -51,7 +50,6 @@ function registerNewIssueCallbacks() {
       },
       error: function(response) {
         jQuery('#issue-form-errors').html('Error saving issue.').show();
-        return false;
       }
     });
 
