@@ -5,7 +5,7 @@
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create'},
                              :html => {:multipart => true, :id => 'issue-form'} do |f| %>
     <%= error_messages_for 'issue' %>
-    <p><label for="issue_project_id"><%=l(:field_project)%>:</label>
+    <p>
     <%= f.select :project_id,
                project_tree_options_for_select(@allowed_projects, :selected => @project),
                :onchange => remote_function(:url => { :action => 'new', :format => 'js' },

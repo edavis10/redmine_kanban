@@ -10,6 +10,8 @@ jQuery(function($) {
   $('#dialog-window').
     dialog({
       autoOpen: false,
+      minWidth: 400,
+      width: 800,
       buttons: {
         "Cancel": function() {
           $(this).dialog("close");
