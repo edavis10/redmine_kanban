@@ -23,7 +23,7 @@ jQuery(function($) {
   $('#new-issue-dialog').click(function() {
     $('#dialog-window').
       html(''). // Gets cached
-      html('<h2>Test</h2>').
+      load('/kanban_issues/new.js').
       dialog('open');
   });
 });

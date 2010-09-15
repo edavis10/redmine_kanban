@@ -8,11 +8,12 @@ class KanbanIssuesController < ApplicationController
   before_filter :require_valid_from_pane, :except => [:new]
 
   def new
-    @issue = Issue.new
+    @issue = Issue.new(:status => IssueStatus.default)
      @allowed_projects = User.current.projects.all(:conditions =>
                                                    Project.allowed_to_condition(User.current, :add_issues))
     @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
     @project ||= @allowed_projects.first
+    @issue.project ||= @project
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current, true)
     @priorities = IssuePriority.all
 

@@ -38,6 +38,7 @@ class NewIssueTest < ActionController::IntegrationTest
   # Have to simulate JS requests by hitting the same endpoint as jQuery
   context "Loading the new issue form" do
     setup do
+      IssueStatus.generate!(:is_default => true)
       @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
       @project = Project.generate!
       @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :add_issues])
@@ -51,10 +52,19 @@ class NewIssueTest < ActionController::IntegrationTest
       get '/kanban_issues/new.js'
 
       assert_response :success
-      assert_select "form#issue-form"
+      # Can't use assert_select here because of the content_type
+      assert_match /issue-form/, response.body
     end
     
-    should 'have a select field to select the project'
+    should 'have a select field to select the project' do
+      get '/kanban_issues/new.js'
+
+      assert_response :success
+      # Can't use assert_select here because of the content_type
+      assert_match /select/, response.body
+      assert_match /#{@project.name}/, response.body
+
+    end
   end
 
   
