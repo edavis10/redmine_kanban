@@ -5,13 +5,7 @@
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create'},
                              :html => {:multipart => true, :id => 'issue-form'} do |f| %>
     <%= error_messages_for 'issue' %>
-    <p>
-    <%= f.select :project_id,
-               project_tree_options_for_select(@allowed_projects, :selected => @project),
-               :onchange => remote_function(:url => { :action => 'new', :format => 'js' },
-                                            :method => :get,
-                                            :update => 'new-issue-wrapper',
-                                            :with => "Form.serialize('issue-form')") %></p>
+    <p><%= f.select :project_id, project_tree_options_for_select(@allowed_projects, :selected => @project) %></p>      
 
     <div class="box">
       <%= render :partial => 'issues/form', :locals => {:f => f} %>
@@ -25,4 +19,8 @@
 <script type="text/javascript">
 /* "Patch" the form to work as a dialog */
 jQuery('#attachments_fields').closest('p').hide();
+
+jQuery('#issue_project_id').change(function() {
+  jQuery('#dialog-window').load('/kanban_issues/new.js', jQuery('#issue-form').serialize())
+});
 </script>
