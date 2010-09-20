@@ -9,6 +9,7 @@
 </h2>
 
 <div class="contextual">
+  <%= call_hook(:view_user_kanbans_show_contextual_top, :user => @user, :kanban => @kanban) %>
   <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
   <% if User.current.allowed_to?(:view_kanban, nil, :global => true) %>
   <%= link_to(l(:text_kanban_board), kanban_url, :class => 'icon icon-stats') %>
@@ -22,6 +23,7 @@
       <%= collection_select(:user, :id, User.active.sort, :id, :name, :include_blank => true) %>
     <% end %>
   <% end %>
+  <%= call_hook(:view_user_kanbans_show_contextual_bottom, :user => @user, :kanban => @kanban) %>
 </div>
 
 <div class="clear"></div>
