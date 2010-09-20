@@ -166,11 +166,23 @@ module KanbansHelper
     @user == User.current
   end
 
+  # Renders the title for the "Incoming" project.  It can be linked as:
+  # * New Issue jQuery dialog (user has permission to add issues)
+  # * Link to the url configured in the plugin (plugin is configured with a url)
+  # * No link at all
   def incoming_title
     if Setting.plugin_redmine_kanban['panes'].present? &&
         Setting.plugin_redmine_kanban['panes']['incoming'].present? &&
         Setting.plugin_redmine_kanban['panes']['incoming']['url'].present?
-      link_to(l(:kanban_text_incoming), Setting.plugin_redmine_kanban['panes']['incoming']['url'])
+      href_url = Setting.plugin_redmine_kanban['panes']['incoming']['url']
+    else
+      href_url = ''
+    end
+    
+    if User.current.allowed_to?(:add_issues, nil, :global => true)
+       link_to(l(:kanban_text_incoming), href_url, :class => 'new-issue-dialog')
+    elsif href_url.present?
+      link_to(l(:kanban_text_incoming), href_url)
     else
       l(:kanban_text_incoming)
     end

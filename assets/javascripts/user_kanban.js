@@ -19,11 +19,13 @@ jQuery(function($) {
       }});
 
 
-  $('#new-issue-dialog').click(function() {
+  $('.new-issue-dialog').click(function() {
     $('#dialog-window').
       html(''). // Gets cached
       load('/kanban_issues/new.js').
       dialog('open');
+
+    return false;
   });
 });
 
