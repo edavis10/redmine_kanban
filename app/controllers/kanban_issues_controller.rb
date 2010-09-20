@@ -8,6 +8,8 @@ class KanbanIssuesController < ApplicationController
   before_filter :require_valid_from_pane, :except => [:new]
 
   helper :kanbans
+  helper :issues
+  helper :watchers
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
