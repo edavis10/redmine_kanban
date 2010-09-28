@@ -188,7 +188,7 @@ module KanbansHelper
     end
   end
 
-  def export_i18_for_javascript
+  def export_i18n_for_javascript
     strings = {
       'kanban_text_error_saving_issue' => l(:kanban_text_error_saving_issue),
       'kanban_text_notice_issue_created_and_continue' => l(:kanban_text_notice_issue_created_and_continue)
