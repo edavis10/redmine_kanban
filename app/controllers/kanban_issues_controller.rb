@@ -10,6 +10,7 @@ class KanbanIssuesController < ApplicationController
   helper :kanbans
   helper :issues
   helper :watchers
+  helper :projects
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
