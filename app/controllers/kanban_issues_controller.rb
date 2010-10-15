@@ -14,6 +14,7 @@ class KanbanIssuesController < ApplicationController
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
+    @issue.author_login = User.current.login if @issue.respond_to?(:author_login)
      @allowed_projects = User.current.projects.all(:conditions =>
                                                    Project.allowed_to_condition(User.current, :add_issues))
     @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
