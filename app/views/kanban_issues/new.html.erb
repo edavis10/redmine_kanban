@@ -22,4 +22,10 @@ hideAttachmentsForm();
 registerNewIssueCallbacks();
 </script>
 
+<style type="text/css">
+/* Remove some margin for recent issues in the popup only */
+.tabular .recent-issues h3 { margin-left: 10px; }
+.tabular .recent-issues div.recent-issue { margin-left: 10px; }
+</style>
+
 <%= export_i18n_for_javascript %>
