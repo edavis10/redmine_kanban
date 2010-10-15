@@ -38,6 +38,10 @@ function registerNewIssueCallbacks() {
     jQuery('#dialog-window').load('/kanban_issues/new.js', jQuery('#issue-form').serialize())
   });
 
+  jQuery('#issue_tracker_id').change(function() {
+    jQuery('#dialog-window').load('/kanban_issues/new.js', jQuery('#issue-form').serialize())
+  });
+
   jQuery('#issue-form').submit(function(event) {
     jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
       data: jQuery('#issue-form').serialize(),
