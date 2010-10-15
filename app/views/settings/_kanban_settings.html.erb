@@ -43,6 +43,13 @@ end
           options_from_collection_for_select(Group.all, :id, :lastname, @settings['management_group'].to_i)) %>
     <%= content_tag(:span, l(:kanban_text_management_group_help)) %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_project_level)) %>
+    <%= text_field_tag("settings[project_level]", @settings['project_level']) %>
+    <br />
+    <%= content_tag(:span, l(:kanban_text_project_level_help)) %>
+  </p>
 </fieldset>
 
 <fieldset>
