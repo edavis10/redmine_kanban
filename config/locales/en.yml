@@ -54,5 +54,5 @@ en:
   kanban_label_management_group: "Management Group"
   kanban_text_management_group_help: "Group that can manage other user's Kanbans. Used on the My Kanban Requests page."
   kanban_text_error_saving_issue: "Error saving issue"
-  kanban_text_notice_issue_created_and_continue: "Issue created. Create another?"
+  kanban_text_issue_created_reload_to_see: "Issue successfully created. Reload to see the new issues."
   kanban_text_notice_reload: "This data is out of date. Reload to see the latest data."

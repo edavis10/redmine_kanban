@@ -46,14 +46,8 @@ function registerNewIssueCallbacks() {
     jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
       data: jQuery('#issue-form').serialize(),
       success: function(response) {
-        jQuery('.flash.warning').html(i18n.kanban_text_notice_reload).show();
-
-        var another = confirm(i18n.kanban_text_notice_issue_created_and_continue);
-        if (another) {
-          jQuery('#issue-form')[0].reset();
-        } else {
-          jQuery('#dialog-window').dialog("close");
-        }
+        jQuery('.flash.notice').html(i18n.kanban_text_issue_created_reload_to_see).show();
+        jQuery('#dialog-window').dialog("close");
       },
       error: function(response) {
         jQuery('#issue-form-errors').html(i18n.kanban_text_error_saving_issue).show();
