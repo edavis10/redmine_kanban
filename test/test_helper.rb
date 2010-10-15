@@ -126,10 +126,43 @@ module KanbanTestHelper
 
     make_users
     
-    @high_priority = IssuePriority.generate!(:name => "High", :type => 'IssuePriority') if IssuePriority.find_by_name("High").nil?
-    @medium_priority = IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority') if IssuePriority.find_by_name("Medium").nil?
-    @low_priority = IssuePriority.generate!(:name => "Low", :type => 'IssuePriority') if IssuePriority.find_by_name("Low").nil?
-    @priority_hidden_from_incoming = IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority') if IssuePriority.find_by_name("Hidden").nil?
+    high_priority
+    medium_priority
+    low_priority
+    hidden_priority
+  end
+
+  def high_priority
+    unless @high_priority
+      @high_priority = IssuePriority.find_by_name("High")
+      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority')
+    end
+    @high_priority
+  end
+
+
+  def medium_priority
+    unless @medium_priority
+      @medium_priority = IssuePriority.find_by_name("Medium")
+      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority')
+    end
+    @medium_priority
+  end
+
+  def low_priority
+    unless @low_priority
+      @low_priority = IssuePriority.find_by_name("Low")
+      @low_priority ||= IssuePriority.generate!(:name => "Low", :type => 'IssuePriority')
+    end
+    @low_priority
+  end
+
+  def hidden_priority
+    unless @priority_hidden_from_incoming
+      @priority_hidden_from_incoming = IssuePriority.find_by_name("Hidden")
+      @priority_hidden_from_incoming ||= IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority')
+    end
+    @priority_hidden_from_incoming
 
   end
 
@@ -163,7 +196,7 @@ module KanbanTestHelper
     4.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @high_priority,
+                 :priority => high_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
@@ -171,7 +204,7 @@ module KanbanTestHelper
     1.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @medium_priority,
+                 :priority => medium_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
@@ -179,7 +212,7 @@ module KanbanTestHelper
     2.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @low_priority,
+                 :priority => low_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => nil)
     end
@@ -191,7 +224,7 @@ module KanbanTestHelper
     5.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @high_priority,
+                 :priority => high_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
@@ -199,7 +232,7 @@ module KanbanTestHelper
     7.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @medium_priority,
+                 :priority => medium_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
@@ -207,7 +240,7 @@ module KanbanTestHelper
     5.times do
       Issue.generate!(:tracker => @public_tracker,
                  :project => @public_project,
-                 :priority => @low_priority,
+                 :priority => low_priority,
                  :status => @unstaffed_status,
                  :estimated_hours => 5)
     end
