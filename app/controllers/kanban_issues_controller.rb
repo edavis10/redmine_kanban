@@ -11,6 +11,7 @@ class KanbanIssuesController < ApplicationController
   helper :issues
   helper :watchers
   helper :projects
+  helper :custom_fields
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
@@ -20,6 +21,8 @@ class KanbanIssuesController < ApplicationController
     @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
     @project ||= @allowed_projects.first
     @issue.project ||= @project
+    # Tracker must be set before custom field values
+    @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first)
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current, true)
     @priorities = IssuePriority.all
 
