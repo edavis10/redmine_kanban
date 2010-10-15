@@ -166,6 +166,11 @@ class KanbanIssue < ActiveRecord::Base
     self.project == project
   end
 
+  # Is for_project a descendant of this record's project?
+  def for_project_descendant?(for_project)
+    self.project.is_descendant_of?(for_project)
+  end
+
   private
   def self.configured_statuses
     valid_statuses = []

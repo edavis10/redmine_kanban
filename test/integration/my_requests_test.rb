@@ -223,15 +223,109 @@ class MyRequestsTest < ActionController::IntegrationTest
       end
       assert_select "li#issue_#{@different_author_canceled_issue.id}", :count => 0
     end
+
+    should "group issues under the parent project with a project_level of 1" do
+      configure_plugin({'project_level' => '1'})
+      
+      @subproject = Project.generate!
+      assert @subproject.set_parent!(@project)
+      assert_equal @project, @subproject.parent
+      @project.reload
+      @subproject.reload
+      Member.generate!({:principal => @user, :project => @subproject, :roles => [@role]})
+      
+      @new_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @new_status)
+      @testing_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @testing_status)
+      @active_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @active_status)
+      @selected_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @selected_status)
+      @backlog_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
+      @finished_issue = Issue.generate_for_project!(@subproject, :author => @user, :status => @finished_status)
+      @canceled_issue = Issue.generate_for_project!(@subproject, :author => @user, :status => @canceled_status)
+
+      login_as
+      visit_my_kanban_requests
+
+      # Show parent project
+      assert_select '#kanban' do
+        assert_select '.project-lane h2.project-name', :text => /#{@project.name}/
+      end
+      
+      # Don't show subproject below limit
+      assert_select '#kanban' do
+        assert_select '.project-lane h2.project-name', :text => /#{@subproject.name}/, :count => 0
+      end
+          
+      # New lane
+      assert_select '#new-requests' do
+        assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
+          assert_select "li#issue_#{@new_issue1.id}", :count => 1
+        end
+      end
+
+      # Testing lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
+            assert_select "li#issue_#{@testing_issue1.id}", :count => 1
+          end
+        end
+      end
+      
+      # Active lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
+            assert_select "li#issue_#{@active_issue1.id}", :count => 1
+          end
+        end
+      end
+
+      # Selected lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
+            assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+          end
+        end
+      end
+
+      # Backlog lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
+            assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+          end
+        end
+      end
+
+      # Finished lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
+            assert_select "li#issue_#{@finished_issue.id}", :count => 1
+          end
+        end
+      end
+
+      # Canceled lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
+            assert_select "li#issue_#{@canceled_issue.id}", :count => 1
+          end
+        end
+      end
+
+    end
     
-    should "group each horizontal lane by project when there is an issue for it" do
+    should "group each horizontal lane by project" do
       login_as
       Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
       visit_my_kanban_requests
 
       assert_select '#kanban' do
         assert_select 'div.project-lane' do
-          assert_select '.project-name', :text => /#{@public_project.reload.name}/, :count => 0 # No issue
+          assert_select '.project-name', :text => /#{@public_project.reload.name}/
           assert_select '.project-name', :text => /#{@project.reload.name}/
         end
       end

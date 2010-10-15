@@ -100,7 +100,7 @@ class Kanban
       end
 
       issues = all_kanban_issues.collect {|kanban_issue|
-        if kanban_issue.for_project?(project)
+        if kanban_issue.for_project?(project) || (roll_up_projects? && kanban_issue.for_project_descendant?(project))
           kanban_issue.issue
         end
       }
@@ -115,7 +115,14 @@ class Kanban
     
     if backlog_issues.present?
       issues = backlog_issues.collect {|priority, issues|
-        issues.select {|issue| issue.project_id == project.id }
+        issues.select {|issue|
+          if roll_up_projects?
+            issue.project_id == project.id || issue.project.is_descendant_of?(project)
+          else
+            issue.project_id == project.id
+          end
+
+        }
       }.flatten
     end
     issues ||= []
@@ -132,7 +139,11 @@ class Kanban
 
     # Organized by {assigned_user => [issues]}
     issues = canceled_issues.values.flatten.select {|issue|
-      issue.project == project
+      if roll_up_projects?
+        issue.project_id == project.id || issue.project.is_descendant_of?(project)
+      else
+        issue.project == project
+      end
     }
     issues ||= []
     issues
@@ -143,7 +154,11 @@ class Kanban
 
     # Organized by {assigned_user => [issues]}
     issues = finished_issues.values.flatten.select {|issue|
-      issue.project == project
+      if roll_up_projects?
+        issue.project_id == project.id || issue.project.is_descendant_of?(project)
+      else
+        issue.project == project
+      end
     }
     issues ||= []
     issues
@@ -173,31 +188,12 @@ class Kanban
 
   # Find all of the projects referenced on the KanbanIssue and Issues
   def projects
-    # Grouped by users
-    projects = [
-                active_issues,
-                testing_issues
-               ].collect do |kanban_issue_set|                           # user => [kanban_issue]
-      kanban_issue_set.values.inject([]) {|projects, kanban_issues|      # [project], kanban_issue
-        projects += kanban_issues.collect {|kanban_issue|
-          kanban_issue.issue.project if kanban_issue.issue
-        }
-        projects.compact
-      }
-    end
+    projects = Project.all(:conditions => Project.allowed_to_condition(User.current, :view_issues))
+    # User isn't a member but they created an issue which was moved out of their visibility
+    projects += Project.all(:include => :issues,
+                            :conditions => ["#{Issue.table_name}.author_id = :user", {:user => User.current.id}])
 
-    # No grouping
-    projects += [selected_issues].collect do |kanban_issues|
-      kanban_issues.inject([]) {|projects, kanban_issue|
-        kanban_issue.issue.project if kanban_issue.issue
-      }
-    end
-
-    projects += backlog_issues.collect do |priority, issues|
-      issues.collect(&:project) if issues
-    end
-    
-    projects.flatten.uniq
+    roll_up_projects_to_project_level(projects).uniq
   end
   
   def quick_issue_ids
@@ -206,6 +202,19 @@ class Kanban
     else
       []
     end
+  end
+
+  def project_level
+    unless @project_level
+      @project_level = Setting.plugin_redmine_kanban['project_level'].to_i if Setting.plugin_redmine_kanban['project_level'].present?
+      @project_level ||= 0
+    end
+    
+    @project_level
+  end
+
+  def roll_up_projects?
+    @project_level > 0
   end
 
   # Updates the Issue with +issue_id+ to change it's
@@ -284,6 +293,22 @@ class Kanban
     else
       @users
     end
+  end
+
+  # Returns a list of projects that are higher up in the tree than project_level
+  #
+  # Recursive
+  def roll_up_projects_to_project_level(projects)
+    return projects if project_level == 0
+    
+    projects.inject([]) {|filtered, project|
+      if project.level >= project_level
+        filtered + roll_up_projects_to_project_level(project.ancestors)
+      else
+        filtered << project
+      end
+      filtered.uniq
+    }
   end
 
 end

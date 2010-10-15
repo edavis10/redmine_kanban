@@ -71,6 +71,7 @@ module KanbanTestHelper
     'user_help' => "*This is user help*",
     "staff_role"=> make_kanban_role.id,
     "management_group"=> @management_group.id.to_s,  
+    "project_level" => "0",
     "panes"=>
     {
       "selected"=>{
