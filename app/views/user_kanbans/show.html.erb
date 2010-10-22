@@ -58,7 +58,7 @@
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
   </div>
 
-  <% @kanban.projects.each do |project| %>
+  <% @projects_sorted_by_tree.each do |project| %>
   <div class="project-lane horizontal-lane">
     <div class="project pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%">
       <h2 class="project-name">

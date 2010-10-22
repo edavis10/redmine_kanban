@@ -16,6 +16,12 @@ class UserKanbansController < ApplicationController
     end
     
     @kanban = Kanban.new(:user => @user, :for => [:author, :watcher])
+    @projects_sorted_by_tree = []
+
+    Project.project_tree(@kanban.projects) do |project, level|
+      @projects_sorted_by_tree << project
+    end
+    
   end
 
   def create
