@@ -103,7 +103,7 @@ class Kanban
         if kanban_issue.for_project?(project) || (roll_up_projects? && kanban_issue.for_project_descendant?(project))
           kanban_issue.issue
         end
-      }
+      }.compact
       issues ||= []
       issues
     }
