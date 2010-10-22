@@ -214,7 +214,7 @@ class Kanban
   end
 
   def roll_up_projects?
-    @project_level > 0
+    project_level > 0
   end
 
   # Updates the Issue with +issue_id+ to change it's
