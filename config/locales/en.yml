@@ -57,4 +57,8 @@ en:
   kanban_text_issue_created_reload_to_see: "Issue successfully created. Reload to see the new issues."
   kanban_text_notice_reload: "This data is out of date. Reload to see the latest data."
   kanban_label_project_level: "Group projects at level"
-  kanban_text_project_level_help: "Groups projects at a higher level than this into the parent project. For example: 1 will group all sub-projects into the top level projects. 2 will group all sub-sub-projects into the sub-projects. Use 0 for no grouping.'
+  kanban_text_project_level_help: "Groups projects at a higher level than this into the parent project. For example: 1 will group all sub-projects into the top level projects. 2 will group all sub-sub-projects into the sub-projects. Use 0 for no grouping."
+  kanban_label_simple_issue_popup_form: "Use Simple Issue Popup Form"
+  kanban_text_simple_issue_popup_form_help: "When checked the issue popup form will be limited to only showing the Project, Tracker, Subject, and Description fields."
+
+

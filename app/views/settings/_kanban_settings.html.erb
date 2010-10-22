@@ -50,6 +50,13 @@ end
     <br />
     <%= content_tag(:span, l(:kanban_text_project_level_help)) %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_simple_issue_popup_form)) %>
+    <%= check_box_tag("settings[simple_issue_popup_form]", "1", @settings['simple_issue_popup_form'].to_s == "1" ) %>
+    <br />
+    <%= content_tag(:span, l(:kanban_text_simple_issue_popup_form_help)) %>
+  </p>
 </fieldset>
 
 <fieldset>

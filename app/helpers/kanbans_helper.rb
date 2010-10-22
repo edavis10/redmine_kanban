@@ -203,6 +203,15 @@ module KanbansHelper
     return User.current
   end
 
+  def use_simple_issue_popup_form?
+    # TODO: Hate how Settings is stored...
+    @settings['simple_issue_popup_form'] && (
+                                       @settings['simple_issue_popup_form'] == '1' ||
+                                       @settings['simple_issue_popup_form'] == 1 ||
+                                       @settings['simple_issue_popup_form'] == true
+                                       )
+  end
+  
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
 
