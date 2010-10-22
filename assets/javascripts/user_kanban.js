@@ -9,6 +9,7 @@ jQuery(function($) {
 
   $('#dialog-window').
     dialog({
+      position: [10,10],
       autoOpen: false,
       minWidth: 400,
       width: 800,
@@ -23,6 +24,7 @@ jQuery(function($) {
     $('#dialog-window').
       html(''). // Gets cached
       load('/kanban_issues/new.js').
+      dialog("option", "width", $('#content').width()). // Set width to the content width
       dialog('open');
 
     return false;
