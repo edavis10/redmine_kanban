@@ -2,11 +2,16 @@
 
 <h2><%=l(:label_issue_new)%></h2>
 
+<% if @project %>
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project, :format => 'json'},
                              :html => {:multipart => true, :id => 'issue-form'} do |f| %>
     <div id="issue-form-errors" class="flash error" style="display:none;"></div>
     <%= error_messages_for 'issue' %>
-    <p><%= f.select :project_id, project_tree_options_for_select(@allowed_projects, :selected => @project) %></p>      
+    <% if @allowed_projects.length <= 1 %>
+      <%= f.hidden_field :project_id %>
+    <% else %>
+      <p><%= f.select :project_id, project_tree_options_for_select(@allowed_projects, :selected => @project) %></p>
+    <% end %>
 
     <div class="box">
       <%= render :partial => 'issues/form', :locals => {:f => f} %>
@@ -14,6 +19,11 @@
     <%= submit_tag l(:button_create) %>
 <% end %>
 
+<% else %>
+
+<p class="nodata"><%= l(:kanban_text_no_project) %></p>
+
+<% end %>
 
 </div>
 

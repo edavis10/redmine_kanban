@@ -16,13 +16,18 @@ class KanbanIssuesController < ApplicationController
   def new
     @issue = Issue.new(:status => IssueStatus.default)
     @issue.author_login = User.current.login if @issue.respond_to?(:author_login)
-     @allowed_projects = User.current.projects.all(:conditions =>
-                                                   Project.allowed_to_condition(User.current, :add_issues))
+    valid_incoming_projects_conditions = ARCondition.new(Project.allowed_to_condition(User.current, :add_issues))
+    if @settings['panes'].present? && @settings['panes']['incoming'].present? && @settings['panes']['incoming']['excluded_projects'].present?
+      valid_incoming_projects_conditions.add(["#{Project.table_name}.id IN (?)", @settings['panes']['incoming']['excluded_projects']])
+    end
+                                                         
+    @allowed_projects = User.current.projects.all(:conditions => valid_incoming_projects_conditions.conditions)
+                                                   
     @project = @allowed_projects.detect {|p| p.id.to_s == params[:issue][:project_id]} if params[:issue] && params[:issue][:project_id]
     @project ||= @allowed_projects.first
     @issue.project ||= @project
     # Tracker must be set before custom field values
-    @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first)
+    @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first) if @project
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current, true)
     @priorities = IssuePriority.all
 
