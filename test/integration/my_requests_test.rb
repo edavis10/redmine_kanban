@@ -325,7 +325,7 @@ class MyRequestsTest < ActionController::IntegrationTest
 
       assert_select '#kanban' do
         assert_select 'div.project-lane' do
-          assert_select '.project-name', :text => /#{@public_project.reload.name}/
+          assert_select '.project-name', :text => /#{@public_project.reload.name}/, :count => 0 # No issues
           assert_select '.project-name', :text => /#{@project.reload.name}/
         end
       end

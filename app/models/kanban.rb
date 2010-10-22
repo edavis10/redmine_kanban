@@ -88,6 +88,8 @@ class Kanban
   # * :testing - user and project
   # * :active - user and project
   # * :selected - project
+  #
+  # OPTIMIZE: could cache this to ivars
   [:testing, :active, :selected, :canceled].each do |pane|
     define_method("#{pane}_issues_for") {|options|
       project = options[:project]
@@ -109,6 +111,7 @@ class Kanban
     }
   end
 
+  # OPTIMIZE: could cache this to ivars
   def backlog_issues_for(options={})
     project = options[:project]
     #    user = options[:user]
@@ -134,6 +137,7 @@ class Kanban
   end
 
 
+  # OPTIMIZE: could cache this to ivars
   def canceled_issues_for(options={})
     project = options[:project]
 
@@ -149,6 +153,7 @@ class Kanban
     issues
   end
 
+  # OPTIMIZE: could cache this to ivars
   def finished_issues_for(options={})
     project = options[:project]
 
@@ -194,6 +199,19 @@ class Kanban
                             :conditions => ["#{Issue.table_name}.author_id = :user", {:user => User.current.id}])
 
     roll_up_projects_to_project_level(projects).uniq
+  end
+
+  def has_issues_for_project_and_user?(project, user)
+    opts = {:user => user, :project => project}
+
+    # TODO: should be refactored to use enum#any?
+    return true if finished_issues_for(opts).length > 0
+    return true if canceled_issues_for(opts).length > 0
+    return true if testing_issues_for(opts).length > 0
+    return true if active_issues_for(opts).length > 0
+    return true if selected_issues_for(opts).length > 0
+    return true if backlog_issues_for(opts).length > 0
+    return false
   end
   
   def quick_issue_ids
