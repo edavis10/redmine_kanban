@@ -32,6 +32,7 @@ Redmine::Plugin.register :redmine_kanban do
   permission(:manage_kanban, {})
 
   permission(:view_my_kanban_requests, {:user_kanbans => [:show, :create], :kanban_issues => [:new]}, :public => true)
+  permission(:view_assigned_kanban, {:assigned_kanbans => [:show]}, :public => true)
   
   settings(:partial => 'settings/kanban_settings',
            :default => {
@@ -63,6 +64,13 @@ Redmine::Plugin.register :redmine_kanban do
        :my_kanban_requests,
        {:controller => 'user_kanbans', :action => 'show'},
        :caption => :text_my_kanban_requests_title,
+       :after => :kanban,
+       :require => :loggedin)
+
+  menu(:top_menu,
+       :assigned_kanban,
+       {:controller => 'assigned_kanbans', :action => 'show'},
+       :caption => :text_assigned_kanban_title,
        :after => :kanban,
        :require => :loggedin)
 
