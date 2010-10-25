@@ -17,40 +17,40 @@
 
 <div id="kanban">
   <% if KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured? %>
-  <div id="unstaffed-requests" class="column" style="width: <%= column_width(:unstaffed) %>%">
+  <div id="unstaffed-requests" class="equal-column" style="width: <%= column_width(:unstaffed) %>%">
     <% if KanbanPane::IncomingPane.configured? %>
-    <div id="incoming" class="pane">
+    <div id="incoming" class="pane inner-pane">
       <%= render :partial => 'incoming' %>
     </div>
     <% end %>
     <% if KanbanPane::BacklogPane.configured? %>
-    <div id="backlog" class="pane">
+    <div id="backlog" class="pane inner-pane">
       <%= render :partial => 'backlog' %>
     </div>
     <% end %>
   </div>
   <% end %>
   <% if KanbanPane::QuickPane.configured? || KanbanPane::SelectedPane.configured? %>
-  <div id="selected-requests" class="column" style="width: <%= column_width(:selected) %>%">
+  <div id="selected-requests" class="equal-column" style="width: <%= column_width(:selected) %>%">
     <% if KanbanPane::QuickPane.configured? %>
-    <div id="quick-tasks" class="pane">
+    <div id="quick-tasks" class="pane inner-pane">
       <%= render :partial => 'quick' %>
     </div>
     <% end %>
     <% if KanbanPane::SelectedPane.configured? %>
-    <div id="selected-tasks"class="pane">
+    <div id="selected-tasks"class="pane inner-pane">
       <%= render :partial => 'selected' %>
     </div>
     <% end %>
   </div>
   <% end %>
-  <div id="staffed-requests" class="column" style="width: <%= column_width(:staffed) %>%">
-    <div id="staffed-requests-header" class="staff">
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "staffed-column user", :style => "width: #{staffed_column_width(:user)}%") %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "staffed-column active", :style => "width: #{staffed_column_width(:active)}%") if KanbanPane::ActivePane.configured? %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "staffed-column testing", :style => "width: #{staffed_column_width(:testing)}%") if KanbanPane::TestingPane.configured? %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "staffed-column finished", :style => "width: #{staffed_column_width(:finished)}%") if KanbanPane::FinishedPane.configured? %>
-      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_canceled_requests)), :class => "staffed-column canceled", :style => "width: #{staffed_column_width(:canceled)}%") if KanbanPane::CanceledPane.configured? %>
+  <div id="staffed-requests" class="equal-column" style="width: <%= column_width(:staffed) %>%">
+    <div id="kanban-headers" class="staff">
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:user)}%") %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_active)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:active)}%") if KanbanPane::ActivePane.configured? %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_testing)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:testing)}%") if KanbanPane::TestingPane.configured? %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_finished_requests)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:finished)}%") if KanbanPane::FinishedPane.configured? %>
+      <%= content_tag(:div, content_tag(:h3, l(:kanban_text_canceled_requests)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:canceled)}%") if KanbanPane::CanceledPane.configured? %>
     </div>
     <div style="clear:both"></div>
 

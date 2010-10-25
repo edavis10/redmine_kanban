@@ -24,6 +24,7 @@ $incoming-pane-color: #99ccff;
       margin-bottom: -99999px;
       padding-bottom: 99999px;
       /* end hack */
+      float: left;
    }
 }
 
@@ -36,31 +37,23 @@ $incoming-pane-color: #99ccff;
 #kanban {width: 100%;}
 #unstaffed-requests { background-color: #F7F7FF; }
 #selected-requests { background-color: #F7F7FF; }
-#staffed-requests { background-color: #FFFFEF; }
+#staffed-requests {  }
 
 #incoming {min-height: 200px;}
 #backlog { }
-#staffed-requests { padding: 0; }
 #staffed-requests .user { font-weight: bold; }
-#staffed-requests .active { }
-#staffed-requests .testing { }
-#staffed-requests .finished { }
-#staffed-requests .canceled { }
 
 .column { min-height: 600px; float:left; margin-left:-2px; border: 2px solid #333333; padding: 5px;}
-.staff { border-top: 2px solid #333333; padding: 5px; min-height: 60px; }
-.staffed-column { float:left; }
 .active-header { width:33%; display: inline;}
 .active-header h3 { display:inline }
 
 .pane { }
 
 #staffed-requests .column { padding: 0; }
-#staffed-requests-header { border: none; min-height:0; text-align: center;}
 #staffed-requests ol { width:96%; }
 
-div.pane ol { margin:0 0 10px; list-style: none; padding-left: 0px; min-height:30px; }
-div.pane ol li { padding: 0; }
+.pane ol { margin:0 0 10px; list-style: none; padding-left: 0px; min-height:30px; }
+.pane ol li { padding: 0; }
 
 #backlog-issues p, #quick-issues p {margin: 0; font-weight: bold; }
 ol#backlog-issues ol, ol#quick-issues ol { padding-left: 15px; margin-bottom: 15px;}
@@ -145,7 +138,7 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
    }
 }
 
-.user-kanban {
+#kanban {
 
    @include equal-column-hack;
 
