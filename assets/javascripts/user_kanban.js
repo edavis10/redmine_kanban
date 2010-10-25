@@ -1,3 +1,5 @@
+var watched_issue = false;
+
 jQuery(function($) {
   $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
   $("#ajax-indicator").ajaxStop(function(){ $(this).hide();  });
@@ -13,6 +15,11 @@ jQuery(function($) {
       autoOpen: false,
       minWidth: 400,
       width: 800,
+      close: function(event, ui) {
+        if (watched_issue) {
+          $('.flash.notice').html(i18n.kanban_text_issue_watched_reload_to_see).show();
+        }
+      },
       buttons: {
         "Cancel": function() {
           $(this).dialog("close");
@@ -62,6 +69,7 @@ function registerNewIssueCallbacks() {
 
 function takeOverWatchLinks(jquerySelector) {
   jQuery(jquerySelector).find('a.icon-fav-off').click(function() {
+    watched_issue = true;
     jQuery('#watch_and_cancel').html(i18n.kanban_text_watch_and_cancel_hint).show();
   });
 }
