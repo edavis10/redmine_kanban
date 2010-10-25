@@ -2,6 +2,7 @@
 
 <h2><%=l(:label_issue_new)%></h2>
 
+<div id="watch_and_cancel" class="flash notice" style="display:none;"></div>
 <% if @project %>
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project, :format => 'json'},
                              :html => {:multipart => true, :id => 'issue-form'} do |f| %>
@@ -30,6 +31,7 @@
 <script type="text/javascript">
 hideAttachmentsForm();
 registerNewIssueCallbacks();
+takeOverWatchLinks('.recent-issues');
 </script>
 
 <style type="text/css">

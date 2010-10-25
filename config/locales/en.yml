@@ -61,4 +61,4 @@ en:
   kanban_label_simple_issue_popup_form: "Use Simple Issue Popup Form"
   kanban_text_simple_issue_popup_form_help: "When checked the issue popup form will be limited to only showing the Project, Tracker, Subject, and Description fields."
   kanban_text_no_project: "You don't have permission to create new issues on any of the Incoming projects."
-
+  kanban_text_watch_and_cancel_hint: 'If the issue you are now watching is what you were going to report, please click "cancel" - you will kept up-to-date on the progress of this issue as a watcher.'

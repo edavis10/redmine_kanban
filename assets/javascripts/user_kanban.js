@@ -59,3 +59,9 @@ function registerNewIssueCallbacks() {
     return false;
   });
 }
+
+function takeOverWatchLinks(jquerySelector) {
+  jQuery(jquerySelector).find('a.icon-fav-off').click(function() {
+    jQuery('#watch_and_cancel').html(i18n.kanban_text_watch_and_cancel_hint).show();
+  });
+}

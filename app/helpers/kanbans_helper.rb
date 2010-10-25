@@ -192,7 +192,8 @@ module KanbansHelper
     strings = {
       'kanban_text_error_saving_issue' => l(:kanban_text_error_saving_issue),
       'kanban_text_issue_created_reload_to_see' => l(:kanban_text_issue_created_reload_to_see),
-      'kanban_text_notice_reload' => l(:kanban_text_notice_reload)
+      'kanban_text_notice_reload' => l(:kanban_text_notice_reload),
+      'kanban_text_watch_and_cancel_hint' => l(:kanban_text_watch_and_cancel_hint)
     }
 
     javascript_tag("var i18n = #{strings.to_json}")
