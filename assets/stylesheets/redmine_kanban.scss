@@ -21,8 +21,8 @@ $incoming-pane-color: #99ccff;
 
    .equal-column {
       /* Used to hack the equal height columns*/
-      margin-bottom: -1000px;
-      padding-bottom: 1000px;
+      margin-bottom: -99999px;
+      padding-bottom: 99999px;
       /* end hack */
    }
 }
