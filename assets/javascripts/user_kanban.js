@@ -51,10 +51,10 @@ function registerNewIssueCallbacks() {
     jQuery('#dialog-window').load('/kanban_issues/new.js', jQuery('#issue-form').serialize())
   });
 
-  jQuery('#issue-form').submit(function(event) {
-    jQuery.ajaxQueue.post(jQuery('#issue-form').attr('action'), {
-      data: jQuery('#issue-form').serialize(),
-      success: function(response) {
+  jQuery('#issue-form').submit(function() {
+    jQuery(this).ajaxSubmit({
+      dataType: 'xml', // TODO: json format would prompt for a file download in the iframe
+      success: function(responseText, statusText, xhr, $form) {
         jQuery('.flash.notice').html(i18n.kanban_text_issue_created_reload_to_see).show();
         jQuery('#dialog-window').dialog("close");
       },
