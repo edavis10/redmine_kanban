@@ -1,8 +1,5 @@
 jQuery(function($) {
-  $('#user_id').change(function() {
-    $('form#user_switch').submit();
-  });
-
+  Kanban.registerUserSwitch();
 
   $('#dialog-window').
     dialog({

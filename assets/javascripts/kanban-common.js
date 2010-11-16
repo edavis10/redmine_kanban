@@ -42,6 +42,12 @@
       });
     },
 
+    registerUserSwitch: function() {
+      $('#user_id').change(function() {
+        $('form#user_switch').submit();
+      });
+    },
+
     initilize: function() {
       $(function($) {
         Kanban.initilize_after_dom_loaded();
