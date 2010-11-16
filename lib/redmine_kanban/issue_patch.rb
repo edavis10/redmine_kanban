@@ -18,6 +18,23 @@ module RedmineKanban
           named_scope :visible, lambda {|*args| { :include => :project,
               :conditions => Project.allowed_to_condition(args.first || User.current, :view_issues) } }
         end
+
+        named_scope :due_between, lambda {|a, b|
+          {
+            :conditions => ["#{Issue.table_name}.due_date > :start and #{Issue.table_name}.due_date <= :end",
+                            {
+                              :start => a,
+                              :end => b
+                            }]
+          }
+        }
+
+        named_scope :due_sooner_than, lambda {|a|
+          {
+            :conditions => ["#{Issue.table_name}.due_date < ?", a]
+          }
+
+        }
       end
 
     end
