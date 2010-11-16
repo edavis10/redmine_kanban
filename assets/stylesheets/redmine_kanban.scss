@@ -187,3 +187,11 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
       cursor: auto;
    }
 }
+
+#deadlines {
+   .horizontal-lane {
+      .kanban-header { width: 20%; }
+      .deadline { width: 20%; }
+   }
+
+}

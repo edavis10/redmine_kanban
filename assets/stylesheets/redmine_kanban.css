@@ -234,3 +234,8 @@ div.icons .updated-note {
       border: none; }
   #kanban li.issue {
     cursor: auto; }
+
+#deadlines .horizontal-lane .kanban-header {
+  width: 20%; }
+#deadlines .horizontal-lane .deadline {
+  width: 20%; }

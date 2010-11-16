@@ -1,0 +1,54 @@
+<div id="deadlines">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_project)) %></div>
+  </div>
+
+  <div class="horizontal-lane">
+    <div class="due-today pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date < ?", 3.days.from_now]),
+                   :locals => { :limit => 200 }) %>
+      </ol>
+    </div>
+
+    <div class="due-in-3-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date > ? and #{Issue.table_name}.due_date <= ?", 3.days.from_now, 7.days.from_now]),
+                   :locals => { :limit => 200 }) %>
+      </ol>
+    </div>
+
+    <div class="due-in-7-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date > ? and #{Issue.table_name}.due_date <= ?", 7.days.from_now, 14.days.from_now]),
+                   :locals => { :limit => 200 }) %>
+      </ol>
+    </div>
+
+    <div class="due-in-14-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date > ? and #{Issue.table_name}.due_date <= ?", 14.days.from_now, 30.days.from_now]),
+                   :locals => { :limit => 200 }) %>
+      </ol>
+    </div>
+
+    <div class="due-in-30-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date > ?", 30.days.from_now]),
+                   :locals => { :limit => 200 }) %>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+<div class="clear"></div>
