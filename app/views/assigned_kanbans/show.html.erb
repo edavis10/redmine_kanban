@@ -1,0 +1,125 @@
+<div class="flash error" style="display:none"></div>
+<div class="flash warning" style="display:none"></div>
+<div class="flash notice" style="display:none"></div>
+
+<h2>
+  <% if showing_current_user_kanban? %>
+    <%= l(:text_my_kanban_requests_title) %>
+  <% else %>
+    <%= l(:text_user_kanban_requests_title, :user => @user ) %>
+  <% end %>
+</h2>
+
+<div class="contextual">
+  <%= call_hook(:view_assigned_kanbans_show_contextual_top, :user => @user, :kanban => @kanban) %>
+  <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
+  <% if User.current.allowed_to?(:view_kanban, nil, :global => true) %>
+  <%= link_to(l(:text_kanban_board), kanban_url, :class => 'icon icon-stats') %>
+  <% end %>
+  <% if User.current.allowed_to?(:add_issues, nil, :global => true) %>
+  <%= link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue') %>
+  <% end %>
+  <% if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i) %>
+    <% form_tag(kanban_user_kanbans_path, :method => :post, :id => 'user_switch') do %>
+      <%= label_tag('user_id', l(:label_user_switch)) %>
+      <%= collection_select(:user, :id, User.active.sort, :id, :name, :include_blank => true) %>
+    <% end %>
+  <% end %>
+  <%= call_hook(:view_assigned_kanbans_show_contextual_bottom, :user => @user, :kanban => @kanban) %>
+</div>
+
+<div class="clear"></div>
+
+<%= render :partial => 'kanbans/user_help' %>
+<%= render :partial => 'kanbans/color_help' %>
+
+<div id="new-requests" class="assigned-kanban vertical-lane">
+  <div class="kanban-headers">
+    <div class="kanban-header">
+      <%= content_tag(:h3, incoming_title) %>
+    </div>
+  </div>
+
+  <div class="project-lane">
+    <% user_kanban_div_helper(:project_id => 0, :column => :incoming, :user => @user) do |div| %>
+      <%= div.issues(@kanban.incoming_issues_for) %>
+    <% end %>
+  </div>
+  <div style="clear:left;"> </div>
+
+</div>
+
+<div id="kanban" class="assigned-kanban" style="width: 80%">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
+  </div>
+
+  <% @projects_sorted_by_tree.each do |project| %>
+  <div class="project-lane horizontal-lane">
+    <div class="project pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%">
+      <h2 class="project-name">
+        <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}) %>
+      </h2>
+
+      <div class="inner-pane">
+        <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
+        <% user_kanban_div_helper(:project_id => project.id, :column => :finished, :user => @user) do |div| %>
+          <%= div.issues(@kanban.finished_issues_for(:user => @user, :project => project)) %>
+        <% end %>
+      </div>
+
+      <div style="clear:left;"> </div>
+
+      <div class="inner-pane">
+        <%= content_tag(:h3, l(:kanban_text_canceled_requests)) %>
+        <% user_kanban_div_helper(:project_id => project.id, :column => :canceled, :user => @user) do |div| %>
+          <%= div.issues(@kanban.canceled_issues_for(:user => @user, :project => project)) %>
+        <% end %>
+      </div>
+
+  <div style="clear:left;"> </div>
+    </div>
+
+    <% user_kanban_div_helper(:project_id => project.id, :column => :testing, :user => @user) do |div| %>
+        <%= div.issues(@kanban.testing_issues_for(:user => @user, :project => project)) %>
+    <% end %>
+
+    <% user_kanban_div_helper(:project_id => project.id, :column => :active, :user => @user) do |div| %>
+        <%= div.issues(@kanban.active_issues_for(:user => @user, :project => project)) %>
+    <% end %>
+
+    <% user_kanban_div_helper(:project_id => project.id, :column => :selected, :user => @user) do |div| %>
+        <%= div.issues(@kanban.selected_issues_for(:user => @user, :project => project)) %>
+    <% end %>
+
+    <% user_kanban_div_helper(:project_id => project.id, :column => :backlog, :user => @user) do |div| %>
+      <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
+    <% end %>
+    <div style="clear:left;"> </div>
+  </div>
+  <% end %>
+</div>
+
+<%= jquery_dialog_div %>
+
+<% if showing_current_user_kanban? %>
+  <% html_title l(:text_my_kanban_requests_title) %>
+<% else %>
+  <% html_title l(:text_user_kanban_requests_title, :user => @user ) %>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'smoothness/jquery-ui-1.7.3.custom.css', :plugin => "redmine_kanban" %>
+  <%= stylesheet_link_tag 'redmine_kanban.css', :plugin => "redmine_kanban" %>
+  <%= javascript_include_tag 'jquery-1.3.2.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery-ui-1.7.3.custom.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.json-1.3.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.ajax_queue.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_tag("jQuery.noConflict();") %>
+  <%= javascript_include_tag 'user_kanban.js', :plugin => 'redmine_kanban' %>
+<% end %>
