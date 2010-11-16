@@ -4,7 +4,7 @@
 
 <div id="watch_and_cancel" class="flash notice" style="display:none;"></div>
 <% if @project %>
-<% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project, :format => 'json'},
+<% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project, :format => 'xml'},
                              :html => {:multipart => true, :id => 'issue-form'} do |f| %>
     <div id="issue-form-errors" class="flash error" style="display:none;"></div>
     <%= error_messages_for 'issue' %>
@@ -29,7 +29,6 @@
 </div>
 
 <script type="text/javascript">
-hideAttachmentsForm();
 registerNewIssueCallbacks();
 var watched_issue = false;
 takeOverWatchLinks('.recent-issues');
