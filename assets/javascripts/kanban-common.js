@@ -1,5 +1,6 @@
 (function($) {
   Kanban = {
+    watched_issue: false,
 
     registerAjaxIndicator: function() {
       $("#ajax-indicator").ajaxStart(function(){ $(this).show();  });
@@ -30,6 +31,14 @@
         });
 
         return false;
+      });
+    },
+
+    // Take over the click events on the watch links used by redmine_recent_issues
+    takeOverWatchLinks: function(jquerySelector) {
+      $(jquerySelector).find('a.icon-fav-off').click(function() {
+        this.watched_issue = true;
+        $('#watch_and_cancel').html(i18n.kanban_text_watch_and_cancel_hint).show();
       });
     },
 
