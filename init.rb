@@ -62,14 +62,14 @@ Redmine::Plugin.register :redmine_kanban do
        })
   menu(:top_menu,
        :my_kanban_requests,
-       {:controller => 'user_kanbans', :action => 'show'},
+       {:controller => 'user_kanbans', :action => 'show', :id => nil},
        :caption => :text_my_kanban_requests_title,
        :after => :kanban,
        :require => :loggedin)
 
   menu(:top_menu,
        :assigned_kanban,
-       {:controller => 'assigned_kanbans', :action => 'show'},
+       {:controller => 'assigned_kanbans', :action => 'show', :id => nil},
        :caption => :text_assigned_kanban_title,
        :after => :kanban,
        :require => :loggedin)
