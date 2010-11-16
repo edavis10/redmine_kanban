@@ -4,9 +4,9 @@
 
 <h2>
   <% if showing_current_user_kanban? %>
-    <%= l(:text_my_kanban_requests_title) %>
+    <%= l(:text_assigned_kanban_title) %>
   <% else %>
-    <%= l(:text_user_kanban_requests_title, :user => @user ) %>
+    <%= l(:text_assigned_to_user_kanban_title, :user => @user ) %>
   <% end %>
 </h2>
 
@@ -107,9 +107,9 @@
 <%= jquery_dialog_div %>
 
 <% if showing_current_user_kanban? %>
-  <% html_title l(:text_my_kanban_requests_title) %>
+  <% html_title l(:text_assigned_kanban_title) %>
 <% else %>
-  <% html_title l(:text_user_kanban_requests_title, :user => @user ) %>
+  <% html_title l(:text_assigned_to_user_kanban_title, :user => @user ) %>
 <% end %>
 
 <% content_for :header_tags do %>

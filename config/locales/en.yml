@@ -65,3 +65,4 @@ en:
   kanban_text_issue_watched_reload_to_see: "Issue is now watched. Reload to see the new issues."
 
   text_assigned_kanban_title: "Assigned Kanban"
+  text_assigned_to_user_kanban_title: "{{user}}'s Assigned Kanban"
