@@ -20,7 +20,7 @@
   <%= link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue') %>
   <% end %>
   <% if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i) %>
-    <% form_tag(kanban_user_kanbans_path, :method => :post, :id => 'user_switch') do %>
+    <% form_tag(kanban_assigned_kanbans_path, :method => :post, :id => 'user_switch') do %>
       <%= label_tag('user_id', l(:label_user_switch)) %>
       <%= collection_select(:user, :id, User.active.sort, :id, :name, :include_blank => true) %>
     <% end %>

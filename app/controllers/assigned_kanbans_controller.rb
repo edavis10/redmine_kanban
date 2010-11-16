@@ -26,6 +26,15 @@ class AssignedKanbansController < ApplicationController
     end
   end
 
+  def create
+    user_id = if params[:user] && params[:user][:id]
+                params[:user][:id]
+              else
+                User.current.id
+              end
+    redirect_to kanban_assigned_kanban_path(:id => user_id)
+  end
+
   private
 
   def kanban_settings
