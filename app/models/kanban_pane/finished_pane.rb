@@ -11,27 +11,7 @@ class KanbanPane::FinishedPane < KanbanPane
     conditions = ''
     conditions << " #{Issue.table_name}.status_id = :status"
     conditions << " AND #{Issue.table_name}.updated_on > :days"
-
-    if user.present?
-      for_conditions = []
-      if for_option.include?(:author)
-        for_conditions << " #{Issue.table_name}.author_id = :user"
-      end
-
-      if for_option.include?(:watcher)
-        for_conditions << " #{Watcher.table_name}.user_id = :user"
-      end
-
-      if for_option.include?(:assigned_to)
-        for_conditions << "#{Issue.table_name}.assigned_to_id = :user"
-      end
-
-      if for_conditions.present?
-        conditions << " AND ("
-        conditions << for_conditions.join(" OR ")
-        conditions << " ) "
-      end
-    end
+    conditions = merge_for_option_conditions(conditions, for_option) if user.present?
     
     issues = Issue.visible.all(:include => [:assigned_to, :watchers],
                                :order => "#{Issue.table_name}.updated_on DESC",

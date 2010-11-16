@@ -7,27 +7,7 @@ class KanbanPane::IncomingPane < KanbanPane
 
     conditions = ''
     conditions << "status_id = :status"
-
-    if user.present?
-      for_conditions = []
-      if for_option.include?(:author)
-        for_conditions << "#{Issue.table_name}.author_id = :user"
-      end
-
-      if for_option.include?(:watcher)
-        for_conditions << "#{Watcher.table_name}.user_id = :user"
-      end
-
-      if for_option.include?(:assigned_to)
-        for_conditions << "#{Issue.table_name}.assigned_to_id = :user"
-      end
-
-      if for_conditions.present?
-        conditions << " AND ("
-        conditions << for_conditions.join(" OR ")
-        conditions << " ) "
-      end
-    end
+    conditions = merge_for_option_conditions(conditions, for_option) if user.present?
     
     return Issue.visible.
       all(:limit => settings['panes']['incoming']['limit'],

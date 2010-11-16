@@ -41,4 +41,31 @@ class KanbanPane
     }
   end
 
+  def conditions_from_for_options(for_option)
+    for_conditions = []
+    if for_option.include?(:author)
+      for_conditions << " #{Issue.table_name}.author_id = :user"
+    end
+
+    if for_option.include?(:watcher)
+      for_conditions << " #{Watcher.table_name}.user_id = :user"
+    end
+
+    if for_option.include?(:assigned_to)
+      for_conditions << "#{Issue.table_name}.assigned_to_id = :user"
+    end
+
+    for_conditions
+  end
+
+  def merge_for_option_conditions(conditions, for_option)
+    if conditions_from_for_options(for_option).present?
+      conditions << " AND ("
+      conditions << conditions_from_for_options(for_option).join(" OR ")
+      conditions << " ) "
+    end
+
+    conditions
+  end
+
 end
