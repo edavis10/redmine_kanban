@@ -32,7 +32,3 @@ jQuery(function($) {
     return false;
   });
 });
-
-function hideAttachmentsForm() {
-  jQuery('#attachments_fields').closest('p').hide();
-}
