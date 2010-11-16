@@ -18,6 +18,10 @@ class KanbanPane::IncomingPane < KanbanPane
         for_conditions << "#{Watcher.table_name}.user_id = :user"
       end
 
+      if for_option.include?(:assigned_to)
+        for_conditions << "#{Issue.table_name}.assigned_to_id = :user"
+      end
+
       if for_conditions.present?
         conditions << " AND ("
         conditions << for_conditions.join(" OR ")

@@ -108,9 +108,9 @@ class KanbanIssue < ActiveRecord::Base
         end
       when :assigned_to
         if user_id
-          for_conditions << "#{KanbanIssue.table_name}.user_id = :user"
+          for_conditions << "#{Issue.table_name}.assigned_to_id = :user"
         else
-          for_conditions << "#{KanbanIssue.table_name}.user_id IS NULL"
+          for_conditions << "#{Issue.table_name}.assigned_to_id IS NULL"
         end
       when :watcher
         if user_id
