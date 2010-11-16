@@ -93,7 +93,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Visit by url hacking
       visit "/kanban/users/#{@another_user.id}"
       assert_response :forbidden
-      assert_template 'common/403'
+      assert_template 'common/error'
 
     end
 
