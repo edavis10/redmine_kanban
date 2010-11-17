@@ -43,7 +43,7 @@
     <div class="due-in-30-days pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.all(:conditions => ["#{Issue.table_name}.due_date > ?", 30.days.from_now]),
+                   :collection => Issue.visible.open.due_between(30.days.from_now, 60.days.from_now),
                    :locals => { :limit => 200 }) %>
       </ol>
     </div>

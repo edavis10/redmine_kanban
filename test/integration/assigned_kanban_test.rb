@@ -223,6 +223,8 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       @in_30_days = Issue.generate_for_project!(@project, :due_date => 30.days.from_now + 1.hour)
       @in_31_days = Issue.generate_for_project!(@project, :due_date => 31.days.from_now + 1.hour)
 
+      @in_70_days = Issue.generate_for_project!(@project, :due_date => 70.days.from_now + 1.hour)
+      
       login_as
       visit_assigned_kanban
 
@@ -251,6 +253,8 @@ class AssignedKanbanTest < ActionController::IntegrationTest
           assert_select "li#issue_#{@in_30_days.id}", :count => 1
           assert_select "li#issue_#{@in_31_days.id}", :count => 1
         end
+
+        assert_select "li#issue_#{@in_70_days.id}", :count => 0
       end
 
     end
