@@ -193,19 +193,22 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
 }
 
 #deadlines {
+   margin-bottom: 15px;
+   @include standard-border;
+
    .horizontal-lane {
       @include equal-column-hack;
 
       .equal-column {
-         margin-bottom: -200px;
-         padding-bottom: 200px;
+         margin-bottom: -450px;
+         padding-bottom: 450px;
       }
 
       .kanban-header { width: 20%; }
       .deadline {
          width: 20%;
 
-         ol { overflow: scroll; min-height: 200px; margin: 2px; }
+         ol { overflow-y: scroll; max-height: 400px; }
       }
 
       .due-today {

@@ -236,35 +236,39 @@ div.icons .updated-note {
   #kanban li.issue {
     cursor: auto; }
 
-#deadlines .horizontal-lane {
-  overflow: hidden;
-  /* Equal height column hack */ }
-  #deadlines .horizontal-lane .equal-column {
-    /* Used to hack the equal height columns*/
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
-    /* end hack */
-    float: left; }
-  #deadlines .horizontal-lane .equal-column {
-    margin-bottom: -200px;
-    padding-bottom: 200px; }
-  #deadlines .horizontal-lane .kanban-header {
-    width: 20%; }
-  #deadlines .horizontal-lane .deadline {
-    width: 20%; }
-    #deadlines .horizontal-lane .deadline ol {
-      overflow: scroll;
-      min-height: 200px;
-      margin: 2px; }
-  #deadlines .horizontal-lane .due-today {
-    background-color: #eb613d; }
-  #deadlines .horizontal-lane .due-in-3-days {
-    background-color: #f0876b; }
-  #deadlines .horizontal-lane .due-in-7-days {
-    background-color: #f5ac99; }
-  #deadlines .horizontal-lane .due-in-14-days {
-    background-color: #f9d2c8; }
-  #deadlines .horizontal-lane .due-in-30-days {
-    background-color: #fef8f6; }
-#deadlines .issue {
-  cursor: auto; }
+#deadlines {
+  margin-bottom: 15px;
+  border-width: 2px;
+  border-color: #333333;
+  border-style: solid; }
+  #deadlines .horizontal-lane {
+    overflow: hidden;
+    /* Equal height column hack */ }
+    #deadlines .horizontal-lane .equal-column {
+      /* Used to hack the equal height columns*/
+      margin-bottom: -99999px;
+      padding-bottom: 99999px;
+      /* end hack */
+      float: left; }
+    #deadlines .horizontal-lane .equal-column {
+      margin-bottom: -450px;
+      padding-bottom: 450px; }
+    #deadlines .horizontal-lane .kanban-header {
+      width: 20%; }
+    #deadlines .horizontal-lane .deadline {
+      width: 20%; }
+      #deadlines .horizontal-lane .deadline ol {
+        overflow-y: scroll;
+        max-height: 400px; }
+    #deadlines .horizontal-lane .due-today {
+      background-color: #eb613d; }
+    #deadlines .horizontal-lane .due-in-3-days {
+      background-color: #f0876b; }
+    #deadlines .horizontal-lane .due-in-7-days {
+      background-color: #f5ac99; }
+    #deadlines .horizontal-lane .due-in-14-days {
+      background-color: #f9d2c8; }
+    #deadlines .horizontal-lane .due-in-30-days {
+      background-color: #fef8f6; }
+  #deadlines .issue {
+    cursor: auto; }
