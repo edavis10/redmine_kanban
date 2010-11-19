@@ -22,7 +22,7 @@ class MyRequestsTest < ActionController::IntegrationTest
     
     should "load their own page" do
       login_as
-      click_link "My Kanban Requests"
+      click_link "My Requests"
       
       assert_response :success
       assert_equal "/kanban/my-requests", current_url
@@ -358,7 +358,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_response :success
       assert_equal "/kanban/users/#{@another_user.id}", current_path
 
-      assert_select "#content", :text => /#{@another_user.to_s}'s Kanban Requests/
+      assert_select "#content", :text => /#{@another_user.to_s}'s Requests/
     end
     
       
