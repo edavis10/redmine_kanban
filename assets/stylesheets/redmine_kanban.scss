@@ -15,8 +15,8 @@ $backlog-pane-color: #ccffff;
 $incoming-pane-color: #99ccff;
 
 /* Deadline colors */
-$deadline-base-color: #eb613d;
-$deadline-color-step-percent: 10%;
+$deadline-present-color: #f00;
+$deadline-future-color: #ccffff;
 
 /* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
 /* Uses the child element of '.equal-column' */
@@ -212,23 +212,23 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
       }
 
       .due-today {
-         background-color: lighten($deadline-base-color, $deadline-color-step-percent * 0);
+         background-color: mix($deadline-present-color, $deadline-future-color, 80);
       }
 
       .due-in-3-days {
-         background-color: lighten($deadline-base-color, $deadline-color-step-percent * 1);
+         background-color: mix($deadline-present-color, $deadline-future-color, 60);
       }
 
       .due-in-7-days {
-         background-color: lighten($deadline-base-color, $deadline-color-step-percent * 2);
+         background-color: mix($deadline-present-color, $deadline-future-color, 40);
       }
 
       .due-in-14-days {
-         background-color: lighten($deadline-base-color, $deadline-color-step-percent * 3);
+         background-color: mix($deadline-present-color, $deadline-future-color, 20);
       }
 
       .due-in-30-days {
-         background-color: lighten($deadline-base-color, $deadline-color-step-percent * 4);
+         background-color: mix($deadline-present-color, $deadline-future-color, 0);
       }
 
 

@@ -261,14 +261,14 @@ div.icons .updated-note {
         overflow-y: scroll;
         max-height: 400px; }
     #deadlines .horizontal-lane .due-today {
-      background-color: #eb613d; }
+      background-color: #f43232; }
     #deadlines .horizontal-lane .due-in-3-days {
-      background-color: #f0876b; }
+      background-color: #ea6666; }
     #deadlines .horizontal-lane .due-in-7-days {
-      background-color: #f5ac99; }
+      background-color: #e09999; }
     #deadlines .horizontal-lane .due-in-14-days {
-      background-color: #f9d2c8; }
+      background-color: #d6cccc; }
     #deadlines .horizontal-lane .due-in-30-days {
-      background-color: #fef8f6; }
+      background-color: #ccffff; }
   #deadlines .issue {
     cursor: auto; }
