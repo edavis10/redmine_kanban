@@ -8,6 +8,9 @@ require "block_helpers"
 require 'dispatcher'
 
 Dispatcher.to_prepare :redmine_kanban do
+
+  require_dependency 'principal'
+  Principal.send(:include, RedmineKanban::Patches::PrincipalPatch)
   require_dependency 'issue'
   # Guards against including the module multiple time (like in tests)
   # and registering multiple callbacks

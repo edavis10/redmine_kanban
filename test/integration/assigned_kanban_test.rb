@@ -199,26 +199,49 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       @management_group.users << @user
     end
 
-    should "allow showing another user's User Kanban page" do
-      @another_user = User.generate_with_protected!
-      
-      login_as
-      visit_assigned_kanban
+    context "switch user" do
+      should "allow showing another user's User Kanban page" do
+        @another_user = User.generate_with_protected!.reload
+        Issue.generate_for_project!(@project, :assigned_to => @another_user)
+        
+        login_as
+        visit_assigned_kanban
 
-      assert_select "div.contextual" do
-        assert_select "form#user_switch"
+        assert_select "div.contextual" do
+          assert_select "form#user_switch"
+        end
+
+        select @another_user.to_s, :from => "Switch Assignee"
+        submit_form "user_switch" # JS submission
+
+        assert_response :success
+        assert_equal "/kanban/assigned-to/#{@another_user.id}", current_path
+
+        assert_select "#content", :text => /#{@another_user.to_s}'s Assignments/
       end
 
-      select @another_user.to_s, :from => "Switch Assignee"
-      submit_form "user_switch" # JS submission
+      should "only show users who have issues assigned to them" do
+        @user1_with_issue = User.generate_with_protected!
+        @user2_with_issue = User.generate_with_protected!
+        @user_without_issue = User.generate_with_protected!
 
-      assert_response :success
-      assert_equal "/kanban/assigned-to/#{@another_user.id}", current_path
+        Issue.generate_for_project!(@project, :assigned_to => @user1_with_issue)
+        Issue.generate_for_project!(@project, :assigned_to => @user2_with_issue)
 
-      assert_select "#content", :text => /#{@another_user.to_s}'s Assignments/
-    end
-    
+        login_as
+        visit_assigned_kanban
+
+        assert_select "div.contextual" do
+          assert_select "form#user_switch" do
+            assert_select "option[value=?]", @user1_with_issue.id
+            assert_select "option[value=?]", @user2_with_issue.id
+            assert_select "option[value=?]", @user_without_issue.id, :count => 0
+          end
+          
+        end
+        
+      end
       
+    end
   end
 end
-

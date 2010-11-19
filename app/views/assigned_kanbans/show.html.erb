@@ -14,7 +14,9 @@
   <%= menu.color_help %>
   <%= menu.my_kanban_requests %>
   <%= menu.new_issue %>
-  <%= menu.user_switch :url => kanban_assigned_kanbans_path, :label => l(:label_switch_assignee) %>
+  <%= menu.user_switch(:url => kanban_assigned_kanbans_path,
+                       :label => l(:label_switch_assignee),
+                       :users => Principal.with_issue_assigned) %>
 <% end %>
 
 <div class="clear"></div>
