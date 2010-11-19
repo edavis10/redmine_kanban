@@ -360,7 +360,7 @@ module IntegrationTestHelper
 
   def visit_assigned_kanban
     visit '/'
-    click_link "Assigned Kanban"
+    click_link "My Assignments"
 
     assert_response :success
     assert_equal "/kanban/my-assigned", current_url

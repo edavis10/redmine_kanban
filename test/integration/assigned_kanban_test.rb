@@ -22,7 +22,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
     
     should "load their own page" do
       login_as
-      click_link "Assigned Kanban"
+      click_link "My Assignments"
       
       assert_response :success
       assert_equal "/kanban/my-assigned", current_url
