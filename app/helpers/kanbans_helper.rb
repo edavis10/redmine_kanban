@@ -260,9 +260,19 @@ module KanbansHelper
       end
     end
 
+    def my_kanban_requests
+      link_to(l(:text_my_kanban_requests_title), kanban_user_kanban_path(:id => User.current.id), :class => 'icon icon-user')
+    end
+
     def new_issue
       if User.current.allowed_to?(:add_issues, nil, :global => true)
          link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue')
+      end
+    end
+
+    def sync_kanban
+      if User.current.allowed_to?(:edit_kanban, nil, :global => true)
+        link_to(l(:kanban_text_sync), sync_kanban_url, :method => :put, :class => 'icon icon-reload')
       end
     end
 

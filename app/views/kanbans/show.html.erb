@@ -4,13 +4,11 @@
 
 <h2><%= l(:kanban_title) %></h2>
 
-<div class="contextual">
-  <% if User.current.allowed_to?(:edit_kanban, nil, :global => true) %>
-  <%= link_to(l(:kanban_text_sync), sync_kanban_url, :method => :put, :class => 'icon icon-reload') %>
-  <% end %>
-  <%= link_to(l(:text_my_kanban_requests_title), kanban_user_kanban_path(:id => User.current.id), :class => 'icon icon-user') %>
-  <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
-</div>
+<% kanban_contextual_menu(:kanban => @kanban) do |menu| %>
+  <%= menu.sync_kanban %>
+  <%= menu.color_help %>
+  <%= menu.my_kanban_requests %>
+<% end %>
 
 <%= render :partial => 'kanbans/user_help', :locals => {:kanban_settings => @settings } %>
 <%= render :partial => 'color_help' %>
