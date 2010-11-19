@@ -10,23 +10,12 @@
   <% end %>
 </h2>
 
-<div class="contextual">
-  <%= call_hook(:view_user_kanbans_show_contextual_top, :user => @user, :kanban => @kanban) %>
-  <%= link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info') %>
-  <% if User.current.allowed_to?(:view_kanban, nil, :global => true) %>
-  <%= link_to(l(:text_kanban_board), kanban_url, :class => 'icon icon-stats') %>
-  <% end %>
-  <% if User.current.allowed_to?(:add_issues, nil, :global => true) %>
-  <%= link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue') %>
-  <% end %>
-  <% if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i) %>
-    <% form_tag(kanban_user_kanbans_path, :method => :post, :id => 'user_switch') do %>
-      <%= label_tag('user_id', l(:label_user_switch)) %>
-      <%= collection_select(:user, :id, User.active.sort, :id, :name, :include_blank => true) %>
-    <% end %>
-  <% end %>
-  <%= call_hook(:view_user_kanbans_show_contextual_bottom, :user => @user, :kanban => @kanban) %>
-</div>
+<% kanban_contextual_menu(:kanban => @kanban, :user => @user) do |menu| %>
+  <%= menu.color_help %>
+  <%= menu.kanban_board %>
+  <%= menu.new_issue %>
+  <%= menu.user_switch %>
+<% end %>
 
 <div class="clear"></div>
 

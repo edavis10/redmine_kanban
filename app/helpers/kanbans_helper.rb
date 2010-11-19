@@ -213,7 +213,7 @@ module KanbansHelper
                                        @settings['simple_issue_popup_form'] == true
                                        )
   end
-  
+
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
 
@@ -242,4 +242,45 @@ module KanbansHelper
     end
     
   end
+
+  class KanbanContextualMenu < BlockHelpers::Base
+
+    def initialize(options={})
+      @kanban = options[:kanban]
+      @user = options[:user]
+    end
+
+    def color_help
+      link_to_function(l(:kanban_text_color_help), "$('color-help').toggle();", :class => 'icon icon-info')
+    end
+
+    def kanban_board
+      if User.current.allowed_to?(:view_kanban, nil, :global => true)
+        link_to(l(:text_kanban_board), kanban_url, :class => 'icon icon-stats')
+      end
+    end
+
+    def new_issue
+      if User.current.allowed_to?(:add_issues, nil, :global => true)
+         link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue')
+      end
+    end
+
+    def user_switch
+      if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i)
+        render :partial => 'kanbans/user_switch'
+      end
+    end
+
+    def display(body)
+      content = call_hook(:view_user_kanbans_show_contextual_top, :user => @user, :kanban => @kanban).to_s
+      content += body
+      content += call_hook(:view_user_kanbans_show_contextual_bottom, :user => @user, :kanban => @kanban).to_s
+      
+      content_tag(:div,
+                  content,
+                  :class => "contextual")
+    end
+  end
+  
 end
