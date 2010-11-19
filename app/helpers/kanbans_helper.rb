@@ -280,9 +280,13 @@ module KanbansHelper
       end
     end
 
-    def user_switch
+    # @param [Hash] options
+    # @option options [String] :url URL that the user switch form should post to
+    def user_switch(options={})
+      url = options[:url]
+      
       if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i)
-        render :partial => 'kanbans/user_switch'
+        render :partial => 'kanbans/user_switch', :locals => {:url => url}
       end
     end
 

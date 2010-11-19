@@ -189,4 +189,36 @@ class AssignedKanbanTest < ActionController::IntegrationTest
     end
 
   end
+
+  context "for logged in users in the management group" do
+    setup do
+      @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
+      @project = Project.generate!
+      @role = Role.generate!(:permissions => [:view_issues, :view_kanban])
+      Member.generate!({:principal => @user, :project => @project, :roles => [@role]})
+      @management_group.users << @user
+    end
+
+    should "allow showing another user's User Kanban page" do
+      @another_user = User.generate_with_protected!
+      
+      login_as
+      visit_assigned_kanban
+
+      assert_select "div.contextual" do
+        assert_select "form#user_switch"
+      end
+
+      select @another_user.to_s, :from => "Switch User"
+      submit_form "user_switch" # JS submission
+
+      assert_response :success
+      assert_equal "/kanban/assigned-to/#{@another_user.id}", current_path
+
+      assert_select "#content", :text => /#{@another_user.to_s}'s Assignments/
+    end
+    
+      
+  end
 end
+
