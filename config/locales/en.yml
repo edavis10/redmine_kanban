@@ -66,3 +66,5 @@ en:
 
   text_assigned_kanban_title: "My Assignments"
   text_assigned_to_user_kanban_title: "{{user}}'s Assignments"
+  label_switch_assignee: "Switch Assignee"
+

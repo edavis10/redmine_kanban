@@ -1,4 +1,4 @@
 <% form_tag(url, :method => :post, :id => 'user_switch') do %>
-  <%= label_tag('user_id', l(:label_user_switch)) %>
+  <%= label_tag('user_id', label) %>
   <%= collection_select(:user, :id, User.active.sort, :id, :name, :include_blank => true) %>
 <% end %>

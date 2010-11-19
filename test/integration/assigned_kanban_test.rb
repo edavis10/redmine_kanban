@@ -209,7 +209,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
         assert_select "form#user_switch"
       end
 
-      select @another_user.to_s, :from => "Switch User"
+      select @another_user.to_s, :from => "Switch Assignee"
       submit_form "user_switch" # JS submission
 
       assert_response :success

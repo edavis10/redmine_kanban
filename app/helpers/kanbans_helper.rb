@@ -282,11 +282,13 @@ module KanbansHelper
 
     # @param [Hash] options
     # @option options [String] :url URL that the user switch form should post to
+    # @option options [String] :label Text to use for the Switch User label (i18n'd already)
     def user_switch(options={})
       url = options[:url]
+      label = options[:label] || l(:label_user_switch)
       
       if kanban_settings["management_group"] && User.current.group_ids.include?(kanban_settings["management_group"].to_i)
-        render :partial => 'kanbans/user_switch', :locals => {:url => url}
+        render :partial => 'kanbans/user_switch', :locals => {:url => url, :label => label}
       end
     end
 
