@@ -28,13 +28,6 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       assert_equal "/kanban/my-assigned", current_url
 
     end
-    
-    should "not show a link to the main Kanban" do
-      login_as
-      visit_assigned_kanban
-
-      assert_select "a", :text => "Kanban Board", :count => 0
-    end
   end
 
   context "for logged in users with permission to View Kanban" do
@@ -45,13 +38,6 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       Member.generate!({:principal => @user, :project => @project, :roles => [@role]})
       Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
       @another_user = User.generate_with_protected!
-    end
-
-    should "show a link to the main Kanban" do
-      login_as
-      visit_assigned_kanban
-
-      assert_select "a", :text => "Kanban Board"
     end
 
     should "show the user help content using the text formatting" do
