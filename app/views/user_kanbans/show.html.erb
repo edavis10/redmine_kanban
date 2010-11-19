@@ -33,6 +33,8 @@
 <%= render :partial => 'kanbans/user_help' %>
 <%= render :partial => 'kanbans/color_help' %>
 
+<%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => @user}) %>
+
 <div id="new-requests" class="user-kanban vertical-lane">
   <div class="kanban-headers">
     <div class="kanban-header">
