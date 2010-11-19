@@ -203,7 +203,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
     end
 
     should "show the upcoming deadlines" do
-      # Due Today
+      # Due asap
       @today = Issue.generate_for_project!(@project, :due_date => Date.today)
       @past_due = Issue.generate_for_project!(@project, :due_date => 3.days.ago)
 
@@ -229,7 +229,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       visit_assigned_kanban
 
       assert_select "#deadlines" do
-        assert_select ".due-today" do
+        assert_select ".due-asap" do
           assert_select "li#issue_#{@today.id}", :count => 1
           assert_select "li#issue_#{@past_due.id}", :count => 1
         end

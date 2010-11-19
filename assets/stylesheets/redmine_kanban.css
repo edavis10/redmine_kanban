@@ -260,7 +260,7 @@ div.icons .updated-note {
       #deadlines .horizontal-lane .deadline ol {
         overflow-y: scroll;
         max-height: 200px; }
-    #deadlines .horizontal-lane .due-today {
+    #deadlines .horizontal-lane .due-asap {
       background-color: #f43232; }
     #deadlines .horizontal-lane .due-in-3-days {
       background-color: #ea6666; }

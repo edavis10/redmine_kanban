@@ -8,7 +8,7 @@
   </div>
 
   <div class="horizontal-lane">
-    <div class="due-today pane equal-column deadline">
+    <div class="due-asap pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
                    :collection => Issue.visible.open.due_sooner_than(3.days.from_now),
