@@ -200,15 +200,15 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
       @include equal-column-hack;
 
       .equal-column {
-         margin-bottom: -450px;
-         padding-bottom: 450px;
+         margin-bottom: -250px;
+         padding-bottom: 250px;
       }
 
       .kanban-header { width: 20%; }
       .deadline {
          width: 20%;
 
-         ol { overflow-y: scroll; max-height: 400px; }
+         ol { overflow-y: scroll; max-height: 200px; }
       }
 
       .due-today {

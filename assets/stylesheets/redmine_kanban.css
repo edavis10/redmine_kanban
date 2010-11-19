@@ -251,15 +251,15 @@ div.icons .updated-note {
       /* end hack */
       float: left; }
     #deadlines .horizontal-lane .equal-column {
-      margin-bottom: -450px;
-      padding-bottom: 450px; }
+      margin-bottom: -250px;
+      padding-bottom: 250px; }
     #deadlines .horizontal-lane .kanban-header {
       width: 20%; }
     #deadlines .horizontal-lane .deadline {
       width: 20%; }
       #deadlines .horizontal-lane .deadline ol {
         overflow-y: scroll;
-        max-height: 400px; }
+        max-height: 200px; }
     #deadlines .horizontal-lane .due-today {
       background-color: #f43232; }
     #deadlines .horizontal-lane .due-in-3-days {
