@@ -408,4 +408,64 @@ class Test::Unit::TestCase
       end
     end
   end
+
+  def self.should_show_deadlines(&block)
+    should "show deadlines" do
+      # Due asap
+      @today = Issue.generate_for_project!(@project, :due_date => Date.today)
+      @past_due = Issue.generate_for_project!(@project, :due_date => 3.days.ago)
+
+      # Due in 3 days
+      @in_3_days = Issue.generate_for_project!(@project, :due_date => 3.days.from_now + 1.hour)
+      @in_4_days = Issue.generate_for_project!(@project, :due_date => 4.days.from_now + 1.hour)
+
+      # Due in 7 days
+      @in_7_days = Issue.generate_for_project!(@project, :due_date => 7.days.from_now + 1.hour)
+      @in_8_days = Issue.generate_for_project!(@project, :due_date => 8.days.from_now + 1.hour)
+
+      # Due in 14 days
+      @in_14_days = Issue.generate_for_project!(@project, :due_date => 14.days.from_now + 1.hour)
+      @in_15_days = Issue.generate_for_project!(@project, :due_date => 15.days.from_now + 1.hour)
+
+      # Due in 30 days
+      @in_30_days = Issue.generate_for_project!(@project, :due_date => 30.days.from_now + 1.hour)
+      @in_31_days = Issue.generate_for_project!(@project, :due_date => 31.days.from_now + 1.hour)
+
+      @in_70_days = Issue.generate_for_project!(@project, :due_date => 70.days.from_now + 1.hour)
+      
+      login_as
+      instance_eval(&block)
+
+      assert_select "#deadlines" do
+        assert_select ".due-asap" do
+          assert_select "li#issue_#{@today.id}", :count => 1
+          assert_select "li#issue_#{@past_due.id}", :count => 1
+        end
+
+        assert_select ".due-in-3-days" do
+          assert_select "li#issue_#{@in_3_days.id}", :count => 1
+          assert_select "li#issue_#{@in_4_days.id}", :count => 1
+        end
+
+        assert_select ".due-in-7-days" do
+          assert_select "li#issue_#{@in_7_days.id}", :count => 1
+          assert_select "li#issue_#{@in_8_days.id}", :count => 1
+        end
+
+        assert_select ".due-in-14-days" do
+          assert_select "li#issue_#{@in_14_days.id}", :count => 1
+          assert_select "li#issue_#{@in_15_days.id}", :count => 1
+        end
+
+        assert_select ".due-in-30-days" do
+          assert_select "li#issue_#{@in_30_days.id}", :count => 1
+          assert_select "li#issue_#{@in_31_days.id}", :count => 1
+        end
+
+        assert_select "li#issue_#{@in_70_days.id}", :count => 0
+      end
+
+    end
+    
+  end
 end

@@ -188,6 +188,8 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       assert_select "li#issue_#{@different_assigned_to_canceled_issue.id}", :count => 0
     end
 
+    should_show_deadlines { visit_assigned_kanban }
+    
   end
 
   context "for logged in users in the management group" do

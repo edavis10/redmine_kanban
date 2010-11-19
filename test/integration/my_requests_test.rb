@@ -317,6 +317,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       end
     end
 
+    should_show_deadlines { visit_my_kanban_requests }
   end
 
   context "for logged in users in the management group" do

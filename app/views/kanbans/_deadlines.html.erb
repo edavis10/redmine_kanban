@@ -1,0 +1,49 @@
+<div id="deadlines">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_due_asap)) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_due_in_x_days, :days => '3')) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_due_in_x_days, :days => '7')) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_due_in_x_days, :days => '14')) %></div>
+    <div class="kanban-header pane equal-column"><%= content_tag(:h3, l(:label_due_in_x_days, :days => '30')) %></div>
+  </div>
+
+  <div class="horizontal-lane">
+    <div class="due-asap pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.due_sooner_than(3.days.from_now)) %>
+      </ol>
+    </div>
+
+    <div class="due-in-3-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.due_between(3.days.from_now, 7.days.from_now)) %>
+      </ol>
+    </div>
+
+    <div class="due-in-7-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.due_between(7.days.from_now, 14.days.from_now)) %>
+      </ol>
+    </div>
+
+    <div class="due-in-14-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.due_between(14.days.from_now, 30.days.from_now)) %>
+      </ol>
+    </div>
+
+    <div class="due-in-30-days pane equal-column deadline">
+      <ol>
+        <%= render(:partial => 'kanbans/issue',
+                   :collection => Issue.visible.open.due_between(30.days.from_now, 60.days.from_now)) %>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+<div class="clear"></div>

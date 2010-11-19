@@ -1,5 +1,6 @@
 /* Variables */
 /* My Kanban colors */
+/* Deadline colors */
 /* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
 /* Uses the child element of '.equal-column' */
 #kanban {
@@ -233,4 +234,41 @@ div.icons .updated-note {
     #kanban .inner-pane .pane {
       border: none; }
   #kanban li.issue {
+    cursor: auto; }
+
+#deadlines {
+  margin-bottom: 15px;
+  border-width: 2px;
+  border-color: #333333;
+  border-style: solid; }
+  #deadlines .horizontal-lane {
+    overflow: hidden;
+    /* Equal height column hack */ }
+    #deadlines .horizontal-lane .equal-column {
+      /* Used to hack the equal height columns*/
+      margin-bottom: -99999px;
+      padding-bottom: 99999px;
+      /* end hack */
+      float: left; }
+    #deadlines .horizontal-lane .equal-column {
+      margin-bottom: -250px;
+      padding-bottom: 250px; }
+    #deadlines .horizontal-lane .kanban-header {
+      width: 20%; }
+    #deadlines .horizontal-lane .deadline {
+      width: 20%; }
+      #deadlines .horizontal-lane .deadline ol {
+        overflow-y: scroll;
+        max-height: 200px; }
+    #deadlines .horizontal-lane .due-asap {
+      background-color: #f43232; }
+    #deadlines .horizontal-lane .due-in-3-days {
+      background-color: #ea6666; }
+    #deadlines .horizontal-lane .due-in-7-days {
+      background-color: #e09999; }
+    #deadlines .horizontal-lane .due-in-14-days {
+      background-color: #d6cccc; }
+    #deadlines .horizontal-lane .due-in-30-days {
+      background-color: #ccffff; }
+  #deadlines .issue {
     cursor: auto; }

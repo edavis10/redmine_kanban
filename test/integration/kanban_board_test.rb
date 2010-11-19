@@ -1,13 +1,14 @@
 require 'test_helper'
 
 class KanbanBoardTest < ActionController::IntegrationTest
-  setup do
+  def setup
     configure_plugin
     setup_kanban_issues
     setup_all_issues
 
     @public_project = Project.generate!(:is_public => true)
-    @user = User.generate_with_protected!(:login => 'user', :password => 'password', :password_confirmation => 'password')
+    @project = @public_project
+    @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
     @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :edit_kanban])
     @member = Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
   end
@@ -25,7 +26,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
       # Another journal but with no notes, should not trigger the bubble
       Journal.generate!(:journalized => issue_with_note_by_assigned, :notes => '')
 
-      log_user('user', 'password')
+      login_as
       get "/kanban"
       
       assert_response :success
@@ -37,7 +38,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
     end
 
     should "show the user help content using the text formatting" do
-      login_as 'user', 'password'
+      login_as
       visit_kanban_board
 
       assert_select '.user-help' do
@@ -45,6 +46,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
       end
     end
 
+    should_show_deadlines { visit_kanban_board }
   end
 
 end

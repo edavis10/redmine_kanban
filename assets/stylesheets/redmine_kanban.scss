@@ -14,6 +14,10 @@ $selected-pane-color: #ffff99;
 $backlog-pane-color: #ccffff;
 $incoming-pane-color: #99ccff;
 
+/* Deadline colors */
+$deadline-present-color: #f00;
+$deadline-future-color: #ccffff;
+
 /* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
 /* Uses the child element of '.equal-column' */
 @mixin equal-column-hack {
@@ -186,4 +190,50 @@ div.icons .updated-note {position: absolute; left: -16px; top: -8px; } /* Allow 
    li.issue {
       cursor: auto;
    }
+}
+
+#deadlines {
+   margin-bottom: 15px;
+   @include standard-border;
+
+   .horizontal-lane {
+      @include equal-column-hack;
+
+      .equal-column {
+         margin-bottom: -250px;
+         padding-bottom: 250px;
+      }
+
+      .kanban-header { width: 20%; }
+      .deadline {
+         width: 20%;
+
+         ol { overflow-y: scroll; max-height: 200px; }
+      }
+
+      .due-asap {
+         background-color: mix($deadline-present-color, $deadline-future-color, 80);
+      }
+
+      .due-in-3-days {
+         background-color: mix($deadline-present-color, $deadline-future-color, 60);
+      }
+
+      .due-in-7-days {
+         background-color: mix($deadline-present-color, $deadline-future-color, 40);
+      }
+
+      .due-in-14-days {
+         background-color: mix($deadline-present-color, $deadline-future-color, 20);
+      }
+
+      .due-in-30-days {
+         background-color: mix($deadline-present-color, $deadline-future-color, 0);
+      }
+
+
+   }
+
+   .issue { cursor: auto; }
+
 }
