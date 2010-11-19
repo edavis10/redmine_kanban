@@ -264,6 +264,10 @@ module KanbansHelper
       link_to(l(:text_my_kanban_requests_title), kanban_user_kanban_path(:id => User.current.id), :class => 'icon icon-user')
     end
 
+    def assigned_requests
+      link_to(l(:text_assigned_kanban_title), kanban_assigned_kanban_path(:id => User.current.id), :class => 'icon icon-user')
+    end
+
     def new_issue
       if User.current.allowed_to?(:add_issues, nil, :global => true)
          link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue')
