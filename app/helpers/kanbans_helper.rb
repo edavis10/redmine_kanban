@@ -171,20 +171,45 @@ module KanbansHelper
   # * Link to the url configured in the plugin (plugin is configured with a url)
   # * No link at all
   def incoming_title
+    
+
     if Setting.plugin_redmine_kanban['panes'].present? &&
         Setting.plugin_redmine_kanban['panes']['incoming'].present? &&
         Setting.plugin_redmine_kanban['panes']['incoming']['url'].present?
+
       href_url = Setting.plugin_redmine_kanban['panes']['incoming']['url']
+      incoming_project = extract_project_from_url(href_url)
+      link_name = incoming_project.present? ? incoming_project.name : l(:kanban_text_incoming)
     else
       href_url = ''
+      link_name = l(:kanban_text_incoming)
     end
     
     if User.current.allowed_to?(:add_issues, nil, :global => true)
-       link_to(l(:kanban_text_incoming), href_url, :class => 'new-issue-dialog')
+       link_to(link_name, href_url, :class => 'new-issue-dialog')
     elsif href_url.present?
-      link_to(l(:kanban_text_incoming), href_url)
+      link_to(link_name, href_url)
     else
-      l(:kanban_text_incoming)
+      link_name
+    end
+  end
+
+  # Given a url, extract the project record from it.
+  # Will return nil if the url isn't a link to a project or the url can't be
+  # recognized
+  def extract_project_from_url(url)
+    project = nil
+    
+    link_path = url.
+      sub(request.host, ''). # Remove host
+      sub(/https?:\/\//,''). # Protocol
+      sub(/\?.*/,'') # Query string
+    begin
+      route = ActionController::Routing::Routes.recognize_path(link_path, :method => :get)
+      if route[:controller] == 'projects' && route[:id]
+        project = Project.find(route[:id])
+      end
+    rescue ActionController::RoutingError # Parse failed, not a route
     end
   end
 

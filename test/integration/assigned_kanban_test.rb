@@ -189,7 +189,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
     end
 
     should_show_deadlines { visit_assigned_kanban }
-    
+    should_allow_overriding_the_incoming_pane_link_when_linked_to_a_project { visit_assigned_kanban }
   end
 
   context "for logged in users in the management group" do

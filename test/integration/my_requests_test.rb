@@ -318,6 +318,8 @@ class MyRequestsTest < ActionController::IntegrationTest
     end
 
     should_show_deadlines { visit_my_kanban_requests }
+    should_allow_overriding_the_incoming_pane_link_when_linked_to_a_project { visit_my_kanban_requests }
+
   end
 
   context "for logged in users in the management group" do

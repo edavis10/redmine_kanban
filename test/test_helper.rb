@@ -409,6 +409,22 @@ class Test::Unit::TestCase
     end
   end
 
+  def self.should_allow_overriding_the_incoming_pane_link_when_linked_to_a_project(&block)
+    should "allow overriding the 'Incoming' pane when linked to a project" do
+      Setting.plugin_redmine_kanban["panes"]["incoming"]["url"] = "/projects/#{@project.identifier}"
+
+      assert_equal "/projects/#{@project.identifier}", Setting.plugin_redmine_kanban["panes"]["incoming"]["url"]
+      
+      login_as
+      instance_eval(&block)
+
+      assert_select '#new-requests' do
+        assert_select '.kanban-header a', :text => /#{@project.name}/
+      end
+      
+    end
+  end
+  
   def self.should_show_deadlines(&block)
     should "show deadlines" do
       # Due asap
