@@ -295,7 +295,19 @@ module KanbansHelper
 
     def new_issue
       if User.current.allowed_to?(:add_issues, nil, :global => true)
-         link_to_function(l(:label_issue_new), "void(0)", :class => 'new-issue-dialog icon icon-issue')
+
+        if Setting.plugin_redmine_kanban['panes'].present? &&
+            Setting.plugin_redmine_kanban['panes']['incoming'].present? &&
+            Setting.plugin_redmine_kanban['panes']['incoming']['url'].present?
+
+          incoming_url = Setting.plugin_redmine_kanban['panes']['incoming']['url']
+          incoming_project = extract_project_from_url(incoming_url)
+          link_name = incoming_project.present? ? incoming_project.name : l(:label_issue_new)
+        else
+          link_name = l(:label_issue_new)
+        end
+        
+         link_to_function(link_name, "void(0)", :class => 'new-issue-dialog icon icon-issue')
       end
     end
 
