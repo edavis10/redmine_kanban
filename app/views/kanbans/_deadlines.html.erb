@@ -11,35 +11,35 @@
     <div class="due-asap pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.due_sooner_than(3.days.from_now)) %>
+                   :collection => Issue.visible.open.due_sooner_than(3.days.from_now).send(scope_method, @user)) %>
       </ol>
     </div>
 
     <div class="due-in-3-days pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.due_between(3.days.from_now, 7.days.from_now)) %>
+                   :collection => Issue.visible.open.due_between(3.days.from_now, 7.days.from_now).send(scope_method, @user)) %>
       </ol>
     </div>
 
     <div class="due-in-7-days pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.due_between(7.days.from_now, 14.days.from_now)) %>
+                   :collection => Issue.visible.open.due_between(7.days.from_now, 14.days.from_now).send(scope_method, @user)) %>
       </ol>
     </div>
 
     <div class="due-in-14-days pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.due_between(14.days.from_now, 30.days.from_now)) %>
+                   :collection => Issue.visible.open.due_between(14.days.from_now, 30.days.from_now).send(scope_method, @user)) %>
       </ol>
     </div>
 
     <div class="due-in-30-days pane equal-column deadline">
       <ol>
         <%= render(:partial => 'kanbans/issue',
-                   :collection => Issue.visible.open.due_between(30.days.from_now, 60.days.from_now)) %>
+                   :collection => Issue.visible.open.due_between(30.days.from_now, 60.days.from_now).send(scope_method, @user)) %>
       </ol>
     </div>
 

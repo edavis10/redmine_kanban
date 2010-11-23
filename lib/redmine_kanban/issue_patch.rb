@@ -35,6 +35,19 @@ module RedmineKanban
           }
 
         }
+
+        named_scope :assigned_to, lambda {|user|
+          {
+            :conditions => ["#{Issue.table_name}.assigned_to_id = (?)", user.id]
+          }
+        }
+
+        named_scope :created_by, lambda {|user|
+          {
+            :conditions => ["#{Issue.table_name}.author_id = (?)", user.id]
+          }
+        }
+        
       end
 
     end

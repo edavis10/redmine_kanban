@@ -14,7 +14,7 @@
 <%= render :partial => 'kanbans/user_help', :locals => {:kanban_settings => @settings } %>
 <%= render :partial => 'color_help' %>
 
-<%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => nil}) %>
+<%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => nil, :scope_method => :all}) %>
 
 <div id="kanban">
   <% if KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured? %>

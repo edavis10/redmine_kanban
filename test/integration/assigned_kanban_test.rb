@@ -188,7 +188,7 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       assert_select "li#issue_#{@different_assigned_to_canceled_issue.id}", :count => 0
     end
 
-    should_show_deadlines { visit_assigned_kanban }
+    should_show_deadlines(:assigned) { visit_assigned_kanban }
     should_allow_overriding_the_incoming_pane_link_when_linked_to_a_project { visit_assigned_kanban }
   end
 

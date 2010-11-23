@@ -24,7 +24,7 @@
 <%= render :partial => 'kanbans/user_help' %>
 <%= render :partial => 'kanbans/color_help' %>
 
-<%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => @user}) %>
+<%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => @user, :scope_method => :assigned_to}) %>
 
 <div id="new-requests" class="assigned-kanban vertical-lane">
   <div class="kanban-headers">

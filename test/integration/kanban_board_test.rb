@@ -46,7 +46,7 @@ class KanbanBoardTest < ActionController::IntegrationTest
       end
     end
 
-    should_show_deadlines { visit_kanban_board }
+    should_show_deadlines(:all) { visit_kanban_board }
   end
 
 end

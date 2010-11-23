@@ -425,30 +425,44 @@ class Test::Unit::TestCase
     end
   end
   
-  def self.should_show_deadlines(&block)
+  def self.should_show_deadlines(type_of_deadline, &block)
     should "show deadlines" do
+      case type_of_deadline
+      when :assigned
+        issue_attributes = {:assigned_to => @user}
+        @issue_not_shown = Issue.generate_for_project!(@project, :due_date => Date.today, :assigned_to => nil)
+      when :created
+        issue_attributes = {:author => @user}
+        @issue_not_shown = Issue.generate_for_project!(@project, :due_date => Date.today, :author => User.generate_with_protected!)
+      when :all
+        issue_attributes = {}
+        @issue_not_shown = nil
+      else
+        flunk "Invalid type_of_deadline"
+      end
+
       # Due asap
-      @today = Issue.generate_for_project!(@project, :due_date => Date.today)
-      @past_due = Issue.generate_for_project!(@project, :due_date => 3.days.ago)
+      @today = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => Date.today}))
+      @past_due = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 3.days.ago}))
 
       # Due in 3 days
-      @in_3_days = Issue.generate_for_project!(@project, :due_date => 3.days.from_now + 1.hour)
-      @in_4_days = Issue.generate_for_project!(@project, :due_date => 4.days.from_now + 1.hour)
+      @in_3_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 3.days.from_now + 1.hour}))
+      @in_4_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 4.days.from_now + 1.hour}))
 
       # Due in 7 days
-      @in_7_days = Issue.generate_for_project!(@project, :due_date => 7.days.from_now + 1.hour)
-      @in_8_days = Issue.generate_for_project!(@project, :due_date => 8.days.from_now + 1.hour)
+      @in_7_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 7.days.from_now + 1.hour}))
+      @in_8_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 8.days.from_now + 1.hour}))
 
       # Due in 14 days
-      @in_14_days = Issue.generate_for_project!(@project, :due_date => 14.days.from_now + 1.hour)
-      @in_15_days = Issue.generate_for_project!(@project, :due_date => 15.days.from_now + 1.hour)
+      @in_14_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 14.days.from_now + 1.hour}))
+      @in_15_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 15.days.from_now + 1.hour}))
 
       # Due in 30 days
-      @in_30_days = Issue.generate_for_project!(@project, :due_date => 30.days.from_now + 1.hour)
-      @in_31_days = Issue.generate_for_project!(@project, :due_date => 31.days.from_now + 1.hour)
+      @in_30_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 30.days.from_now + 1.hour}))
+      @in_31_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 31.days.from_now + 1.hour}))
 
-      @in_70_days = Issue.generate_for_project!(@project, :due_date => 70.days.from_now + 1.hour)
-      
+      @in_70_days = Issue.generate_for_project!(@project, issue_attributes.merge({:due_date => 70.days.from_now + 1.hour}))
+
       login_as
       instance_eval(&block)
 
@@ -479,6 +493,10 @@ class Test::Unit::TestCase
         end
 
         assert_select "li#issue_#{@in_70_days.id}", :count => 0
+        # the :all option should show all issues with deadlines
+        if @issue_not_shown
+          assert_select "li#issue_#{@issue_not_shown.id}", :count => 0
+        end
       end
 
     end
