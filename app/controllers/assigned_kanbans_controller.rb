@@ -16,7 +16,7 @@ class AssignedKanbansController < ApplicationController
       return
     end
 
-    @kanban = Kanban.new(:user => @user, :for => [:assigned_to])
+    @kanban = Kanban.new(:user => @user, :for => [:assigned_to], :fill_backlog => true)
     @projects_sorted_by_tree = []
 
     Project.project_tree(@kanban.projects) do |project, level|

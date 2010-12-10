@@ -18,10 +18,13 @@ class Kanban
   # * :watcher - by who is watching the issue
   attr_accessor :for
 
+  attr_accessor :fill_backlog
+
   def initialize(attributes={})
     @user = attributes[:user]
     @for = attributes[:for].to_a
     @for = [:assigned_to] unless @for.present?
+    @fill_backlog = attributes[:fill_backlog] || false
     @incoming_pane = KanbanPane::IncomingPane.new
     @backlog_pane = KanbanPane::BacklogPane.new
     @quick_pane = KanbanPane::QuickPane.new
@@ -62,6 +65,18 @@ class Kanban
   def backlog_issues
     quick_issues # Needs to load quick_issues
     @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids, :for => @for, :user => @user)
+  end
+
+  def backlog_issues_with_fill(already_found_ids = [])
+    quick_issues # Needs to load quick_issues
+    # * Clears the user, all issues should be found.
+    # * Sets the limit to be how many are still needed
+    # * adds extra exclude ids for issues that are in the backlog_issues already
+    fill_to = @settings['panes']['backlog']['limit'].to_i - already_found_ids.length
+    backlog_pane.get_issues(:exclude_ids => quick_issue_ids + already_found_ids,
+                            :for => nil,
+                            :user => nil,
+                            :limit => fill_to)
   end
 
   def selected_issues
@@ -129,6 +144,25 @@ class Kanban
       }.flatten
     end
     issues ||= []
+
+    # Fill the backlog issues until the plugin limit
+    if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
+      already_found_ids = issues.collect(&:id)
+      if backlog_issues_with_fill(already_found_ids).present?
+        issues += backlog_issues_with_fill(already_found_ids).collect {|priority, issues|
+          issues.select {|issue|
+            if roll_up_projects?
+              issue.project_id == project.id || issue.project.is_descendant_of?(project)
+            else
+              issue.project_id == project.id
+            end
+
+          }
+        }.flatten
+      end
+      
+    end
+
     issues
   end
 

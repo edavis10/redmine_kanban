@@ -77,6 +77,10 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       @different_assigned_to_selected_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @selected_status)
       @backlog_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @unstaffed_status, :estimated_hours => 5)
       @different_assigned_to_backlog_issue1 = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
+      15.times do
+        Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @unstaffed_status, :estimated_hours => 5, :priority => low_priority)
+      end
+      
 
       @finished_issue = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @finished_status)
       @different_assigned_to_finished_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @finished_status)
@@ -159,11 +163,11 @@ class AssignedKanbanTest < ActionController::IntegrationTest
         assert_select '.project-lane' do
           assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
             assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
-            assert_select "li#issue_#{@backlog_watched_issue.id}", :count => 0
+            assert_select "li#issue_#{@different_assigned_to_backlog_issue1.id}", :count => 1
+            assert_select "li", :count => 15 # Filled to issue limit
           end
         end
       end
-      assert_select "li#issue_#{@different_assigned_to_backlog_issue1.id}", :count => 0
 
       # Finished lane
       assert_select '#kanban' do
