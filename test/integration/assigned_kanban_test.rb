@@ -66,7 +66,10 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       @new_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @new_status)
       @new_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @new_status)
       @different_assigned_to_new_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @new_status)
-
+      8.times do
+        Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @new_status)
+      end
+      
       @testing_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
       @testing_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status)
       @different_assigned_to_testing_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @testing_status)
@@ -113,10 +116,11 @@ class AssignedKanbanTest < ActionController::IntegrationTest
         assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
           assert_select "li#issue_#{@new_issue1.id}", :count => 1
           assert_select "li#issue_#{@new_issue2.id}", :count => 1
+          assert_select "li#issue_#{@different_assigned_to_new_issue.id}", :count => 1
           assert_select "li#issue_#{@new_watched_issue.id}", :count => 0
+          assert_select "li", :count => 5 # Filled to issue limit
         end
       end
-      assert_select "li#issue_#{@different_assigned_to_new_issue.id}", :count => 0
       
       # Testing lane
       assert_select '#kanban' do

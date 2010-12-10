@@ -19,12 +19,14 @@ class Kanban
   attr_accessor :for
 
   attr_accessor :fill_backlog
+  attr_accessor :fill_incoming
 
   def initialize(attributes={})
     @user = attributes[:user]
     @for = attributes[:for].to_a
     @for = [:assigned_to] unless @for.present?
     @fill_backlog = attributes[:fill_backlog] || false
+    @fill_incoming = attributes[:fill_incoming] || false
     @incoming_pane = KanbanPane::IncomingPane.new
     @backlog_pane = KanbanPane::BacklogPane.new
     @quick_pane = KanbanPane::QuickPane.new
@@ -167,7 +169,16 @@ class Kanban
   end
 
   def incoming_issues_for(options={})
-    incoming_issues
+    issues = incoming_issues
+    if @fill_incoming && issues.length < @settings['panes']['incoming']['limit'].to_i
+      limit = @settings['panes']['incoming']['limit'].to_i - issues.length
+      issues += incoming_pane.get_issues(:user => nil,
+                                         :for => nil,
+                                         :exclude_ids => issues.collect(&:id),
+                                         :limit => limit)
+    end
+    
+    issues
   end
 
 
