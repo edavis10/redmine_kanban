@@ -69,15 +69,18 @@ class Kanban
     @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids, :for => @for, :user => @user)
   end
 
-  def backlog_issues_with_fill(already_found_ids = [])
+  def backlog_issues_with_fill(already_found_ids = [], options = {})
     quick_issues # Needs to load quick_issues
     # * Clears the user, all issues should be found.
     # * Sets the limit to be how many are still needed
     # * adds extra exclude ids for issues that are in the backlog_issues already
+    # * restricts the find to only specific projects, so limit is followed
     fill_to = @settings['panes']['backlog']['limit'].to_i - already_found_ids.length
+    restrict_to_project_ids = options[:project_ids] || []
     backlog_pane.get_issues(:exclude_ids => quick_issue_ids + already_found_ids,
                             :for => nil,
                             :user => nil,
+                            :project_ids => restrict_to_project_ids,
                             :limit => fill_to)
   end
 
@@ -150,8 +153,9 @@ class Kanban
     # Fill the backlog issues until the plugin limit
     if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
       already_found_ids = issues.collect(&:id)
-      if backlog_issues_with_fill(already_found_ids).present?
-        issues += backlog_issues_with_fill(already_found_ids).collect {|priority, issues|
+      restrict_to_projects = project.self_and_descendants.collect(&:id)
+      if backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).present?
+        issues += backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).collect {|priority, issues|
           issues.select {|issue|
             if roll_up_projects?
               issue.project_id == project.id || issue.project.is_descendant_of?(project)
