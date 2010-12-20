@@ -5,13 +5,17 @@ class KanbanIssuesController < ApplicationController
   before_filter :authorize
   before_filter :setup_settings
   before_filter :find_issue, :except => [:new]
-  before_filter :require_valid_from_pane, :except => [:new]
+  before_filter :require_valid_from_pane, :except => [:new, :show]
 
   helper :kanbans
   helper :issues
   helper :watchers
   helper :projects
   helper :custom_fields
+  helper :attachments
+  helper :journals
+  helper :issue_relations
+  helper :timelog
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
@@ -35,6 +39,31 @@ class KanbanIssuesController < ApplicationController
       format.html { render :text => '', :status => :not_acceptable }
       format.js { render :layout => false }
     end
+  end
+
+  def show
+    @project = @issue.project
+    
+    @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
+    @journals.each_with_index {|j,i| j.indice = i+1}
+    @journals.reverse! if User.current.wants_comments_in_reverse_order?
+    @changesets = @issue.changesets.visible.all
+    @changesets.reverse! if User.current.wants_comments_in_reverse_order?
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @edit_allowed = User.current.allowed_to?(:edit_issues, @project)
+    @priorities = IssuePriority.all
+    @time_entry = TimeEntry.new
+
+    respond_to do |format|
+      format.html { render :text => '', :status => :not_acceptable }
+      format.js {
+        # Redmine only uses a single template so render that template to a
+        # string first, then embed that string into our custom template. Meta!
+        @core_content = render_to_string(:layout => false, :template => 'issues/show.rhtml')
+        render :layout => false
+      }
+    end
+
   end
 
   def edit
@@ -63,6 +92,9 @@ class KanbanIssuesController < ApplicationController
     @settings = Setting.plugin_redmine_kanban
   end
 
+  # Find the requested issue.
+  #
+  # Also checks the permissions by using Issue#visible
   def find_issue
     @issue = Issue.visible.find(params[:id])
   rescue ActiveRecord::RecordNotFound

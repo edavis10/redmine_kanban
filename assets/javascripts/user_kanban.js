@@ -28,4 +28,16 @@ jQuery(function($) {
 
     return false;
   });
+
+  $('.issue-id').click(function() {
+
+    issueId = $(this).html().replace('#','')
+    $('#dialog-window').
+      html('').
+      load('/kanban_issues/' + issueId + '.js').
+      dialog("option", "width", $('#content').width()). // Set width to the content width
+      dialog('open');
+
+    return false;
+  });
 });

@@ -36,6 +36,7 @@ Redmine::Plugin.register :redmine_kanban do
 
   permission(:view_my_kanban_requests, {:user_kanbans => [:show, :create], :kanban_issues => [:new]}, :public => true)
   permission(:view_assigned_kanban, {:assigned_kanbans => [:show, :create]}, :public => true)
+  permission(:view_issue_in_kanban, {:kanban_issues => [:show]}, :public => true)
   
   settings(:partial => 'settings/kanban_settings',
            :default => {

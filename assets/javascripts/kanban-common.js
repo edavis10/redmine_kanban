@@ -34,6 +34,26 @@
       });
     },
 
+    // Register callbacks for the Issue Show popup
+    registerIssueShowCallbacks: function() {
+      $('#issue-form').submit(function() {
+        $(this).ajaxSubmit({
+          url: this.action.replace('kanban_issues','issues'), // Change relative form endpoint
+          dataType: 'xml', // TODO: json format would prompt for a file download in the iframe
+          success: function(responseText, statusText, xhr, $form) {
+            $('.flash.notice').html(i18n.kanban_text_issue_updated_reload_to_see).show();
+            $('#dialog-window').dialog("close");
+          },
+          error: function(response) {
+            $('#issue-form-errors').html(i18n.kanban_text_error_saving_issue).show();
+          }
+        });
+
+        return false;
+      });
+
+    },
+
     // Take over the click events on the watch links used by redmine_recent_issues
     takeOverWatchLinks: function(jquerySelector) {
       $(jquerySelector).find('a.icon-fav-off').click(function() {
