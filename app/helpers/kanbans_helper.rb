@@ -43,6 +43,12 @@ module KanbansHelper
     end
   end
 
+  def issue_updated_note_icon(issue)
+    if updated_note_on_issue?(issue)
+      image_tag('comment.png', :class => 'updated-note', :alt => l(:kanban_text_updated_issue), :title => l(:kanban_text_updated_issue))
+    end
+  end
+
   def kanban_issue_css_classes(issue)
     css = 'kanban-issue ' + issue.css_classes
     if User.current.logged? && !issue.assigned_to_id.nil? && issue.assigned_to_id != User.current.id
