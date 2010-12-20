@@ -9,7 +9,7 @@
         <%= image_tag('comment.png', :class => 'updated-note', :alt => l(:kanban_text_updated_issue), :title => l(:kanban_text_updated_issue)) if updated_note_on_issue?(issue) %>
         <%= image_tag('fav.png') if issue.watched_by?(viewed_user) %>
       </div>
-      <a href="<%= issue_url(issue) %>">#<%= h(issue.id) %></a> - <%= h(issue.project.name) if issue.project %>
+      <a href="<%= issue_url(issue) %>" class="issue-id">#<%= h(issue.id) %></a> - <%= h(issue.project.name) if issue.project %>
     </div>
     
     <div class="issue-details-body"><%= h(issue.subject) %></div>
