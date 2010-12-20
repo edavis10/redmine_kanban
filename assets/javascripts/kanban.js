@@ -1,5 +1,5 @@
 jQuery(function($) {
-  $("#dialog-window").dialog({ autoOpen: false, modal: true, width: 600 });
+  $("#dialog-window").dialog({ position: [10,10], autoOpen: false, modal: true, minWidth: 400, width: 800 });
 
   receiveCrossListDrop = function(event, ui, list, options) {
     if (!options) { var options = {}; }
