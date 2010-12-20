@@ -14,6 +14,8 @@ class KanbanIssuesController < ApplicationController
   helper :custom_fields
   helper :attachments
   helper :journals
+  helper :issue_relations
+  helper :timelog
   
   def new
     @issue = Issue.new(:status => IssueStatus.default)
@@ -40,6 +42,8 @@ class KanbanIssuesController < ApplicationController
   end
 
   def show
+    @project = @issue.project
+    
     @journals = @issue.journals.find(:all, :include => [:user, :details], :order => "#{Journal.table_name}.created_on ASC")
     @journals.each_with_index {|j,i| j.indice = i+1}
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
