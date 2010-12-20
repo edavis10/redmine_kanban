@@ -39,7 +39,18 @@ module KanbansHelper
   def updated_note_on_issue?(issue)
     if issue && issue.journals.present?
       last_journal_with_note = issue.journals.select {|journal| journal.notes.present?}.last
-      last_journal_with_note && issue.assigned_to_id != last_journal_with_note.user_id
+      if last_journal_with_note && issue.assigned_to_id != last_journal_with_note.user_id
+        last_journal_with_note
+      else
+        return false
+      end
+      
+    end
+  end
+
+  def issue_updated_note_icon(issue)
+    if last_journal = updated_note_on_issue?(issue)
+      image_tag('comment.png', :class => 'updated-note', :id => "issue-#{h(issue.id)}", :alt => l(:kanban_text_updated_issue), :title => last_journal.notes)
     end
   end
 
