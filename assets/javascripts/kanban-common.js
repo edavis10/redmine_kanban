@@ -71,6 +71,21 @@
 
     },
 
+    // Registers the Issue Show popup form on all updated note icons (bubbles)
+    registerIssuePopupOnAllIssueNoteIcons: function() {
+      $('.updated-note').click(function() {
+        issueId = this.id.replace('issue-','')
+        $('#dialog-window').
+          html('').
+          load('/kanban_issues/' + issueId + '.js').
+          dialog("option", "width", $('#content').width()). // Set width to the content width
+          dialog('open');
+
+        return false;
+      });
+
+    },
+
     // Take over the click events on the watch links used by redmine_recent_issues
     takeOverWatchLinks: function(jquerySelector) {
       $(jquerySelector).find('a.icon-fav-off').click(function() {
@@ -95,6 +110,7 @@
     initilize_after_dom_loaded: function() {
       this.registerAjaxIndicator();
       this.registerIssuePopupOnAllIssueIds();
+      this.registerIssuePopupOnAllIssueNoteIcons();
     }
     
   };

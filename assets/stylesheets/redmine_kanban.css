@@ -103,6 +103,10 @@ div.icons {
   display: inline;
   position: relative; }
 
+div.icons .updated-note {
+  cursor: pointer;
+  cursor: hand; }
+
 .drop-accepted {
   background-color: #FFFFEE;
   height: 32px;
