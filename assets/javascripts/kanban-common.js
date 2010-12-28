@@ -54,27 +54,20 @@
 
     },
 
-    // Registers the Issue Show popup form on all issue id links
-    // in place of standard HTML links.
-    registerIssuePopupOnAllIssueIds: function() {
-      $('.issue-id').click(function() {
+    // Registers the Issue Show popup form on all elements with the issue-show-popup
+    // class.
+    //
+    // The css class attribute should have a value of 'issue-###'
+    registerIssuePopup: function() {
+      $('.issue-show-popup').click(function() {
 
-        issueId = $(this).html().replace('#','')
-        $('#dialog-window').
-          html('').
-          load('/kanban_issues/' + issueId + '.js').
-          dialog("option", "width", $('#content').width()). // Set width to the content width
-          dialog('open');
+        issueId = '';
+        $.each($(this).attr('class').split(' '), function(index, cssClass) {
+          if (cssClass.match('issue-id-')) {
+            issueId = cssClass.replace('issue-id-','')
+          }
+        });
 
-        return false;
-      });
-
-    },
-
-    // Registers the Issue Show popup form on all updated note icons (bubbles)
-    registerIssuePopupOnAllIssueNoteIcons: function() {
-      $('.updated-note').click(function() {
-        issueId = this.id.replace('issue-','')
         $('#dialog-window').
           html('').
           load('/kanban_issues/' + issueId + '.js').
@@ -109,8 +102,7 @@
 
     initilize_after_dom_loaded: function() {
       this.registerAjaxIndicator();
-      this.registerIssuePopupOnAllIssueIds();
-      this.registerIssuePopupOnAllIssueNoteIcons();
+      this.registerIssuePopup();
     }
     
   };

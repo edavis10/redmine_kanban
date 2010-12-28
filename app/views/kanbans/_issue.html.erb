@@ -9,7 +9,7 @@
         <%= issue_updated_note_icon(issue) %>
         <%= image_tag('fav.png') if issue.watched_by?(viewed_user) %>
       </div>
-      <a href="<%= issue_url(issue) %>" class="issue-id">#<%= h(issue.id) %></a> - <%= h(issue.project.name) if issue.project %>
+      <a href="<%= issue_url(issue) %>" class="issue-show-popup issue-id issue-id-<%= h(issue.id) %>">#<%= h(issue.id) %></a> - <%= h(issue.project.name) if issue.project %>
     </div>
     
     <div class="issue-details-body"><%= h(issue.subject) %></div>

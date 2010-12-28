@@ -50,7 +50,7 @@ module KanbansHelper
 
   def issue_updated_note_icon(issue)
     if last_journal = updated_note_on_issue?(issue)
-      image_tag('comment.png', :class => 'updated-note', :id => "issue-#{h(issue.id)}", :alt => l(:kanban_text_updated_issue), :title => h(last_journal.notes))
+      image_tag('comment.png', :class => "updated-note issue-show-popup issue-id-#{h(issue.id)}", :id => "issue-#{h(issue.id)}", :alt => l(:kanban_text_updated_issue), :title => h(last_journal.notes))
     end
   end
 
