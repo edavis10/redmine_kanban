@@ -131,32 +131,43 @@ class Kanban
     }
   end
 
+  # Display the backlog issues filtered by user and/or project, sorted by
+  # Priority
+  #
+  # Will fill to the pane limit with unassigned and assigned to other
+  # issues
   # OPTIMIZE: could cache this to ivars
+  # TODO: filtering is a mess
   def backlog_issues_for(options={})
     project = options[:project]
-    #    user = options[:user]
-    
-    if backlog_issues.present?
-      issues = backlog_issues.collect {|priority, issues|
-        issues.select {|issue|
-          if roll_up_projects?
-            issue.project_id == project.id || issue.project.is_descendant_of?(project)
-          else
-            issue.project_id == project.id
-          end
+    user = options[:user]
+    restrict_to_projects = project.self_and_descendants.collect(&:id)
 
-        }
-      }.flatten
-    end
+    backlog_issues_assigned = backlog_pane.get_issues(:exclude_ids => quick_issue_ids,
+                                                      :for => @for,
+                                                      :user => user,
+                                                      :project_ids => restrict_to_projects)
+    
+    issues = backlog_issues_assigned.collect {|priority, issues|
+      issues.select {|issue|
+        if roll_up_projects?
+          issue.project_id == project.id || issue.project.is_descendant_of?(project)
+        else
+          issue.project_id == project.id
+        end
+      }
+    }.flatten
     issues ||= []
+
+    issues = issues.sort_by(&:priority) if issues.present?
 
     # Fill the backlog issues until the plugin limit
     if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
       already_found_ids = issues.collect(&:id)
-      restrict_to_projects = project.self_and_descendants.collect(&:id)
+
       if backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).present?
-        issues += backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).collect {|priority, issues|
-          issues.select {|issue|
+        fill_issues = backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).collect {|priority, fill_issue|
+          fill_issue.select {|issue|
             if roll_up_projects?
               issue.project_id == project.id || issue.project.is_descendant_of?(project)
             else
@@ -165,6 +176,9 @@ class Kanban
 
           }
         }.flatten
+
+        fill_issues = fill_issues.sort_by(&:priority) if fill_issues.present?
+        issues += fill_issues
       end
       
     end
