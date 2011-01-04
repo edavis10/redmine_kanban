@@ -267,7 +267,6 @@ class Kanban
       end
 
       if user_filter
-        debugger if issue.id == 608
         user_filter_results = filter_user_on.collect do |user_attribute_filter|
           case user_attribute_filter
           when :author
