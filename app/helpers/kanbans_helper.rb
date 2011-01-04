@@ -80,8 +80,10 @@ module KanbansHelper
 
   def column_configured?(column)
     case column
-    when :unstaffed
-      KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured?
+    when :incoming
+      KanbanPane::IncomingPane.configured?
+    when :backlog
+      KanbanPane::BacklogPane.configured?
     when :selected
       KanbanPane::QuickPane.configured? || KanbanPane::SelectedPane.configured?
     when :staffed
@@ -94,7 +96,8 @@ module KanbansHelper
   def column_width(column)
     # weights of the columns
     column_ratios = {
-      :unstaffed => 1,
+      :incoming => 1,
+      :backlog => 1,
       :selected => 1,
       :staffed => 4
     }
@@ -102,7 +105,8 @@ module KanbansHelper
     return 0.0 if column == :selected && !column_configured?(:selected)
     
     visible = 0
-    visible += column_ratios[:unstaffed] if column_configured?(:unstaffed)
+    visible += column_ratios[:incoming] if column_configured?(:incoming)
+    visible += column_ratios[:backlog] if column_configured?(:backlog)
     visible += column_ratios[:selected] if column_configured?(:selected)
     visible += column_ratios[:staffed] if column_configured?(:staffed)
     

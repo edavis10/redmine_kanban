@@ -17,20 +17,21 @@
 <%= render(:partial => 'kanbans/deadlines', :locals => {:kanban => @kanban, :user => nil, :scope_method => :all}) %>
 
 <div id="kanban">
-  <% if KanbanPane::IncomingPane.configured? || KanbanPane::BacklogPane.configured? %>
-  <div id="unstaffed-requests" class="equal-column" style="width: <%= column_width(:unstaffed) %>%">
-    <% if KanbanPane::IncomingPane.configured? %>
-    <div id="incoming" class="pane inner-pane">
-      <%= render :partial => 'incoming' %>
+  <% if KanbanPane::IncomingPane.configured? %>
+    <div class="unstaffed-requests equal-column" style="width: <%= column_width(:incoming) %>%">
+      <div id="incoming" class="pane inner-pane">
+        <%= render :partial => 'incoming' %>
+      </div>
     </div>
-    <% end %>
-    <% if KanbanPane::BacklogPane.configured? %>
-    <div id="backlog" class="pane inner-pane">
-      <%= render :partial => 'backlog' %>
-    </div>
-    <% end %>
-  </div>
   <% end %>
+  <% if KanbanPane::BacklogPane.configured? %>
+    <div class="unstaffed-requests equal-column" style="width: <%= column_width(:backlog) %>%">
+      <div id="backlog" class="pane inner-pane">
+        <%= render :partial => 'backlog' %>
+      </div>
+    </div>
+  <% end %>
+
   <% if KanbanPane::QuickPane.configured? || KanbanPane::SelectedPane.configured? %>
   <div id="selected-requests" class="equal-column" style="width: <%= column_width(:selected) %>%">
     <% if KanbanPane::QuickPane.configured? %>
@@ -45,6 +46,7 @@
     <% end %>
   </div>
   <% end %>
+
   <div id="staffed-requests" class="equal-column" style="width: <%= column_width(:staffed) %>%">
     <div id="kanban-headers" class="staff">
       <%= content_tag(:div, content_tag(:h3, l(:kanban_text_user)), :class => "kanban-header pane equal-column", :style => "width: #{staffed_column_width(:user)}%") %>
