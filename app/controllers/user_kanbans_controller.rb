@@ -15,7 +15,7 @@ class UserKanbansController < ApplicationController
       render_403
     end
     
-    @kanban = Kanban.new(:user => @user, :for => [:author, :watcher])
+    @kanban = CreatedKanban.new(:user => @user)
     @projects_sorted_by_tree = []
 
     Project.project_tree(@kanban.projects) do |project, level|

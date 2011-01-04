@@ -1,0 +1,34 @@
+  <p>
+    <%= content_tag(:label, l(:kanban_label_user_help)) %>
+    <%= text_area_tag('settings[user_help]', @settings['user_help'], :class => 'wiki-edit', :rows => 10) %>
+    <%= wikitoolbar_for 'settings_user_help' %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_staff_role)) %>
+    <%= select_tag("settings[staff_role]",
+          content_tag(:option, '') +
+          options_from_collection_for_select(Role.all, :id, :name, @settings['staff_role'].to_i)) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_management_group)) %>
+    <%= select_tag("settings[management_group]",
+          content_tag(:option, '') +
+          options_from_collection_for_select(Group.all, :id, :lastname, @settings['management_group'].to_i)) %>
+    <%= content_tag(:span, l(:kanban_text_management_group_help)) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_project_level)) %>
+    <%= text_field_tag("settings[project_level]", @settings['project_level']) %>
+    <br />
+    <%= content_tag(:span, l(:kanban_text_project_level_help)) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_simple_issue_popup_form)) %>
+    <%= check_box_tag("settings[simple_issue_popup_form]", "1", @settings['simple_issue_popup_form'].to_s == "1" ) %>
+    <br />
+    <%= content_tag(:span, l(:kanban_text_simple_issue_popup_form_help)) %>
+  </p>

@@ -85,6 +85,16 @@ module RedmineKanban
         done_date = start_date + ((due_date - start_date+1)* done_ratio/100).floor
         return done_date <= Date.today
       end
+
+      def for_project?(project)
+        self.project == project
+      end
+
+      # Is for_project a descendant of this record's project?
+      def for_project_descendant?(for_project)
+        self.project.is_descendant_of?(for_project)
+      end
+
     end    
   end
 end

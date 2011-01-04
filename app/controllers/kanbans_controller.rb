@@ -7,7 +7,7 @@ class KanbansController < ApplicationController
   before_filter :setup_settings
 
   def show
-    @kanban = Kanban.new
+    @kanban = Kanban.new(:for => [:assigned_to])
   end
 
   def update

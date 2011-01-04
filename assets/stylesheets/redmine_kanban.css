@@ -6,7 +6,7 @@
 #kanban {
   width: 100%; }
 
-#unstaffed-requests {
+.unstaffed-requests {
   background-color: #F7F7FF; }
 
 #selected-requests {

@@ -64,24 +64,9 @@ class Kanban
     @quick_issues ||= quick_pane.get_issues
   end
 
-  def backlog_issues
+  def backlog_issues(additional_options={})
     quick_issues # Needs to load quick_issues
-    @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids, :for => @for, :user => @user)
-  end
-
-  def backlog_issues_with_fill(already_found_ids = [], options = {})
-    quick_issues # Needs to load quick_issues
-    # * Clears the user, all issues should be found.
-    # * Sets the limit to be how many are still needed
-    # * adds extra exclude ids for issues that are in the backlog_issues already
-    # * restricts the find to only specific projects, so limit is followed
-    fill_to = @settings['panes']['backlog']['limit'].to_i - already_found_ids.length
-    restrict_to_project_ids = options[:project_ids] || []
-    backlog_pane.get_issues(:exclude_ids => quick_issue_ids + already_found_ids,
-                            :for => nil,
-                            :user => nil,
-                            :project_ids => restrict_to_project_ids,
-                            :limit => fill_to)
+    backlog_pane.get_issues({:exclude_ids => quick_issue_ids, :for => @for, :user => @user}.merge(additional_options))
   end
 
   def selected_issues
@@ -110,24 +95,24 @@ class Kanban
   # * :selected - project
   #
   # OPTIMIZE: could cache this to ivars
-  [:testing, :active, :selected, :canceled].each do |pane|
+  [:testing, :active, :selected, :canceled, :finished].each do |pane|
     define_method("#{pane}_issues_for") {|options|
+      options = {} if options.nil?
       project = options[:project]
       user = options[:user]
 
-      if pane != :selected
+      case
+      when [:testing, :active].include?(pane) # grouped by user
         all_kanban_issues = send("#{pane}_issues")[user]
-      else
+        
+      when [:selected, :canceled, :finished].include?(pane) # no grouping
         all_kanban_issues = send("#{pane}_issues")
+
+      else
+        all_kanban_issues = []
       end
 
-      issues = all_kanban_issues.collect {|kanban_issue|
-        if kanban_issue.for_project?(project) || (roll_up_projects? && kanban_issue.for_project_descendant?(project))
-          kanban_issue.issue
-        end
-      }.compact
-      issues ||= []
-      issues
+      issues = filter_issues(all_kanban_issues, :project => project, :user => user)
     }
   end
 
@@ -139,45 +124,43 @@ class Kanban
   # OPTIMIZE: could cache this to ivars
   # TODO: filtering is a mess
   def backlog_issues_for(options={})
-    project = options[:project]
-    user = options[:user]
-    restrict_to_projects = project.self_and_descendants.collect(&:id)
 
-    backlog_issues_assigned = backlog_pane.get_issues(:exclude_ids => quick_issue_ids,
-                                                      :for => @for,
-                                                      :user => user,
-                                                      :project_ids => restrict_to_projects)
+    # Override the default backlog_issues finder
+    backlog_issues_additional_options = {}
+    if user = options[:user]
+      backlog_issues_additional_options[:user] = user
+    end
     
-    issues = backlog_issues_assigned.collect {|priority, issues|
-      issues.select {|issue|
-        if roll_up_projects?
-          issue.project_id == project.id || issue.project.is_descendant_of?(project)
-        else
-          issue.project_id == project.id
-        end
-      }
-    }.flatten
-    issues ||= []
+    if project = options[:project]
+      # restricts the find to only specific projects, so limit is followed
+      restrict_to_projects = project.self_and_descendants.collect(&:id)
+      backlog_issues_additional_options[:project_ids] = restrict_to_projects
+    end
+    
+    backlog_issues_found = backlog_issues(backlog_issues_additional_options)
 
+    issues = filter_issues(backlog_issues_found, :project => project, :user => user)
     issues = issues.sort_by(&:priority) if issues.present?
 
     # Fill the backlog issues until the plugin limit
     if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
-      already_found_ids = issues.collect(&:id)
 
-      if backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).present?
-        fill_issues = backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).collect {|priority, fill_issue|
-          fill_issue.select {|issue|
-            if roll_up_projects?
-              issue.project_id == project.id || issue.project.is_descendant_of?(project)
-            else
-              issue.project_id == project.id
-            end
+      # Add some additional options for getting the fill
+      fill_options = {}
+      # Clears the user, all issues should be found.
+      fill_options[:user] = nil
+      # Adds extra exclude ids for issues that are in the backlog_issues already
+      fill_options[:exclude_ids] = quick_issue_ids + issues.collect(&:id)
+      # Sets the limit to be how many are still needed
+      fill_options[:limit] = @settings['panes']['backlog']['limit'].to_i - issues.length
 
-          }
-        }.flatten
+      backlog_issues_with_fill = backlog_issues(backlog_issues_additional_options.merge(fill_options))
 
-        fill_issues = fill_issues.sort_by(&:priority) if fill_issues.present?
+      if backlog_issues_with_fill.present?
+        fill_issues = filter_issues(backlog_issues_with_fill, :project => project, :user => nil)
+        # Sort by priority but appended to existing issues
+        # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
+        fill_issues = fill_issues.sort_by(&:priority)
         issues += fill_issues
       end
       
@@ -196,39 +179,6 @@ class Kanban
                                          :limit => limit)
     end
     
-    issues
-  end
-
-
-  # OPTIMIZE: could cache this to ivars
-  def canceled_issues_for(options={})
-    project = options[:project]
-
-    # Organized by {assigned_user => [issues]}
-    issues = canceled_issues.values.flatten.select {|issue|
-      if roll_up_projects?
-        issue.project_id == project.id || issue.project.is_descendant_of?(project)
-      else
-        issue.project == project
-      end
-    }
-    issues ||= []
-    issues
-  end
-
-  # OPTIMIZE: could cache this to ivars
-  def finished_issues_for(options={})
-    project = options[:project]
-
-    # Organized by {assigned_user => [issues]}
-    issues = finished_issues.values.flatten.select {|issue|
-      if roll_up_projects?
-        issue.project_id == project.id || issue.project.is_descendant_of?(project)
-      else
-        issue.project == project
-      end
-    }
-    issues ||= []
     issues
   end
 
@@ -296,6 +246,50 @@ class Kanban
 
   def roll_up_projects?
     project_level > 0
+  end
+
+  def filter_issues(issues, filters = {})
+    project_filter = filters[:project]
+    user_filter = filters[:user]
+    filter_user_on = @for
+    
+    # Support looking up the issue through a KanbanIssue
+    actual_issues = issues.collect {|issue|
+      issue.is_a?(Issue) ? issue : issue.issue
+    }
+    
+    filtered_issues = actual_issues.select {|issue|
+
+      if project_filter
+        project_filter_passed = issue.for_project?(project_filter) || (roll_up_projects? && issue.for_project_descendant?(project_filter))
+      else
+        project_filter_passed = true # No filter
+      end
+
+      if user_filter
+        user_filter_results = filter_user_on.collect do |user_attribute_filter|
+          case user_attribute_filter
+          when :author
+            issue.author == user_filter
+          when :assigned_to
+            issue.assigned_to == user_filter
+          when :watcher
+            issue.watched_by?(user_filter)
+          else
+            false
+          end          
+        end
+
+        user_filter_passed = user_filter_results.any?
+      else
+        user_filter_passed = true # No filter
+      end
+
+      project_filter_passed && user_filter_passed
+    }
+    filtered_issues ||= []
+    filtered_issues
+
   end
 
   # Updates the Issue with +issue_id+ to change it's
