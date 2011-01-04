@@ -110,22 +110,32 @@ class Kanban
   # * :selected - project
   #
   # OPTIMIZE: could cache this to ivars
-  [:testing, :active, :selected, :canceled].each do |pane|
+  [:testing, :active, :selected, :canceled, :finished].each do |pane|
     define_method("#{pane}_issues_for") {|options|
       project = options[:project]
       user = options[:user]
 
-      if pane != :selected
+      case
+      when [:testing, :active].include?(pane) # grouped by user
         all_kanban_issues = send("#{pane}_issues")[user]
-      else
+        
+      when [:selected, :canceled, :finished].include?(pane) # no grouping
         all_kanban_issues = send("#{pane}_issues")
-      end
 
-      issues = all_kanban_issues.collect {|kanban_issue|
-        if kanban_issue.for_project?(project) || (roll_up_projects? && kanban_issue.for_project_descendant?(project))
-          kanban_issue.issue
+      else
+        all_kanban_issues = []
+      end
+      
+      issues = all_kanban_issues.collect {|kanban_record|
+        issue = kanban_record.is_a?(Issue) ? kanban_record : kanban_record.issue
+        if project
+          if issue.for_project?(project) || (roll_up_projects? && issue.for_project_descendant?(project))
+            issue
+          end
+        else
+          issue # All projects
         end
-      }.compact
+      }.compact if all_kanban_issues.present?
       issues ||= []
       issues
     }
@@ -196,39 +206,6 @@ class Kanban
                                          :limit => limit)
     end
     
-    issues
-  end
-
-
-  # OPTIMIZE: could cache this to ivars
-  def canceled_issues_for(options={})
-    project = options[:project]
-
-    # Organized by {assigned_user => [issues]}
-    issues = canceled_issues.values.flatten.select {|issue|
-      if roll_up_projects?
-        issue.project_id == project.id || issue.project.is_descendant_of?(project)
-      else
-        issue.project == project
-      end
-    }
-    issues ||= []
-    issues
-  end
-
-  # OPTIMIZE: could cache this to ivars
-  def finished_issues_for(options={})
-    project = options[:project]
-
-    # Organized by {assigned_user => [issues]}
-    issues = finished_issues.values.flatten.select {|issue|
-      if roll_up_projects?
-        issue.project_id == project.id || issue.project.is_descendant_of?(project)
-      else
-        issue.project == project
-      end
-    }
-    issues ||= []
     issues
   end
 

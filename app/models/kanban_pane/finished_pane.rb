@@ -20,8 +20,6 @@ class KanbanPane::FinishedPane < KanbanPane
                                                  :days => days.to_f.days.ago,
                                                  :user => user_id
                                                }])
-
-    return issues.group_by(&:assigned_to)
   end
   
 end

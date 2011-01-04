@@ -169,26 +169,17 @@ class KanbanTest < ActiveSupport::TestCase
       }
 
       should "only get issues with the configured Finished status" do
-        @kanban.finished_issues.each do |user, issues|
-          issues.each do |issue|
-            assert_equal 'Closed', issue.status.name
-          end
+        @kanban.finished_issues.each do |issue|
+          assert_equal 'Closed', issue.status.name
         end
       end
 
       should "only get issues from the last 7 days" do
-        @kanban.finished_issues.each do |user, issues|
-          issues.each do |issue|
-            assert issue.updated_on > 7.days.ago
-          end
+        @kanban.finished_issues.each do |issue|
+          assert issue.updated_on > 7.days.ago
         end
       end
     
-      should "group issues by User" do
-        @kanban.finished_issues.keys.each do |key|
-          assert key.is_a?(UnknownUser) || key.is_a?(User)
-        end
-      end
     end
 
     context "for canceled issues" do
@@ -198,26 +189,17 @@ class KanbanTest < ActiveSupport::TestCase
       }
 
       should "only get issues with the configured Canceled status" do
-        @kanban.canceled_issues.each do |user, issues|
-          issues.each do |issue|
-            assert_equal 'Rejected', issue.status.name
-          end
+        @kanban.canceled_issues.each do |issue|
+          assert_equal 'Rejected', issue.status.name
         end
       end
 
       should "only get issues from the last 7 days" do
-        @kanban.canceled_issues.each do |user, issues|
-          issues.each do |issue|
-            assert issue.updated_on > 7.days.ago
-          end
+        @kanban.canceled_issues.each do |issue|
+          assert issue.updated_on > 7.days.ago
         end
       end
     
-      should "group issues by User" do
-        @kanban.canceled_issues.keys.each do |key|
-          assert key.is_a?(UnknownUser) || key.is_a?(User)
-        end
-      end
     end
 
   end

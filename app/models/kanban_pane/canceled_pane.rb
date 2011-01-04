@@ -21,8 +21,6 @@ class KanbanPane::CanceledPane < KanbanPane
                                                  :user => user_id
                                                }])
 
-
-    return issues.group_by(&:assigned_to)
   end
   
 end

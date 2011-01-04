@@ -1,8 +1,8 @@
       <ol id="canceled-issues-user-<%= h user.id -%>" class="canceled-issues <%= allowed_to_assign_staffed_issue_to(user) -%>">
-        <% if @kanban.canceled_issues.blank? ||  @kanban.canceled_issues[user].blank? %>
+        <% if @kanban.canceled_issues_for(:user => user).blank? %>
         <%= render :partial => 'empty_issue' %>
         <% else %>
-        <%= render(:partial => 'issue', :collection => @kanban.canceled_issues[user]) %>
+        <%= render(:partial => 'issue', :collection => @kanban.canceled_issues_for(:user => user)) %>
         <% end %>
       </ol>
 
