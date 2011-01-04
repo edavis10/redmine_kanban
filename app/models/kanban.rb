@@ -152,22 +152,8 @@ class Kanban
     end
     
     backlog_issues_found = backlog_issues(backlog_issues_additional_options)
-    
-    issues = backlog_issues_found.collect {|priority, issues|
-      issues.select {|issue|
-        if project 
-          if roll_up_projects?
-            issue.project_id == project.id || issue.project.is_descendant_of?(project)
-          else
-            issue.project_id == project.id
-          end
-        else
-          true # no project filter
-        end
-      }
-    }.flatten
-    issues ||= []
 
+    issues = filter_issues(backlog_issues_found, :project => project)
     issues = issues.sort_by(&:priority) if issues.present?
 
     # Fill the backlog issues until the plugin limit
@@ -175,18 +161,12 @@ class Kanban
       already_found_ids = issues.collect(&:id)
 
       if backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).present?
-        fill_issues = backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).collect {|priority, fill_issue|
-          fill_issue.select {|issue|
-            if roll_up_projects?
-              issue.project_id == project.id || issue.project.is_descendant_of?(project)
-            else
-              issue.project_id == project.id
-            end
+        backlog_fill_issues = backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects)
 
-          }
-        }.flatten
-
-        fill_issues = fill_issues.sort_by(&:priority) if fill_issues.present?
+        fill_issues = filter_issues(backlog_fill_issues, :project => project)
+        # Sort by priority but appended to existing issues
+        # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
+        fill_issues = fill_issues.sort_by(&:priority)
         issues += fill_issues
       end
       

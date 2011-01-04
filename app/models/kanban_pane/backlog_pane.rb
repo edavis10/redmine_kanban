@@ -25,7 +25,7 @@ class KanbanPane::BacklogPane < KanbanPane
                                                  :project_ids => restrict_to_project_ids
                                                }])
 
-    return group_by_priority_position(issues)
+
   end
   
 end

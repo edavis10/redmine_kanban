@@ -39,30 +39,19 @@ class KanbanTest < ActiveSupport::TestCase
       }
 
       should "only get backlog issues up to the limit" do
-        assert_equal 3, @kanban.backlog_issues.size # Priorities
-        assert_equal 15, @kanban.backlog_issues.collect {|a| a[1]}.flatten.size # Issues
+        assert_equal 15, @kanban.backlog_issues.size
       end
 
       should "only get backlog issues with the configured status" do
-        @kanban.backlog_issues.each do |priority, issues|
-          issues.each do |issue|
-            assert_equal 'Unstaffed', issue.status.name
-          end
+        @kanban.backlog_issues.each do |issue|
+          assert_equal 'Unstaffed', issue.status.name
         end
       end
 
       should "not include issues that are already in the Quick Issues list" do
-        @kanban.backlog_issues.each do |priority, issues|
-          issues.each do |issue|
-            assert !@kanban.quick_issue_ids.include?(issue.id)
-          end
+        @kanban.backlog_issues.each do |issue|
+          assert !@kanban.quick_issue_ids.include?(issue.id)
         end
-      end
-
-      should "group backlog issues by IssuePriority" do
-        assert_equal IssuePriority.find_by_name("High"),  @kanban.backlog_issues.first.first
-        assert_equal IssuePriority.find_by_name("Medium"),  @kanban.backlog_issues[1].first
-        assert_equal IssuePriority.find_by_name("Low"),  @kanban.backlog_issues[2].first
       end
     end
 
