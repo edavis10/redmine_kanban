@@ -112,7 +112,7 @@ class Kanban
         all_kanban_issues = []
       end
 
-      issues = filter_issues(all_kanban_issues, :project => project)
+      issues = filter_issues(all_kanban_issues, :project => project, :user => user)
     }
   end
 
@@ -139,7 +139,7 @@ class Kanban
     
     backlog_issues_found = backlog_issues(backlog_issues_additional_options)
 
-    issues = filter_issues(backlog_issues_found, :project => project)
+    issues = filter_issues(backlog_issues_found, :project => project, :user => user)
     issues = issues.sort_by(&:priority) if issues.present?
 
     # Fill the backlog issues until the plugin limit
@@ -157,7 +157,7 @@ class Kanban
       backlog_issues_with_fill = backlog_issues(backlog_issues_additional_options.merge(fill_options))
 
       if backlog_issues_with_fill.present?
-        fill_issues = filter_issues(backlog_issues_with_fill, :project => project)
+        fill_issues = filter_issues(backlog_issues_with_fill, :project => project, :user => user)
         # Sort by priority but appended to existing issues
         # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
         fill_issues = fill_issues.sort_by(&:priority)
@@ -250,18 +250,44 @@ class Kanban
 
   def filter_issues(issues, filters = {})
     project_filter = filters[:project]
+    user_filter = filters[:user]
+    filter_user_on = @for
     
-    filtered_issues = issues.collect {|issue_record|
-      # Support looking up the issue through a KanbanIssue
-      issue = issue_record.is_a?(Issue) ? issue_record : issue_record.issue
+    # Support looking up the issue through a KanbanIssue
+    actual_issues = issues.collect {|issue|
+      issue.is_a?(Issue) ? issue : issue.issue
+    }
+    
+    filtered_issues = actual_issues.select {|issue|
+
       if project_filter
-        if issue.for_project?(project_filter) || (roll_up_projects? && issue.for_project_descendant?(project_filter))
-          issue
-        end
+        project_filter_passed = issue.for_project?(project_filter) || (roll_up_projects? && issue.for_project_descendant?(project_filter))
       else
-        issue # All projects
+        project_filter_passed = true # No filter
       end
-    }.compact if issues.present?
+
+      if user_filter
+        debugger if issue.id == 608
+        user_filter_results = filter_user_on.collect do |user_attribute_filter|
+          case user_attribute_filter
+          when :author
+            issue.author == user_filter
+          when :assigned_to
+            issue.assigned_to == user_filter
+          when :watcher
+            issue.watched_by?(user_filter)
+          else
+            false
+          end          
+        end
+
+        user_filter_passed = user_filter_results.any?
+      else
+        user_filter_passed = true # No filter
+      end
+
+      project_filter_passed && user_filter_passed
+    }
     filtered_issues ||= []
     filtered_issues
 
