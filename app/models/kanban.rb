@@ -69,21 +69,6 @@ class Kanban
     backlog_pane.get_issues({:exclude_ids => quick_issue_ids, :for => @for, :user => @user}.merge(additional_options))
   end
 
-  def backlog_issues_with_fill(already_found_ids = [], options = {})
-    quick_issues # Needs to load quick_issues
-    # * Clears the user, all issues should be found.
-    # * Sets the limit to be how many are still needed
-    # * adds extra exclude ids for issues that are in the backlog_issues already
-    # * restricts the find to only specific projects, so limit is followed
-    fill_to = @settings['panes']['backlog']['limit'].to_i - already_found_ids.length
-    restrict_to_project_ids = options[:project_ids] || []
-    backlog_pane.get_issues(:exclude_ids => quick_issue_ids + already_found_ids,
-                            :for => nil,
-                            :user => nil,
-                            :project_ids => restrict_to_project_ids,
-                            :limit => fill_to)
-  end
-
   def selected_issues
     @selected_issues ||= selected_pane.get_issues(:user => @user, :for => @for)
   end
@@ -147,6 +132,7 @@ class Kanban
     end
     
     if project = options[:project]
+      # restricts the find to only specific projects, so limit is followed
       restrict_to_projects = project.self_and_descendants.collect(&:id)
       backlog_issues_additional_options[:project_ids] = restrict_to_projects
     end
@@ -158,12 +144,20 @@ class Kanban
 
     # Fill the backlog issues until the plugin limit
     if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
-      already_found_ids = issues.collect(&:id)
 
-      if backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects).present?
-        backlog_fill_issues = backlog_issues_with_fill(already_found_ids, :project_ids => restrict_to_projects)
+      # Add some additional options for getting the fill
+      fill_options = {}
+      # Clears the user, all issues should be found.
+      fill_options[:user] = nil
+      # Adds extra exclude ids for issues that are in the backlog_issues already
+      fill_options[:exclude_ids] = quick_issue_ids + issues.collect(&:id)
+      # Sets the limit to be how many are still needed
+      fill_options[:limit] = @settings['panes']['backlog']['limit'].to_i - issues.length
 
-        fill_issues = filter_issues(backlog_fill_issues, :project => project)
+      backlog_issues_with_fill = backlog_issues(backlog_issues_additional_options.merge(fill_options))
+
+      if backlog_issues_with_fill.present?
+        fill_issues = filter_issues(backlog_issues_with_fill, :project => project)
         # Sort by priority but appended to existing issues
         # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
         fill_issues = fill_issues.sort_by(&:priority)
