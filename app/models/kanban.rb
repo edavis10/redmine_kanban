@@ -64,9 +64,9 @@ class Kanban
     @quick_issues ||= quick_pane.get_issues
   end
 
-  def backlog_issues
+  def backlog_issues(additional_options={})
     quick_issues # Needs to load quick_issues
-    @backlog_issues ||= backlog_pane.get_issues(:exclude_ids => quick_issue_ids, :for => @for, :user => @user)
+    backlog_pane.get_issues({:exclude_ids => quick_issue_ids, :for => @for, :user => @user}.merge(additional_options))
   end
 
   def backlog_issues_with_fill(already_found_ids = [], options = {})
@@ -150,21 +150,30 @@ class Kanban
   # OPTIMIZE: could cache this to ivars
   # TODO: filtering is a mess
   def backlog_issues_for(options={})
-    project = options[:project]
-    user = options[:user]
-    restrict_to_projects = project.self_and_descendants.collect(&:id)
 
-    backlog_issues_assigned = backlog_pane.get_issues(:exclude_ids => quick_issue_ids,
-                                                      :for => @for,
-                                                      :user => user,
-                                                      :project_ids => restrict_to_projects)
+    # Override the default backlog_issues finder
+    backlog_issues_additional_options = {}
+    if user = options[:user]
+      backlog_issues_additional_options[:user] = user
+    end
     
-    issues = backlog_issues_assigned.collect {|priority, issues|
+    if project = options[:project]
+      restrict_to_projects = project.self_and_descendants.collect(&:id)
+      backlog_issues_additional_options[:project_ids] = restrict_to_projects
+    end
+    
+    backlog_issues_found = backlog_issues(backlog_issues_additional_options)
+    
+    issues = backlog_issues_found.collect {|priority, issues|
       issues.select {|issue|
-        if roll_up_projects?
-          issue.project_id == project.id || issue.project.is_descendant_of?(project)
+        if project 
+          if roll_up_projects?
+            issue.project_id == project.id || issue.project.is_descendant_of?(project)
+          else
+            issue.project_id == project.id
+          end
         else
-          issue.project_id == project.id
+          true # no project filter
         end
       }
     }.flatten
