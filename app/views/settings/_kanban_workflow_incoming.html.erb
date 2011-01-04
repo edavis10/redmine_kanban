@@ -1,0 +1,33 @@
+  <%= content_tag(:p, l(:kanban_text_workflow_settings_description)) %>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_priority_change)) %>
+    <% incoming_excluded_priorities = @settings['panes']['incoming'] && @settings['panes']['incoming']['excluded_priorities'] ? @settings['panes']['incoming']['excluded_priorities'].collect(&:to_i) : []  %>
+
+    <%= select_tag("settings[panes][incoming][excluded_priorities]",
+                   content_tag(:option, '') +
+                   options_from_collection_for_select(IssuePriority.all,
+                                                    :id,
+                                                    :name,
+                                                    incoming_excluded_priorities),
+                   :multiple => true) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_project_change)) %>
+    <% incoming_excluded_projects = @settings['panes']['incoming'] && @settings['panes']['incoming']['excluded_projects'] ? @settings['panes']['incoming']['excluded_projects'].collect(&:to_i) : []  %>
+
+    <%= select_tag("settings[panes][incoming][excluded_projects]",
+                   content_tag(:option, '') +
+                   options_from_collection_for_select(Project.all,
+                                                    :id,
+                                                    :name,
+                                                    incoming_excluded_projects),
+                   :multiple => true) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_url)) %>
+    <%= text_field_tag('settings[panes][incoming][url]', @settings['panes']['incoming']['url']) %>
+  </p>
+
