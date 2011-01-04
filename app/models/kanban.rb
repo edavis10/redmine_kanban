@@ -157,7 +157,7 @@ class Kanban
       backlog_issues_with_fill = backlog_issues(backlog_issues_additional_options.merge(fill_options))
 
       if backlog_issues_with_fill.present?
-        fill_issues = filter_issues(backlog_issues_with_fill, :project => project, :user => user)
+        fill_issues = filter_issues(backlog_issues_with_fill, :project => project, :user => nil)
         # Sort by priority but appended to existing issues
         # [High, Med, Low] + [High, Med, Low], not [High, High, Med, Med, Low, Low]
         fill_issues = fill_issues.sort_by(&:priority)
