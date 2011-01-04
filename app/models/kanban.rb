@@ -126,19 +126,8 @@ class Kanban
       else
         all_kanban_issues = []
       end
-      
-      issues = all_kanban_issues.collect {|kanban_record|
-        issue = kanban_record.is_a?(Issue) ? kanban_record : kanban_record.issue
-        if project
-          if issue.for_project?(project) || (roll_up_projects? && issue.for_project_descendant?(project))
-            issue
-          end
-        else
-          issue # All projects
-        end
-      }.compact if all_kanban_issues.present?
-      issues ||= []
-      issues
+
+      issues = filter_issues(all_kanban_issues, :project => project)
     }
   end
 
@@ -283,6 +272,25 @@ class Kanban
 
   def roll_up_projects?
     project_level > 0
+  end
+
+  def filter_issues(issues, filters = {})
+    project_filter = filters[:project]
+    
+    filtered_issues = issues.collect {|issue_record|
+      # Support looking up the issue through a KanbanIssue
+      issue = issue_record.is_a?(Issue) ? issue_record : issue_record.issue
+      if project_filter
+        if issue.for_project?(project_filter) || (roll_up_projects? && issue.for_project_descendant?(project_filter))
+          issue
+        end
+      else
+        issue # All projects
+      end
+    }.compact if issues.present?
+    filtered_issues ||= []
+    filtered_issues
+
   end
 
   # Updates the Issue with +issue_id+ to change it's
