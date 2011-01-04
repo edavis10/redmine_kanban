@@ -112,6 +112,7 @@ class Kanban
   # OPTIMIZE: could cache this to ivars
   [:testing, :active, :selected, :canceled, :finished].each do |pane|
     define_method("#{pane}_issues_for") {|options|
+      options = {} if options.nil?
       project = options[:project]
       user = options[:user]
 
