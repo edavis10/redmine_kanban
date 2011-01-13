@@ -270,3 +270,6 @@ div.icons .updated-note {
       background-color: #ccffff; }
   #deadlines .issue {
     cursor: auto; }
+
+div.calendar {
+  z-index: 9999; }
