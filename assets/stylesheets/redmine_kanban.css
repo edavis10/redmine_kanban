@@ -273,3 +273,6 @@ div.icons .updated-note {
 
 div.calendar {
   z-index: 9999; }
+
+#ajax-indicator {
+  z-index: 9999; }
