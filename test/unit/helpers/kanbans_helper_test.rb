@@ -32,24 +32,13 @@ class KanbansHelperTest < HelperTestCase
                              'canceled' => {}
                            }})
     end
-    
-    context "for unstaffed" do
-      should "be 0 if unstaffed is disabled" do
-        assert_equal 0, column_width(:unstaffed)
+
+    context "for incoming" do
+      should "be 0 if incoming is disabled" do
+        assert_equal 0, column_width(:incoming)
       end
 
-      should "be 19.2 if unstaffed and staffed are enabled" do
-        enable_pane(:incoming)
-        enable_pane(:backlog)
-
-        assert KanbanPane::IncomingPane.configured?
-        assert KanbanPane::BacklogPane.configured?
-        assert !KanbanPane::SelectedPane.configured?
-
-        assert_equal 19.2, column_width(:unstaffed)
-      end
-
-      should "be 16.0 if unstaffed, selected, and staffed are enabled"  do
+      should "be 13.7 if staffed, incoming, backlog, and selected are enabled" do
         enable_pane(:incoming)
         enable_pane(:backlog)
         enable_pane(:selected)
@@ -58,7 +47,25 @@ class KanbansHelperTest < HelperTestCase
         assert KanbanPane::BacklogPane.configured?
         assert KanbanPane::SelectedPane.configured?
 
-        assert_equal 16.0, column_width(:unstaffed)
+        assert_equal 13.71, column_width(:incoming)
+      end
+    end
+
+    context "for backlog" do
+      should "be 0 if backlog is disabled" do
+        assert_equal 0, column_width(:backlog)
+      end
+
+      should "be 13.7 if staffed, incoming, backlog, and selected are enabled" do
+        enable_pane(:incoming)
+        enable_pane(:backlog)
+        enable_pane(:selected)
+
+        assert KanbanPane::IncomingPane.configured?
+        assert KanbanPane::BacklogPane.configured?
+        assert KanbanPane::SelectedPane.configured?
+
+        assert_equal 13.71, column_width(:backlog)
       end
     end
 
@@ -77,7 +84,7 @@ class KanbansHelperTest < HelperTestCase
         assert_equal 19.2, column_width(:selected)
       end
 
-      should "be 16.0 if unstaffed, selected, and staffed are enabled"  do
+      should "be 13.71 if unstaffed, selected, and staffed are enabled"  do
         enable_pane(:incoming)
         enable_pane(:backlog)
         enable_pane(:selected)
@@ -86,7 +93,7 @@ class KanbansHelperTest < HelperTestCase
         assert KanbanPane::BacklogPane.configured?
         assert KanbanPane::SelectedPane.configured?
 
-        assert_equal 16.0, column_width(:selected)
+        assert_equal 13.71, column_width(:selected)
       end
     end
 
@@ -95,14 +102,14 @@ class KanbansHelperTest < HelperTestCase
         assert_equal 96, column_width(:staffed)
       end
       
-      should "be 76.8 if unstaffed and staffed are enabled" do
+      should "be 64.0 if unstaffed and staffed are enabled" do
         enable_pane(:incoming)
         enable_pane(:backlog)
 
         assert KanbanPane::IncomingPane.configured?
         assert KanbanPane::BacklogPane.configured?
 
-        assert_equal 76.8, column_width(:staffed)
+        assert_equal 64.0, column_width(:staffed)
       end
 
       should "be 76.8 if selected and staffed are enabled" do
@@ -113,7 +120,7 @@ class KanbansHelperTest < HelperTestCase
         assert_equal 76.8, column_width(:staffed)
       end
 
-      should "be 64.0 if unstaffed, selected, and staffed are enabled" do
+      should "be 54.86 if unstaffed, selected, and staffed are enabled" do
         enable_pane(:incoming)
         enable_pane(:backlog)
         enable_pane(:selected)
@@ -122,7 +129,7 @@ class KanbansHelperTest < HelperTestCase
         assert KanbanPane::BacklogPane.configured?
         assert KanbanPane::SelectedPane.configured?
 
-        assert_equal 64.0, column_width(:staffed)
+        assert_equal 54.86, column_width(:staffed)
       end
       
     end

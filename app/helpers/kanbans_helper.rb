@@ -101,7 +101,8 @@ module KanbansHelper
       :selected => 1,
       :staffed => 4
     }
-    return 0.0 if column == :unstaffed && !column_configured?(:unstaffed)
+    return 0.0 if column == :incoming && !column_configured?(:incoming)
+    return 0.0 if column == :backlog && !column_configured?(:backlog)
     return 0.0 if column == :selected && !column_configured?(:selected)
     
     visible = 0
