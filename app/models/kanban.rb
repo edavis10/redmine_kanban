@@ -124,7 +124,10 @@ class Kanban
   # OPTIMIZE: could cache this to ivars
   # TODO: filtering is a mess
   def backlog_issues_for(options={})
-
+    # Used to turn off fill_backlog on a per-call basis
+    fill_backlog = options[:fill_backlog]
+    fill_backlog = @fill_backlog if fill_backlog.nil?
+    
     # Override the default backlog_issues finder
     backlog_issues_additional_options = {}
     if user = options[:user]
@@ -143,7 +146,7 @@ class Kanban
     issues = issues.sort_by(&:priority) if issues.present?
 
     # Fill the backlog issues until the plugin limit
-    if @fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
+    if fill_backlog && issues.length < @settings['panes']['backlog']['limit'].to_i
 
       # Add some additional options for getting the fill
       fill_options = {}
@@ -218,12 +221,10 @@ class Kanban
     opts = {:user => user, :project => project}
 
     # TODO: should be refactored to use enum#any?
-    return true if finished_issues_for(opts).length > 0
-    return true if canceled_issues_for(opts).length > 0
     return true if testing_issues_for(opts).length > 0
     return true if active_issues_for(opts).length > 0
     return true if selected_issues_for(opts).length > 0
-    return true if backlog_issues_for(opts).length > 0
+    return true if backlog_issues_for(opts.merge({:fill_backlog => false})).length > 0
     return false
   end
   
