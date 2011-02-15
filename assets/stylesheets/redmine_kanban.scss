@@ -38,6 +38,8 @@ $deadline-future-color: #ccffff;
    border-style: solid;
 }
 
+.loading {padding-left: 26px; background-image: url(../../../images/loading.gif); background-repeat: no-repeat; font-weight:bold;}
+
 #kanban {width: 100%;}
 .unstaffed-requests { background-color: #F7F7FF; }
 #selected-requests { background-color: #F7F7FF; }

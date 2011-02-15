@@ -33,10 +33,12 @@
     </div>
   </div>
 
-  <div class="project-lane">
-    <% user_kanban_div_helper(:project_id => 0, :column => :incoming, :user => @user) do |div| %>
-      <%= div.issues(@kanban.incoming_issues_for) %>
-    <% end %>
+  <div class="project-lane" id="assigned-kanbans-show-incoming">
+    <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
+                                                       :project => nil,
+                                                       :column => :incoming,
+                                                       :format => 'js'),
+                           'assigned-kanbans-show-incoming') %>
   </div>
   <div style="clear:left;"> </div>
 

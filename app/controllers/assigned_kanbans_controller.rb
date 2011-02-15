@@ -24,6 +24,11 @@ class AssignedKanbansController < ApplicationController
         @projects_sorted_by_tree << project
       end
     end
+
+    respond_to do |format|
+      format.html {}
+      format.js { render :partial => 'kanbans/user_kanban_div', :locals => {:user => @user, :kanban => @kanban, :column => params[:column]}}
+    end
   end
 
   def create

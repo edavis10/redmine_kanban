@@ -256,6 +256,12 @@ module KanbansHelper
                                        )
   end
 
+  # Load remote RJS/HTML data from url into dom_id
+  def kanban_remote_data(url, dom_id)
+    javascript_tag("Kanban.remoteData('#{url}', '#{dom_id}');") +
+      content_tag(:span, l(:label_loading), :class => 'loading')
+  end
+  
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util
 

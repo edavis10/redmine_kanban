@@ -93,6 +93,13 @@
       });
     },
 
+    // Load remote data from the server into the domId element
+    remoteData: function(url, domId) {
+      $('#' + domId).load(url, function() {
+        Kanban.registerIssuePopup();
+      });
+    },
+
     initilize: function() {
       $(function($) {
         Kanban.initilize_after_dom_loaded();

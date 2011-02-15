@@ -1,0 +1,3 @@
+<% user_kanban_div_helper(:project_id => 0, :column => column.to_sym, :user => user) do |div| %>
+  <%= div.issues(kanban.incoming_issues_for) %>
+<% end %>
