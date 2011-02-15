@@ -3,6 +3,12 @@
 /* Deadline colors */
 /* Equal height columns using margin-bottom: http://www.ejeliot.com/blog/61 */
 /* Uses the child element of '.equal-column' */
+.loading {
+  padding-left: 26px;
+  background-image: url(../../../images/loading.gif);
+  background-repeat: no-repeat;
+  font-weight: bold; }
+
 #kanban {
   width: 100%; }
 

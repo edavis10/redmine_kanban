@@ -59,7 +59,9 @@
     //
     // The css class attribute should have a value of 'issue-###'
     registerIssuePopup: function() {
-      $('.issue-show-popup').click(function() {
+      $('.issue-show-popup').
+        not('.issue-show-popup-registered').
+        click(function() {
 
         issueId = '';
         $.each($(this).attr('class').split(' '), function(index, cssClass) {
@@ -75,7 +77,7 @@
           dialog('open');
 
         return false;
-      });
+      }).addClass('issue-show-popup-registered');
 
     },
 
@@ -90,6 +92,15 @@
     registerUserSwitch: function() {
       $('#user_id').change(function() {
         $('form#user_switch').submit();
+      });
+    },
+
+    // Load remote data from the server into the domId element
+    remoteData: function(url, domId) {
+      $('#' + domId).load(url, function() {
+        Kanban.registerIssuePopup();
+        // Remove temporary 'loading' styling
+        $(this).removeClass('pane').removeClass('equal-column').width('100%'); 
       });
     },
 
