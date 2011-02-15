@@ -213,7 +213,7 @@ class Kanban
       @projects = Project.all(:conditions => Project.allowed_to_condition(User.current, :view_issues))
       # User isn't a member but they created an issue which was moved out of their visibility
       @projects += Project.all(:include => :issues,
-                               :conditions => ["#{Issue.table_name}.author_id = :user", {:user => User.current.id}])
+                               :conditions => ["#{Issue.table_name}.author_id = :user AND #{Project.table_name}.id NOT IN (:found_projects)", {:user => User.current.id, :found_projects => @projects.collect(&:id)}])
 
       @projects = roll_up_projects_to_project_level(@projects).uniq
     end
