@@ -96,9 +96,13 @@
                              "assigned-kanban-show-active-project-#{project.id}") %>
     </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :selected, :user => @user) do |div| %>
-        <%= div.issues(@kanban.selected_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="assigned-kanban-show-selected-project-<%= project.id -%>">
+      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
+                                                         :project => project.identifier,
+                                                         :column => :selected,
+                                                         :format => 'js'),
+                             "assigned-kanban-show-selected-project-#{project.id}") %>
+    </div>
 
     <% user_kanban_div_helper(:project_id => project.id, :column => :backlog, :user => @user) do |div| %>
       <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
