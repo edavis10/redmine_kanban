@@ -62,6 +62,7 @@
 
       <div class="inner-pane">
         <%= content_tag(:h3, l(:kanban_text_finished_requests)) %>
+
         <% user_kanban_div_helper(:project_id => project.id, :column => :finished, :user => @user) do |div| %>
           <%= div.issues(@kanban.finished_issues_for(:user => @user, :project => project)) %>
         <% end %>
@@ -79,9 +80,13 @@
   <div style="clear:left;"> </div>
     </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :testing, :user => @user) do |div| %>
-        <%= div.issues(@kanban.testing_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="assigned-kanban-show-testing-project-<%= project.id -%>">
+      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
+                                                         :project => project.identifier,
+                                                         :column => :testing,
+                                                         :format => 'js'),
+                             "assigned-kanban-show-testing-project-#{project.id}") %>
+    </div>
 
     <% user_kanban_div_helper(:project_id => project.id, :column => :active, :user => @user) do |div| %>
         <%= div.issues(@kanban.active_issues_for(:user => @user, :project => project)) %>
