@@ -1,3 +1,5 @@
-<% user_kanban_div_helper(:project_id => 0, :column => column.to_sym, :user => user) do |div| %>
+<% project_id = project.id if project 
+   project_id ||= 0 %>
+<% user_kanban_div_helper(:project_id => project_id, :column => column.to_sym, :user => user) do |div| %>
   <%= div.issues(kanban.send(column.to_s + '_issues_for', :user => user, :project => project)) %>
 <% end %>

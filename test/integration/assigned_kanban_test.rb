@@ -62,7 +62,9 @@ class AssignedKanbanTest < ActionController::IntegrationTest
 
     end
 
-    should "show the swimlanes based on issue assignment" do
+    context "load swimlanes using ajax" do
+
+      setup do
       @new_issue1 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @new_status)
       @new_issue2 = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @new_status)
       @different_assigned_to_new_issue = Issue.generate_for_project!(@project, :assigned_to => @another_user, :status => @new_status)
@@ -106,14 +108,18 @@ class AssignedKanbanTest < ActionController::IntegrationTest
       [@new_watched_issue, @testing_watched_issue, @active_watched_issue, @selected_watched_issue, @backlog_watched_issue, @finished_watched_issue, @canceled_watched_issue].each do |issue|
         Watcher.generate!(:watchable_type => "Issue", :watchable_id => issue.id, :user => @user)
         assert issue.watched_by? @user
+        end
+
+        login_as
       end
-
-      login_as
-      visit_assigned_kanban
-
-      # New lane
-      assert_select '#new-requests' do
-        assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
+      
+      should "load the new requests lane" do
+      
+        visit "/kanban/assigned-to/#{@user.id}.js?column=incoming"
+        doc = HTML::Document.new(response.body)
+        
+        # New lane
+        assert_select doc.root, "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
           assert_select "li#issue_#{@new_issue1.id}", :count => 1
           assert_select "li#issue_#{@new_issue2.id}", :count => 1
           assert_select "li#issue_#{@different_assigned_to_new_issue.id}", :count => 1
@@ -122,80 +128,92 @@ class AssignedKanbanTest < ActionController::IntegrationTest
         end
       end
       
-      # Testing lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
-            assert_select "li#issue_#{@testing_issue1.id}", :count => 1
-            assert_select "li#issue_#{@testing_issue2.id}", :count => 1
-            assert_select "li#issue_#{@testing_watched_issue.id}", :count => 0
-          end
+      should "load the testing lane" do
+        
+        visit "/kanban/assigned-to/#{@user.id}.js?column=testing&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+        
+        # Testing lane
+        assert_select doc.root, "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
+          assert_select "li#issue_#{@testing_issue1.id}", :count => 1
+          assert_select "li#issue_#{@testing_issue2.id}", :count => 1
+          assert_select "li#issue_#{@testing_watched_issue.id}", :count => 0
         end
+        assert_select "li#issue_#{@different_assigned_to_testing_issue.id}", :count => 0
       end
-      assert_select "li#issue_#{@different_assigned_to_testing_issue.id}", :count => 0
       
-      # Active lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
-            assert_select "li#issue_#{@active_issue1.id}", :count => 1
-            assert_select "li#issue_#{@active_issue2.id}", :count => 1
-            assert_select "li#issue_#{@active_watched_issue.id}", :count => 0
-          end
+      should "load the active lane" do
+        
+        visit "/kanban/assigned-to/#{@user.id}.js?column=active&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+        
+        # Active lane
+        assert_select doc.root, "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
+          assert_select "li#issue_#{@active_issue1.id}", :count => 1
+          assert_select "li#issue_#{@active_issue2.id}", :count => 1
+          assert_select "li#issue_#{@active_watched_issue.id}", :count => 0
+        end
+        assert_select "li#issue_#{@different_assigned_to_active_issue.id}", :count => 0
+
+        # Don't show an issue assigned to a non-member (e.g. issue assigned and then moved)
+        assert_select "#active-issues-user-#{@user.id}-project-#{@another_project.id}.active-issues", :count => 0 do
+          assert_select "li#issue_#{@non_member_issue.id}", :count => 0
         end
       end
-      assert_select "li#issue_#{@different_assigned_to_active_issue.id}", :count => 0
+      
+      should "load the selected lane" do
+        
+        visit "/kanban/assigned-to/#{@user.id}.js?column=selected&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
 
-      # Don't show an issue assigned to a non-member (e.g. issue assigned and then moved)
-      assert_select "#active-issues-user-#{@user.id}-project-#{@another_project.id}.active-issues", :count => 0 do
-        assert_select "li#issue_#{@non_member_issue.id}", :count => 0
+        # Selected lane
+        assert_select doc.root, "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
+          assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+          assert_select "li#issue_#{@selected_watched_issue.id}", :count => 0
+        end
+        assert_select "li#issue_#{@different_assigned_to_selected_issue.id}", :count => 0
       end
 
-      # Selected lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
-            assert_select "li#issue_#{@selected_issue1.id}", :count => 1
-            assert_select "li#issue_#{@selected_watched_issue.id}", :count => 0
-          end
+      should "load the backlog lane" do
+        
+        visit "/kanban/assigned-to/#{@user.id}.js?column=backlog&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+
+        # Backlog lane
+        assert_select doc.root, "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
+          assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+          assert_select "li#issue_#{@different_assigned_to_backlog_issue1.id}", :count => 1
+          assert_select "li", :count => 15 # Filled to issue limit
         end
       end
-      assert_select "li#issue_#{@different_assigned_to_selected_issue.id}", :count => 0
+      
 
-      # Backlog lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
-            assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
-            assert_select "li#issue_#{@different_assigned_to_backlog_issue1.id}", :count => 1
-            assert_select "li", :count => 15 # Filled to issue limit
-          end
-        end
-      end
+      should "load the finished lane" do
+        visit "/kanban/assigned-to/#{@user.id}.js?column=finished&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
 
-      # Finished lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
-            assert_select "li#issue_#{@finished_issue.id}", :count => 1
-            assert_select "li#issue_#{@finished_watched_issue.id}", :count => 0
-          end
+        # Finished lane
+        assert_select doc.root, "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
+          assert_select "li#issue_#{@finished_issue.id}", :count => 1
+          assert_select "li#issue_#{@finished_watched_issue.id}", :count => 0
         end
+        assert_select "li#issue_#{@different_assigned_to_finished_issue.id}", :count => 0
       end
-      assert_select "li#issue_#{@different_assigned_to_finished_issue.id}", :count => 0
+      
 
-      # Canceled lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
-            assert_select "li#issue_#{@canceled_issue.id}", :count => 1
-            assert_select "li#issue_#{@canceled_watched_issue.id}", :count => 0
-          end
+      should "load the canceled lane" do
+        visit "/kanban/assigned-to/#{@user.id}.js?column=canceled&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+
+        # Canceled lane
+        assert_select doc.root, "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
+          assert_select "li#issue_#{@canceled_issue.id}", :count => 1
+          assert_select "li#issue_#{@canceled_watched_issue.id}", :count => 0
         end
+        assert_select "li#issue_#{@different_assigned_to_canceled_issue.id}", :count => 0
       end
-      assert_select "li#issue_#{@different_assigned_to_canceled_issue.id}", :count => 0
     end
-
+    
     should_show_deadlines(:assigned) { visit_assigned_kanban }
     should_allow_overriding_the_incoming_pane_link_when_linked_to_a_project { visit_assigned_kanban }
   end
