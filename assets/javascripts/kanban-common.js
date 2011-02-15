@@ -99,6 +99,8 @@
     remoteData: function(url, domId) {
       $('#' + domId).load(url, function() {
         Kanban.registerIssuePopup();
+        // Remove temporary 'loading' styling
+        $(this).removeClass('pane').removeClass('equal-column').width('100%'); 
       });
     },
 

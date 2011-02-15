@@ -80,7 +80,7 @@
   <div style="clear:left;"> </div>
     </div>
 
-    <div id="assigned-kanban-show-testing-project-<%= project.id -%>">
+    <div id="assigned-kanban-show-testing-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
       <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
                                                          :project => project.identifier,
                                                          :column => :testing,
@@ -88,7 +88,7 @@
                              "assigned-kanban-show-testing-project-#{project.id}") %>
     </div>
 
-    <div id="assigned-kanban-show-active-project-<%= project.id -%>">
+    <div id="assigned-kanban-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
       <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
                                                          :project => project.identifier,
                                                          :column => :active,
@@ -96,7 +96,7 @@
                              "assigned-kanban-show-active-project-#{project.id}") %>
     </div>
 
-    <div id="assigned-kanban-show-selected-project-<%= project.id -%>">
+    <div id="assigned-kanban-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
       <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
                                                          :project => project.identifier,
                                                          :column => :selected,
@@ -104,7 +104,7 @@
                              "assigned-kanban-show-selected-project-#{project.id}") %>
     </div>
 
-    <div id="assigned-kanban-show-backlog-project-<%= project.id -%>">
+    <div id="assigned-kanban-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
       <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
                                                          :project => project.identifier,
                                                          :column => :backlog,
