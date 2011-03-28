@@ -31,10 +31,12 @@
     </div>
   </div>
 
-  <div class="project-lane">
-    <% user_kanban_div_helper(:project_id => 0, :column => :incoming, :user => @user) do |div| %>
-      <%= div.issues(@kanban.incoming_issues_for) %>
-    <% end %>
+  <div class="project-lane" id="user-kanban-show-incoming">
+    <%= kanban_remote_data(kanban_user_kanban_path(:id => @user.id,
+                                                       :project => nil,
+                                                       :column => :incoming,
+                                                       :format => 'js'),
+                           'user-kanban-show-incoming') %>
   </div>
   <div style="clear:left;"> </div>
 
@@ -75,21 +77,37 @@
   <div style="clear:left;"> </div>
     </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :testing, :user => @user) do |div| %>
-        <%= div.issues(@kanban.testing_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="user-kanban-show-testing-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
+      <%= kanban_remote_data(kanban_user_kanban_path(:id => @user.id,
+                                                     :project => project.identifier,
+                                                     :column => :testing,
+                                                     :format => 'js'),
+                             "user-kanban-show-testing-project-#{project.id}") %>
+    </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :active, :user => @user) do |div| %>
-        <%= div.issues(@kanban.active_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="user-kanban-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+      <%= kanban_remote_data(kanban_user_kanban_path(:id => @user.id,
+                                                     :project => project.identifier,
+                                                     :column => :active,
+                                                     :format => 'js'),
+                             "user-kanban-show-active-project-#{project.id}") %>
+    </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :selected, :user => @user) do |div| %>
-        <%= div.issues(@kanban.selected_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="user-kanban-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
+      <%= kanban_remote_data(kanban_user_kanban_path(:id => @user.id,
+                                                     :project => project.identifier,
+                                                     :column => :selected,
+                                                     :format => 'js'),
+                             "user-kanban-show-selected-project-#{project.id}") %>
+    </div>
 
-    <% user_kanban_div_helper(:project_id => project.id, :column => :backlog, :user => @user) do |div| %>
-      <%= div.issues(@kanban.backlog_issues_for(:user => @user, :project => project)) %>
-    <% end %>
+    <div id="user-kanban-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+      <%= kanban_remote_data(kanban_user_kanban_path(:id => @user.id,
+                                                     :project => project.identifier,
+                                                     :column => :backlog,
+                                                     :format => 'js'),
+                             "user-kanban-show-backlog-project-#{project.id}") %>
+    </div>
     <div style="clear:left;"> </div>
   </div>
   <% end %>

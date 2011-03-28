@@ -23,6 +23,13 @@ class UserKanbansController < ApplicationController
         @projects_sorted_by_tree << project
       end
     end
+
+    project = Project.visible.find(params[:project]) if params[:project].present?
+
+    respond_to do |format|
+      format.html {}
+      format.js { render :partial => 'kanbans/user_kanban_div', :locals => {:user => @user, :kanban => @kanban, :column => params[:column], :project => project}}
+    end
     
   end
 

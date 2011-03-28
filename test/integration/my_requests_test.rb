@@ -83,131 +83,141 @@ class MyRequestsTest < ActionController::IntegrationTest
 
     end
 
-    
-    should "show the swimlanes" do
-      @new_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
-      @new_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
-      @different_author_new_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
-
-      @testing_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
-      @testing_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
-      @different_author_testing_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
-      @active_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
-      @active_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
-      @different_author_active_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
-      @selected_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @selected_status)
-      @different_author_selected_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
-      @backlog_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
-      @different_author_backlog_issue1 = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
-
-      @finished_issue = Issue.generate_for_project!(@project, :author => @user, :status => @finished_status)
-      @different_author_finished_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
-      @canceled_issue = Issue.generate_for_project!(@project, :author => @user, :status => @canceled_status)
-      @different_author_canceled_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
-      
-      # Not a member but created
-      @another_project = Project.generate!
-      @non_member_issue = Issue.generate_for_project!(@another_project, :author => @user, :status => @active_status)
-
-      # Watched issues
-      @new_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
-      @testing_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
-      @active_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
-      @selected_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
-      @backlog_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
-      @finished_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
-      @canceled_watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
-
-      [@new_watched_issue, @testing_watched_issue, @active_watched_issue, @selected_watched_issue, @backlog_watched_issue, @finished_watched_issue, @canceled_watched_issue].each do |issue|
-        Watcher.generate!(:watchable_type => "Issue", :watchable_id => issue.id, :user => @user)
-        assert issue.watched_by? @user
+    context "load the swimlanes using ajax" do
+      setup do
+        login_as
       end
 
-      login_as
-      visit_my_kanban_requests
+      should "load the new requests lane" do
+        @new_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
+        @new_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @new_status)
+        @different_author_new_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
 
-      # New lane
-      assert_select '#new-requests' do
-        assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @new_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+
+        visit "/kanban/users/#{@user.id}.js?column=incoming"
+        doc = HTML::Document.new(response.body)
+
+        assert_select doc.root, "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
           assert_select "li#issue_#{@new_issue1.id}", :count => 1
           assert_select "li#issue_#{@new_issue2.id}", :count => 1
-          assert_select "li#issue_#{@new_watched_issue.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
         end
-      end
-      assert_select "li#issue_#{@different_author_new_issue.id}", :count => 0
-      
-      # Testing lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
-            assert_select "li#issue_#{@testing_issue1.id}", :count => 1
-            assert_select "li#issue_#{@testing_issue2.id}", :count => 1
-            assert_select "li#issue_#{@testing_watched_issue.id}", :count => 1
-          end
-        end
-      end
-      assert_select "li#issue_#{@different_author_testing_issue.id}", :count => 0
-      
-      # Active lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
-            assert_select "li#issue_#{@active_issue1.id}", :count => 1
-            assert_select "li#issue_#{@active_issue2.id}", :count => 1
-            assert_select "li#issue_#{@active_watched_issue.id}", :count => 1
-          end
-        end
-      end
-      assert_select "li#issue_#{@different_author_active_issue.id}", :count => 0
-
-      # Show an issue on a project that the current user isn't a member of but the current user created the issue (e.g. issue created and then moved)
-      assert_select "#active-issues-user-#{@user.id}-project-#{@another_project.id}.active-issues" do
-        assert_select "li#issue_#{@non_member_issue.id}", :count => 1
+        assert_select "li#issue_#{@different_author_new_issue.id}", :count => 0
       end
       
-      # Selected lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
-            assert_select "li#issue_#{@selected_issue1.id}", :count => 1
-            assert_select "li#issue_#{@selected_watched_issue.id}", :count => 1
-          end
-        end
-      end
-      assert_select "li#issue_#{@different_author_selected_issue.id}", :count => 0
+      should "load the testing lane" do
+        @testing_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
+        @testing_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @testing_status)
+        @different_author_testing_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @testing_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
 
-      # Backlog lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
-            assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
-            assert_select "li#issue_#{@backlog_watched_issue.id}", :count => 1
-          end
-        end
-      end
-      assert_select "li#issue_#{@different_author_backlog_issue1.id}", :count => 0
+        visit "/kanban/users/#{@user.id}.js?column=testing&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
 
-      # Finished lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
-            assert_select "li#issue_#{@finished_issue.id}", :count => 1
-            assert_select "li#issue_#{@finished_watched_issue.id}", :count => 1
-          end
+        assert_select doc.root, "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
+          assert_select "li#issue_#{@testing_issue1.id}", :count => 1
+          assert_select "li#issue_#{@testing_issue2.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
         end
+        assert_select "li#issue_#{@different_author_testing_issue.id}", :count => 0
       end
-      assert_select "li#issue_#{@different_author_finished_issue.id}", :count => 0
+      
+      should "load the active lane" do
+        @active_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
+        @active_issue2 = Issue.generate_for_project!(@project, :author => @user, :status => @active_status)
+        @different_author_active_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
 
-      # Canceled lane
-      assert_select '#kanban' do
-        assert_select '.project-lane' do
-          assert_select "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
-            assert_select "li#issue_#{@canceled_issue.id}", :count => 1
-            assert_select "li#issue_#{@canceled_watched_issue.id}", :count => 1
-          end
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @active_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+
+        visit "/kanban/users/#{@user.id}.js?column=active&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+
+        assert_select doc.root, "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
+          assert_select "li#issue_#{@active_issue1.id}", :count => 1
+          assert_select "li#issue_#{@active_issue2.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
         end
+        assert_select "li#issue_#{@different_author_active_issue.id}", :count => 0
       end
-      assert_select "li#issue_#{@different_author_canceled_issue.id}", :count => 0
+      
+      should "load the selected lane" do
+        @selected_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @selected_status)
+        @different_author_selected_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
+
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @selected_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+
+        visit "/kanban/users/#{@user.id}.js?column=selected&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+        
+        assert_select doc.root, "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
+          assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
+        end
+        assert_select "li#issue_#{@different_author_selected_issue.id}", :count => 0
+      end
+
+      should "load the backlog lane" do
+        @backlog_issue1 = Issue.generate_for_project!(@project, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
+        @different_author_backlog_issue1 = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
+
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @unstaffed_status, :estimated_hours => 5)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+
+        visit "/kanban/users/#{@user.id}.js?column=backlog&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+
+        assert_select doc.root, "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
+          assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
+        end
+        assert_select "li#issue_#{@different_author_backlog_issue1.id}", :count => 0
+      end
+
+      should "load the finished lane" do
+        @finished_issue = Issue.generate_for_project!(@project, :author => @user, :status => @finished_status)
+        @different_author_finished_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
+
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @finished_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+        
+        visit "/kanban/users/#{@user.id}.js?column=finished&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+
+        assert_select doc.root, "#finished-issues-user-#{@user.id}-project-#{@project.id}.finished-issues" do
+          assert_select "li#issue_#{@finished_issue.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
+        end
+        assert_select "li#issue_#{@different_author_finished_issue.id}", :count => 0
+      end
+
+      should "load the canceled lane" do
+        @canceled_issue = Issue.generate_for_project!(@project, :author => @user, :status => @canceled_status)
+        @different_author_canceled_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
+        @watched_issue = Issue.generate_for_project!(@project, :author => @another_user, :status => @canceled_status)
+        Watcher.generate!(:watchable_type => "Issue", :watchable_id => @watched_issue.id, :user => @user)
+        assert @watched_issue.watched_by? @user
+
+        
+        visit "/kanban/users/#{@user.id}.js?column=canceled&project=#{@project.id}"
+        doc = HTML::Document.new(response.body)
+        
+        assert_select doc.root, "#canceled-issues-user-#{@user.id}-project-#{@project.id}.canceled-issues" do
+          assert_select "li#issue_#{@canceled_issue.id}", :count => 1
+          assert_select "li#issue_#{@watched_issue.id}", :count => 1
+        end
+        assert_select "li#issue_#{@different_author_canceled_issue.id}", :count => 0
+      end
     end
 
     should "group issues under the parent project with a project_level of 1" do
@@ -240,19 +250,19 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_select '#kanban' do
         assert_select '.project-lane h2.project-name', :text => /#{@subproject.name}/, :count => 0
       end
-          
+
       # New lane
       assert_select '#new-requests' do
-        assert_select "#incoming-issues-user-#{@user.id}-project-0.incoming-issues" do
-          assert_select "li#issue_#{@new_issue1.id}", :count => 1
+        assert_select "#user-kanban-show-incoming" do
+            assert_select 'span.loading'
         end
       end
 
       # Testing lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
-            assert_select "li#issue_#{@testing_issue1.id}", :count => 1
+          assert_select "#user-kanban-show-testing-project-#{@project.id}" do
+            assert_select 'span.loading'
           end
         end
       end
@@ -260,8 +270,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Active lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
-            assert_select "li#issue_#{@active_issue1.id}", :count => 1
+          assert_select "#user-kanban-show-active-project-#{@project.id}" do
+            assert_select 'span.loading'
           end
         end
       end
@@ -269,8 +279,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Selected lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
-            assert_select "li#issue_#{@selected_issue1.id}", :count => 1
+          assert_select "#user-kanban-show-selected-project-#{@project.id}" do
+            assert_select 'span.loading'
           end
         end
       end
@@ -278,8 +288,8 @@ class MyRequestsTest < ActionController::IntegrationTest
       # Backlog lane
       assert_select '#kanban' do
         assert_select '.project-lane' do
-          assert_select "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
-            assert_select "li#issue_#{@backlog_issue1.id}", :count => 1
+          assert_select "#user-kanban-show-backlog-project-#{@project.id}" do
+            assert_select 'span.loading'
           end
         end
       end
