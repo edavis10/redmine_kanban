@@ -279,6 +279,29 @@ class AssignedKanbanTest < ActionController::IntegrationTest
         end
         
       end
+
+      should "only show active users" do
+        @user_active = User.generate_with_protected!(:status => User::STATUS_ACTIVE)
+        @user_locked = User.generate_with_protected!(:status => User::STATUS_LOCKED)
+        @user_registered = User.generate_with_protected!(:status => User::STATUS_REGISTERED)
+
+        Issue.generate_for_project!(@project, :assigned_to => @user_active)
+        Issue.generate_for_project!(@project, :assigned_to => @user_locked)
+        Issue.generate_for_project!(@project, :assigned_to => @user_registered)
+        
+        login_as
+        visit_assigned_kanban
+
+        assert_select "div.contextual" do
+          assert_select "form#user_switch" do
+            assert_select "option[value=?]", @user_active.id
+            assert_select "option[value=?]", @user_locked.id, :count => 0
+            assert_select "option[value=?]", @user_registered.id, :count => 0
+          end
+          
+        end
+
+      end
       
     end
   end

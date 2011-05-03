@@ -360,6 +360,24 @@ class MyRequestsTest < ActionController::IntegrationTest
       assert_select "#content", :text => /#{@another_user.to_s}'s Requests/
     end
     
+    should "only show active users in the user switch" do
+      @user_active = User.generate_with_protected!(:status => User::STATUS_ACTIVE)
+      @user_locked = User.generate_with_protected!(:status => User::STATUS_LOCKED)
+      @user_registered = User.generate_with_protected!(:status => User::STATUS_REGISTERED)
+
+      login_as
+      visit_my_kanban_requests
+
+      assert_select "div.contextual" do
+        assert_select "form#user_switch" do
+          assert_select "option[value=?]", @user_active.id
+          assert_select "option[value=?]", @user_locked.id, :count => 0
+          assert_select "option[value=?]", @user_registered.id, :count => 0
+        end
+          
+      end
+
+    end
       
   end
 end

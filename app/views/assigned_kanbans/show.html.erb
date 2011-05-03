@@ -16,7 +16,7 @@
   <%= menu.new_issue %>
   <%= menu.user_switch(:url => kanban_assigned_kanbans_path,
                        :label => l(:label_switch_assignee),
-                       :users => Principal.with_issue_assigned) %>
+                       :users => Principal.active.with_issue_assigned) %>
 <% end %>
 
 <div class="clear"></div>
