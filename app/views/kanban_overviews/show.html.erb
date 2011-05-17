@@ -25,20 +25,19 @@
   </div>
 
   <% @projects_sorted_by_tree.each do |project| %>
+  <% next if project.users.empty? %>
   <div class="project-lane horizontal-lane">
     <div class="project pane equal-column" style="width: 100%">
       <h2 class="project-name">
         <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}) %>
       </h2>
-
     </div>
-
   </div>
 
   <% project.users.each do |user| %>
     <% next unless @kanban.users.include?(user) %>
   <div class="project-lane horizontal-lane">
-    <div class="project pane equal-column project-<%= project.id %>" style="width: <%= my_kanban_column_width(:project) %>%">
+    <div class="pane equal-column project-<%= project.id %>" style="width: <%= my_kanban_column_width(:project) %>%">
       <h3 class="user-name"><%= h(user.name) %></h3>
     </div>
 

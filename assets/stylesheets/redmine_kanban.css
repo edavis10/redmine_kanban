@@ -282,3 +282,8 @@ div.calendar {
 
 #ajax-indicator {
   z-index: 9999; }
+
+#kanban.kanban-overview h3.user-name {
+  border: none; }
+#kanban.kanban-overview .horizontal-lane, #kanban.kanban-overview .horizontal-lane .pane, #kanban.kanban-overview project-lane div.project {
+  min-height: 60px; }
