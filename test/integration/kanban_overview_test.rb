@@ -30,12 +30,14 @@ class KanbanOverviewTest < ActionController::IntegrationTest
 
   context "for logged in users with permission to View Kanban" do
     setup do
-      @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
-      @project = Project.generate!
+      @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing').reload
+      @project = Project.generate!.reload
       @role = Role.generate!(:permissions => [:view_issues, :view_kanban])
-      Member.generate!({:principal => @user, :project => @project, :roles => [@role]})
-      Member.generate!({:principal => @user, :project => @public_project, :roles => [@role]})
-      @another_user = User.generate_with_protected!
+      Member.generate!({:principal => @user, :project => @project, :roles => [@role, Role.find_by_name('KanbanRole')]})
+      Member.generate!({:principal => @user, :project => @public_project, :roles => [@role, Role.find_by_name('KanbanRole')]})
+      @another_user = User.generate_with_protected!.reload
+      Member.generate!({:principal => @another_user, :project => @project, :roles => [@role, Role.find_by_name('KanbanRole')]})
+
     end
 
     should "show the user help content using the text formatting" do
@@ -47,5 +49,27 @@ class KanbanOverviewTest < ActionController::IntegrationTest
       end
     end
 
+    context "showing the swimlanes" do
+      should "be separated by project" do
+        login_as
+        visit_kanban_overview
+
+        assert_select "#kanban div.project-lane.horizontal-lane", :text => /#{@project.name}/i
+      end
+      
+      should "have a row for each project's user" do
+        login_as
+        visit_kanban_overview
+
+        assert_select "#kanban div.horizontal-lane" do
+          assert_select "div.project.project-#{@project.id} .user-name", :text => /#{@user.name}/i
+          assert_select "div.project.project-#{@project.id} .user-name", :text => /#{@another_user.name}/i
+
+          assert_select "div.project.project-#{@public_project.id} .user-name", :text => /#{@user.name}/i
+        end
+      end
+
+    end
+    
   end
 end

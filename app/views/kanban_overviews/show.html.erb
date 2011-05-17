@@ -15,6 +15,48 @@
 <%= render :partial => 'kanbans/user_help' %>
 <%= render :partial => 'kanbans/color_help' %>
 
+<div id="kanban" class="kanban-overview" style="width: 100%">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
+  </div>
+
+  <% @projects_sorted_by_tree.each do |project| %>
+  <div class="project-lane horizontal-lane">
+    <div class="project pane equal-column" style="width: 100%">
+      <h2 class="project-name">
+        <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}) %>
+      </h2>
+
+    </div>
+
+  </div>
+
+  <% project.users.each do |user| %>
+    <% next unless @kanban.users.include?(user) %>
+  <div class="project-lane horizontal-lane">
+    <div class="project pane equal-column project-<%= project.id %>" style="width: <%= my_kanban_column_width(:project) %>%">
+      <h3 class="user-name"><%= h(user.name) %></h3>
+    </div>
+
+    <div id="user-kanban-show-testing-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
+    </div>
+    <div id="user-kanban-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+    </div>
+
+    <div id="user-kanban-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
+    </div>
+
+    <div id="user-kanban-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+    </div>
+    <div style="clear:left;"> </div>
+  </div>
+  <% end %>
+  <% end %>
+</div>
 
 <% html_title l(:kanban_overview_title) %>
 

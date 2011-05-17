@@ -7,6 +7,16 @@ class KanbanOverviewsController < ApplicationController
   before_filter :authorize_global
 
   def show
+    @kanban = OverviewKanban.new
+
+    @projects_sorted_by_tree = []
+    Project.project_tree(@kanban.projects) do |project, level|
+      @projects_sorted_by_tree << project
+    end
+
+    respond_to do |format|
+      format.html {}
+    end
   end
 
   private
