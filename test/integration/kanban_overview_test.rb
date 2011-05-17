@@ -118,6 +118,19 @@ class KanbanOverviewTest < ActionController::IntegrationTest
         end
       end
 
+      should "load the backlog lane" do
+        @backlog_issue_medium = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @unstaffed_status, :estimated_hours => 5, :priority => medium_priority)
+        @backlog_issue_high = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @unstaffed_status, :estimated_hours => 5, :priority => high_priority)
+        
+        visit "/kanban/overview.js?column=backlog&project=#{@project.id}&user=#{@user.id}"
+        doc = HTML::Document.new(response.body)
+
+        # Backlog lane
+        assert_select doc.root, "#backlog-issues-user-#{@user.id}-project-#{@project.id}.backlog-issues" do
+          assert_select "li#issue_#{@backlog_issue_high.id}", :count => 1
+          assert_select "li#issue_#{@backlog_issue_medium.id}", :count => 0
+        end
+      end
 
     end
     

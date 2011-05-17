@@ -65,7 +65,12 @@
                              "kanban-overview-show-selected-project-#{project.id}-user-#{user.id}") %>
     </div>
 
-    <div id="kanban-overview-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+    <div id="kanban-overview-show-backlog-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :backlog,
+                                                          :format => 'js'),
+                             "kanban-overview-show-backlog-project-#{project.id}-user-#{user.id}") %>
     </div>
     <div style="clear:left;"> </div>
   </div>

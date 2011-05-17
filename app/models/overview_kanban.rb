@@ -3,7 +3,7 @@ class OverviewKanban < Kanban
     super
     @for = [:assigned_to]
     @fill_incoming = false
-    @fill_backlog = true
+    @fill_backlog = false
   end
 
   def get_users
@@ -18,6 +18,15 @@ class OverviewKanban < Kanban
 
     # First issue sorted by highest priority
     highest_priority_issue = filtered_issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
+    [highest_priority_issue] # expects an Array returned
+  end
+
+  # After filtering issues, extract the highest priority one
+  def backlog_issues_for(options={})
+    issues = super
+
+    # First issue sorted by highest priority
+    highest_priority_issue = issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
     [highest_priority_issue] # expects an Array returned
   end
   
