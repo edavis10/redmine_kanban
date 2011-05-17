@@ -70,6 +70,28 @@ class KanbanOverviewTest < ActionController::IntegrationTest
       end
 
     end
+
+    context "load the swimlanes using ajax" do
+      setup do
+        login_as
+      end
+
+      should "load the testing lane" do
+        @testing_issue_medium = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status, :priority => medium_priority)
+        @testing_issue_high = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @testing_status, :priority => high_priority)
+
+        visit "/kanban/overview.js?column=testing&project=#{@project.id}&user=#{@user.id}"
+        doc = HTML::Document.new(response.body)
+        
+        # Testing lane
+        assert_select doc.root, "#testing-issues-user-#{@user.id}-project-#{@project.id}.testing-issues" do
+          assert_select "li#issue_#{@testing_issue_high.id}", :count => 1
+          assert_select "li#issue_#{@testing_issue_medium.id}", :count => 0
+        end
+      end
+
+    end
+    
     
   end
 end

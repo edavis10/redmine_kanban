@@ -14,8 +14,15 @@ class KanbanOverviewsController < ApplicationController
       @projects_sorted_by_tree << project
     end
 
+    # TODO: check user params/visibility
+    @user = User.find_by_id(params[:user]) || User.current
+    project = Project.visible.find(params[:project]) if params[:project].present?
+
+
     respond_to do |format|
       format.html {}
+      format.js { render :partial => 'kanbans/user_kanban_div', :locals => {:user => @user, :kanban => @kanban, :column => params[:column], :project => project}}
+
     end
   end
 

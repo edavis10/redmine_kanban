@@ -42,15 +42,20 @@
       <h3 class="user-name"><%= h(user.name) %></h3>
     </div>
 
-    <div id="user-kanban-show-testing-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
+    <div id="kanban-overview-show-testing-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :testing,
+                                                          :format => 'js'),
+                             "kanban-overview-show-testing-project-#{project.id}-user-#{user.id}") %>
     </div>
-    <div id="user-kanban-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+    <div id="kanban-overview-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
     </div>
 
-    <div id="user-kanban-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
+    <div id="kanban-overview-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
     </div>
 
-    <div id="user-kanban-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+    <div id="kanban-overview-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
     </div>
     <div style="clear:left;"> </div>
   </div>
