@@ -30,7 +30,7 @@ Redmine::Plugin.register :redmine_kanban do
 
   requires_redmine :version_or_higher => '0.9.0'
 
-  permission(:view_kanban, {:kanbans => [:show]})
+  permission(:view_kanban, {:kanbans => [:show], :kanban_overviews => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
   permission(:manage_kanban, {})
 
@@ -61,6 +61,13 @@ Redmine::Plugin.register :redmine_kanban do
        :kanban,
        {:controller => 'kanbans', :action => 'show'},
        :caption => :kanban_title,
+       :if => Proc.new {
+         User.current.allowed_to?(:view_kanban, nil, :global => true)
+       })
+  menu(:top_menu,
+       :kanban_overview,
+       {:controller => 'kanban_overviews', :action => 'show'},
+       :caption => :kanban_overview_title,
        :if => Proc.new {
          User.current.allowed_to?(:view_kanban, nil, :global => true)
        })

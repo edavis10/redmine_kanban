@@ -26,6 +26,7 @@ en:
   kanban_label_canceled_pane: Canceled
   kanban_label_limit: Maximum number of items
   kanban_label_day_limit: Number of days
+  kanban_overview_title: Kanban overview
 
   kanban_label_staff_role: Role to use for Staffed Requests
   kanban_label_incoming_project: Project to use for the Incoming pane

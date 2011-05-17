@@ -374,6 +374,15 @@ module IntegrationTestHelper
     assert_equal "/kanban", current_url
   end
 
+  def visit_kanban_overview
+    visit '/'
+    click_link "Kanban overview"
+
+    assert_response :success
+    assert_equal "/kanban/overview", current_url
+  end
+  
+
   # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
   def current_path
     return nil if current_url.nil?
