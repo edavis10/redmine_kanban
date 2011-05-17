@@ -49,7 +49,12 @@
                                                           :format => 'js'),
                              "kanban-overview-show-testing-project-#{project.id}-user-#{user.id}") %>
     </div>
-    <div id="kanban-overview-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+    <div id="kanban-overview-show-active-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :active,
+                                                          :format => 'js'),
+                             "kanban-overview-show-active-project-#{project.id}-user-#{user.id}") %>
     </div>
 
     <div id="kanban-overview-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">

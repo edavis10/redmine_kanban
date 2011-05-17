@@ -90,6 +90,20 @@ class KanbanOverviewTest < ActionController::IntegrationTest
         end
       end
 
+      should "load the active lane" do
+        @active_issue_medium = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status, :priority => medium_priority)
+        @active_issue_high = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @active_status, :priority => high_priority)
+
+        visit "/kanban/overview.js?column=active&project=#{@project.id}&user=#{@user.id}"
+        doc = HTML::Document.new(response.body)
+        
+        # Active lane
+        assert_select doc.root, "#active-issues-user-#{@user.id}-project-#{@project.id}.active-issues" do
+          assert_select "li#issue_#{@active_issue_high.id}", :count => 1
+          assert_select "li#issue_#{@active_issue_medium.id}", :count => 0
+        end
+      end
+
     end
     
     
