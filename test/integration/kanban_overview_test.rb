@@ -104,6 +104,21 @@ class KanbanOverviewTest < ActionController::IntegrationTest
         end
       end
 
+      should "load the selected lane" do
+        @selected_issue_medium = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @selected_status, :priority => medium_priority)
+        @selected_issue_high = Issue.generate_for_project!(@project, :assigned_to => @user, :status => @selected_status, :priority => high_priority)
+
+        visit "/kanban/overview.js?column=selected&project=#{@project.id}&user=#{@user.id}"
+        doc = HTML::Document.new(response.body)
+
+        # Selected lane
+        assert_select doc.root, "#selected-issues-user-#{@user.id}-project-#{@project.id}.selected-issues" do
+          assert_select "li#issue_#{@selected_issue_high.id}", :count => 1
+          assert_select "li#issue_#{@selected_issue_medium.id}", :count => 0
+        end
+      end
+
+
     end
     
     
