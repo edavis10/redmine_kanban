@@ -27,7 +27,7 @@
   <% @projects_sorted_by_tree.each do |project| %>
   <% next if project.users.empty? %>
   <div class="project-lane horizontal-lane">
-    <div class="project pane equal-column" style="width: 100%">
+    <div class="project pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%">
       <h2 class="project-name">
         <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}) %>
       </h2>
@@ -74,6 +74,12 @@
     <div style="clear:left;"> </div>
   </div>
   <% end %>
+  <!-- Clearing row after project -->
+  <div class="project-lane horizontal-lane clearing-row">
+    <div class="pane equal-column project-<%= project.id %>" style="width: 100%">
+    </div>
+    <div style="clear:left;"> </div>
+  </div>
   <% end %>
 </div>
 
