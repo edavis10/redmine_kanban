@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
     kanban.resource :user_kanbans, :as => 'my-requests'
     kanban.resources :assigned_kanbans, :as => 'assigned-to'
     kanban.resource :assigned_kanbans, :as => 'my-assigned', :only => [:show]
+    kanban.resource :kanban_overviews, :as => 'overview', :only => [:show]
   end
   map.resources :kanban_issues
 end

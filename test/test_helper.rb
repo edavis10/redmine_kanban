@@ -72,6 +72,12 @@ module KanbanTestHelper
     "staff_role"=> make_kanban_role.id,
     "management_group"=> @management_group.id.to_s,  
     "project_level" => "0",
+    "panels" =>
+      {
+        "overview" => {
+          "subissues_take_higher_priority" => "0"
+        }
+      },
     "panes"=>
     {
       "selected"=>{
@@ -136,7 +142,7 @@ module KanbanTestHelper
   def high_priority
     unless @high_priority
       @high_priority = IssuePriority.find_by_name("High")
-      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority')
+      @high_priority ||= IssuePriority.generate!(:name => "High", :type => 'IssuePriority', :position => 1)
     end
     @high_priority
   end
@@ -145,7 +151,7 @@ module KanbanTestHelper
   def medium_priority
     unless @medium_priority
       @medium_priority = IssuePriority.find_by_name("Medium")
-      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority')
+      @medium_priority ||= IssuePriority.generate!(:name => "Medium", :type => 'IssuePriority', :position => 2)
     end
     @medium_priority
   end
@@ -153,7 +159,7 @@ module KanbanTestHelper
   def low_priority
     unless @low_priority
       @low_priority = IssuePriority.find_by_name("Low")
-      @low_priority ||= IssuePriority.generate!(:name => "Low", :type => 'IssuePriority')
+      @low_priority ||= IssuePriority.generate!(:name => "Low", :type => 'IssuePriority', :position => 3)
     end
     @low_priority
   end
@@ -161,7 +167,7 @@ module KanbanTestHelper
   def hidden_priority
     unless @priority_hidden_from_incoming
       @priority_hidden_from_incoming = IssuePriority.find_by_name("Hidden")
-      @priority_hidden_from_incoming ||= IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority')
+      @priority_hidden_from_incoming ||= IssuePriority.generate!(:name => "Hidden", :type => 'IssuePriority', :position => 4)
     end
     @priority_hidden_from_incoming
 
@@ -373,6 +379,15 @@ module IntegrationTestHelper
     assert_response :success
     assert_equal "/kanban", current_url
   end
+
+  def visit_kanban_overview
+    visit '/'
+    click_link "Kanban overview"
+
+    assert_response :success
+    assert_equal "/kanban/overview", current_url
+  end
+  
 
   # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
   def current_path

@@ -282,3 +282,12 @@ div.calendar {
 
 #ajax-indicator {
   z-index: 9999; }
+
+#kanban.kanban-overview h2.project-name {
+  border: none; }
+#kanban.kanban-overview h4.user-name {
+  border: none; }
+#kanban.kanban-overview .horizontal-lane, #kanban.kanban-overview .horizontal-lane .pane, #kanban.kanban-overview .project-lane div.project {
+  min-height: 60px; }
+#kanban.kanban-overview div.clearing-row, #kanban.kanban-overview .clearing-row .pane {
+  min-height: 1px; }

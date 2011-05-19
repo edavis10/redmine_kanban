@@ -26,6 +26,7 @@ en:
   kanban_label_canceled_pane: Canceled
   kanban_label_limit: Maximum number of items
   kanban_label_day_limit: Number of days
+  kanban_overview_title: Kanban overview
 
   kanban_label_staff_role: Role to use for Staffed Requests
   kanban_label_incoming_project: Project to use for the Incoming pane
@@ -43,6 +44,7 @@ en:
   kanban_text_parent_issue_color: "Parent Issue - <span>Bold subject</span>"
   kanban_text_updated_issue: "Updated issue"
   kanban_text_workflow_incoming_settings: "Workflow Settings: Incoming Pane"
+  kanban_text_overview_panel: "Panel: Overview"
   kanban_label_incoming_priority_change: "Must change issue priority when"
   kanban_label_incoming_project_change: "Must change issue project when"
   kanban_label_incoming_url: "Url to link the Incoming pane title to"
@@ -64,6 +66,7 @@ en:
   kanban_text_no_project: "You don't have permission to create new issues on any of the Incoming projects."
   kanban_text_watch_and_cancel_hint: 'If the issue you are now watching is what you were going to report, please click "cancel" - you will kept up-to-date on the progress of this issue as a watcher.'
   kanban_text_issue_watched_reload_to_see: "Issue is now watched. Reload to see the new issues."
+  kanban_label_overview_subissues_take_higher_priority: "Subissues considered higher priority than normal issues"
 
   label_due_asap: "Due ASAP"
   label_due_in_x_days: "Due in {{days}} days"

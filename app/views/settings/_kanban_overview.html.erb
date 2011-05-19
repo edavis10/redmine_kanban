@@ -1,0 +1,9 @@
+  <p>
+    <% subissue_priority = if @settings['panels'].present? && @settings['panels']['overview'].present?
+                             @settings['panels']['overview']['subissues_take_higher_priority'].to_s == "1"
+                           else
+                             false
+                           end %>
+    <%= content_tag(:label, l(:kanban_label_overview_subissues_take_higher_priority)) %>
+    <%= check_box_tag("settings[panels][overview][subissues_take_higher_priority]", "1", subissue_priority) %>
+  </p>

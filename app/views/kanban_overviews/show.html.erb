@@ -1,0 +1,98 @@
+<div class="flash error" style="display:none"></div>
+<div class="flash warning" style="display:none"></div>
+<div class="flash notice" style="display:none"></div>
+
+<h2><%= l(:kanban_overview_title) %></h2>
+
+<% kanban_contextual_menu do |menu| %>
+  <%= menu.color_help %>
+  <%= menu.my_kanban_requests %>
+  <%= menu.assigned_requests %>
+<% end %>
+
+<div class="clear"></div>
+
+<%= render :partial => 'kanbans/user_help' %>
+<%= render :partial => 'kanbans/color_help' %>
+
+<div id="kanban" class="kanban-overview" style="width: 100%">
+  <div class="kanban-headers horizontal-lane">
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
+    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
+  </div>
+
+  <% @projects_sorted_by_tree.each do |project| %>
+  <% next if project.users.empty? %>
+  <div class="project-lane horizontal-lane">
+    <div class="project pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%">
+      <h2 class="project-name">
+        <%= link_to(h(project), {:controller => "projects", :action => "show", :id => project}) %>
+      </h2>
+    </div>
+  </div>
+
+  <% project.users.each do |user| %>
+    <% next unless @kanban.users.include?(user) %>
+  <div class="project-lane horizontal-lane">
+    <div class="pane equal-column project-<%= project.id %>" style="width: <%= my_kanban_column_width(:project) %>%">
+      <h4 class="user-name"><%= avatar(user, :size => 12) %> <%= h(user.name) %></h4>
+    </div>
+
+    <div id="kanban-overview-show-testing-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :testing,
+                                                          :format => 'js'),
+                             "kanban-overview-show-testing-project-#{project.id}-user-#{user.id}") %>
+    </div>
+    <div id="kanban-overview-show-active-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :active,
+                                                          :format => 'js'),
+                             "kanban-overview-show-active-project-#{project.id}-user-#{user.id}") %>
+    </div>
+
+    <div id="kanban-overview-show-selected-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :selected,
+                                                          :format => 'js'),
+                             "kanban-overview-show-selected-project-#{project.id}-user-#{user.id}") %>
+    </div>
+
+    <div id="kanban-overview-show-backlog-project-<%= project.id -%>-user-<%= user.id %>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
+      <%= kanban_remote_data(kanban_kanban_overviews_path(:user => user.id,
+                                                          :project => project.identifier,
+                                                          :column => :backlog,
+                                                          :format => 'js'),
+                             "kanban-overview-show-backlog-project-#{project.id}-user-#{user.id}") %>
+    </div>
+    <div style="clear:left;"> </div>
+  </div>
+  <% end %>
+  <!-- Clearing row after project -->
+  <div class="project-lane horizontal-lane clearing-row">
+    <div class="pane equal-column project-<%= project.id %>" style="width: 100%">
+    </div>
+    <div style="clear:left;"> </div>
+  </div>
+  <% end %>
+</div>
+
+<% html_title l(:kanban_overview_title) %>
+
+<% content_for :header_tags do %>
+  <%= include_calendar_headers_tags %>
+  <%= stylesheet_link_tag 'smoothness/jquery-ui-1.7.3.custom.css', :plugin => "redmine_kanban" %>
+  <%= stylesheet_link_tag 'redmine_kanban.css', :plugin => "redmine_kanban" %>
+  <%= javascript_include_tag 'jquery-1.3.2.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery-ui-1.7.3.custom.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.json-1.3.min.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.ajax_queue.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'jquery.form.js', :plugin => 'redmine_kanban' %>
+  <%= javascript_include_tag 'kanban-common.js', :plugin => 'redmine_kanban' %>
+<% end %>

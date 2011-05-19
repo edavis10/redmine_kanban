@@ -30,7 +30,7 @@ Redmine::Plugin.register :redmine_kanban do
 
   requires_redmine :version_or_higher => '0.9.0'
 
-  permission(:view_kanban, {:kanbans => [:show]})
+  permission(:view_kanban, {:kanbans => [:show], :kanban_overviews => [:show]})
   permission(:edit_kanban, {:kanbans => [:update, :sync], :kanban_issues => [:edit]})
   permission(:manage_kanban, {})
 
@@ -54,13 +54,25 @@ Redmine::Plugin.register :redmine_kanban do
              'staff_role' => nil,
              'user_help' => "_Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings._",
              'project_level' => 0,
-             'simple_issue_popup_form' => 0
+             'simple_issue_popup_form' => 0,
+             'panels' => {
+               'overview' => {
+                 'subissues_take_higher_priority' => 0
+               }
+             }
            })
   
   menu(:top_menu,
        :kanban,
        {:controller => 'kanbans', :action => 'show'},
        :caption => :kanban_title,
+       :if => Proc.new {
+         User.current.allowed_to?(:view_kanban, nil, :global => true)
+       })
+  menu(:top_menu,
+       :kanban_overview,
+       {:controller => 'kanban_overviews', :action => 'show'},
+       :caption => :kanban_overview_title,
        :if => Proc.new {
          User.current.allowed_to?(:view_kanban, nil, :global => true)
        })

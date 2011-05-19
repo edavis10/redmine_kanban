@@ -241,3 +241,10 @@ div.icons .updated-note {cursor: pointer; cursor: hand; }
 }
 div.calendar {z-index: 9999;}
 #ajax-indicator {z-index: 9999;}
+
+#kanban.kanban-overview {
+   h2.project-name {border: none;}
+   h4.user-name {border: none;}
+   .horizontal-lane, .horizontal-lane .pane, .project-lane div.project { min-height: 60px; }
+   div.clearing-row, .clearing-row .pane {min-height: 1px;}
+}
