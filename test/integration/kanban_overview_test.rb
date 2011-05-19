@@ -4,6 +4,7 @@ class KanbanOverviewTest < ActionController::IntegrationTest
   def setup
     configure_plugin
     setup_kanban_issues
+    Setting.plugin_redmine_kanban['panels']['overview']['subissues_take_higher_priority'] = '0'
   end
 
   context "for anonymous users" do
@@ -62,10 +63,10 @@ class KanbanOverviewTest < ActionController::IntegrationTest
         visit_kanban_overview
 
         assert_select "#kanban div.horizontal-lane" do
-          assert_select "div.project.project-#{@project.id} .user-name", :text => /#{@user.name}/i
-          assert_select "div.project.project-#{@project.id} .user-name", :text => /#{@another_user.name}/i
+          assert_select "div.project-#{@project.id} .user-name", :text => /#{@user.name}/i
+          assert_select "div.project-#{@project.id} .user-name", :text => /#{@another_user.name}/i
 
-          assert_select "div.project.project-#{@public_project.id} .user-name", :text => /#{@user.name}/i
+          assert_select "div.project-#{@public_project.id} .user-name", :text => /#{@user.name}/i
         end
       end
 

@@ -72,6 +72,12 @@ module KanbanTestHelper
     "staff_role"=> make_kanban_role.id,
     "management_group"=> @management_group.id.to_s,  
     "project_level" => "0",
+    "panels" =>
+      {
+        "overview" => {
+          "subissues_take_higher_priority" => "0"
+        }
+      },
     "panes"=>
     {
       "selected"=>{

@@ -25,8 +25,20 @@ class OverviewKanban < Kanban
     [extract_highest_priority_issue(issues)] # expects an Array returned
   end
 
-  # Returns the first issue sorted by highest priority
+  # Returns the first issue sorted by highest priority.
+  # Optionally if subissues_take_higher_priority is configured, then the
+  # highest priority subissue will be returned
   def extract_highest_priority_issue(issues)
-    issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
+    # Sort subissues higher?
+    if Setting.plugin_redmine_kanban['panels'].present? &&
+        Setting.plugin_redmine_kanban['panels']['overview'].present? &&
+        Setting.plugin_redmine_kanban['panels']['overview']['subissues_take_higher_priority'].to_s == "1"
+      subissues = issues.select {|issue| issue.parent_issue_id.present? }
+
+      if subissues.present?
+        return subissues.sort {|a,b| a.priority.position <=> b.priority.position}.first
+      end
+    end
+    return issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
   end
 end
