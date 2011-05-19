@@ -16,18 +16,17 @@ class OverviewKanban < Kanban
     filtered_issues = super(issues, filters)
     return filtered_issues unless filtered_issues.present?
 
-    # First issue sorted by highest priority
-    highest_priority_issue = filtered_issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
-    [highest_priority_issue] # expects an Array returned
+    [extract_highest_priority_issue(filtered_issues)] # expects an Array returned
   end
 
   # After filtering issues, extract the highest priority one
   def backlog_issues_for(options={})
     issues = super
-
-    # First issue sorted by highest priority
-    highest_priority_issue = issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
-    [highest_priority_issue] # expects an Array returned
+    [extract_highest_priority_issue(issues)] # expects an Array returned
   end
-  
+
+  # Returns the first issue sorted by highest priority
+  def extract_highest_priority_issue(issues)
+    issues.sort {|a,b| a.priority.position <=> b.priority.position}.first
+  end
 end
