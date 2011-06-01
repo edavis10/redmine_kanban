@@ -57,6 +57,18 @@ class KanbanOverviewTest < ActionController::IntegrationTest
 
         assert_select "#kanban div.project-lane.horizontal-lane", :text => /#{@project.name}/i
       end
+
+      should "skip the Incoming Projects" do
+        @incoming_project = incoming_project
+        Member.generate!({:principal => @user, :project => @incoming_project, :roles => [@role, Role.find_by_name('KanbanRole')]})
+
+        reconfigure_plugin({'incoming_projects' => [@incoming_project.id.to_s]})
+        
+        login_as
+        visit_kanban_overview
+
+        assert_select "#kanban", :text => /#{@incoming_project.name}/i, :count => 0
+      end
       
       should "have a row for each project's user" do
         login_as

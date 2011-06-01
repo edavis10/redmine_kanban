@@ -11,6 +11,7 @@ class KanbanOverviewsController < ApplicationController
 
     @projects_sorted_by_tree = []
     Project.project_tree(@kanban.projects) do |project, level|
+      next if kanban_settings['incoming_projects'].present? && kanban_settings['incoming_projects'].include?(project.id.to_s)
       @projects_sorted_by_tree << project
     end
 

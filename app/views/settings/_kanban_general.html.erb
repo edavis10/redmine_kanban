@@ -32,3 +32,17 @@
     <br />
     <%= content_tag(:span, l(:kanban_text_simple_issue_popup_form_help)) %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:kanban_label_incoming_projects)) %>
+    <% incoming_projects = @settings['incoming_projects'] || []
+       incoming_projects.collect!(&:to_i) if incoming_projects.present?
+       %>
+    <%= select_tag("settings[incoming_projects]",
+                   content_tag(:option, '') +
+                   options_from_collection_for_select(Project.all,
+                                                    :id,
+                                                    :name,
+                                                    incoming_projects),
+                   :multiple => true) %>
+  </p>

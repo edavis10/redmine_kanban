@@ -59,7 +59,8 @@ Redmine::Plugin.register :redmine_kanban do
                'overview' => {
                  'subissues_take_higher_priority' => 0
                }
-             }
+             },
+             'incoming_projects' => []
            })
   
   menu(:top_menu,

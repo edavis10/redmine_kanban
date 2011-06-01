@@ -40,7 +40,7 @@ module KanbanTestHelper
     end
   end
 
-  def make_project
+  def incoming_project
     incoming_project = Project.generate!(:name => 'Incoming project')
     tracker = Tracker.generate!(:name => 'Feature')
     incoming_project.trackers << tracker
