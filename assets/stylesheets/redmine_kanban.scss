@@ -248,6 +248,7 @@ div.calendar {z-index: 9999;}
    .kanban-headers { border-bottom: 4px solid #000000; }
    .horizontal-lane, .horizontal-lane .pane, .project-lane div.project { min-height: 60px; }
    .project-lane div.project { border-top-width: 0; }
+   .user-lane .pane { border-top-width: 1px; border-bottom-width: 1px; border-top-color: #666; border-bottom-color: #666; }
    div.clearing-row, .clearing-row .pane {min-height: 1px;}
    div.clearing-row .pane {border-width: 4px 0 0 0;}
 }

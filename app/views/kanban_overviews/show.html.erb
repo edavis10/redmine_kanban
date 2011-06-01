@@ -36,7 +36,7 @@
 
   <% project.users.each do |user| %>
     <% next unless @kanban.users.include?(user) %>
-  <div class="project-lane horizontal-lane">
+  <div class="user-lane horizontal-lane">
     <div class="pane equal-column project-<%= project.id %>" style="width: <%= my_kanban_column_width(:project) %>%">
       <h4 class="user-name"><%= avatar(user, :size => 12) %> <%= h(user.name) %></h4>
     </div>

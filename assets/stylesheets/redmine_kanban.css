@@ -293,6 +293,11 @@ div.calendar {
   min-height: 60px; }
 #kanban.kanban-overview .project-lane div.project {
   border-top-width: 0; }
+#kanban.kanban-overview .user-lane .pane {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-top-color: #666;
+  border-bottom-color: #666; }
 #kanban.kanban-overview div.clearing-row, #kanban.kanban-overview .clearing-row .pane {
   min-height: 1px; }
 #kanban.kanban-overview div.clearing-row .pane {
