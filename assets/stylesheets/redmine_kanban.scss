@@ -245,6 +245,9 @@ div.calendar {z-index: 9999;}
 #kanban.kanban-overview {
    h2.project-name {border: none;}
    h4.user-name {border: none;}
+   .kanban-headers { border-bottom: 4px solid #000000; }
    .horizontal-lane, .horizontal-lane .pane, .project-lane div.project { min-height: 60px; }
+   .project-lane div.project { border-top-width: 0; }
    div.clearing-row, .clearing-row .pane {min-height: 1px;}
+   div.clearing-row .pane {border-width: 4px 0 0 0;}
 }

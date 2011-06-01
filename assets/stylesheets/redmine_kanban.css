@@ -287,7 +287,13 @@ div.calendar {
   border: none; }
 #kanban.kanban-overview h4.user-name {
   border: none; }
+#kanban.kanban-overview .kanban-headers {
+  border-bottom: 4px solid #000000; }
 #kanban.kanban-overview .horizontal-lane, #kanban.kanban-overview .horizontal-lane .pane, #kanban.kanban-overview .project-lane div.project {
   min-height: 60px; }
+#kanban.kanban-overview .project-lane div.project {
+  border-top-width: 0; }
 #kanban.kanban-overview div.clearing-row, #kanban.kanban-overview .clearing-row .pane {
   min-height: 1px; }
+#kanban.kanban-overview div.clearing-row .pane {
+  border-width: 4px 0 0 0; }
