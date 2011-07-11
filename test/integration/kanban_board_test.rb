@@ -21,11 +21,15 @@ class KanbanBoardTest < ActionController::IntegrationTest
       issue_with_note_by_assigned = Issue.find(:last, :conditions => {:status_id => active_status.id})
       assert issue_with_note != issue_with_note_by_assigned
 
-      Journal.generate!(:journalized => issue_with_note, :notes => 'an update that triggers the bubble')
-      Journal.generate!(:journalized => issue_with_note_by_assigned, :user => issue_with_note_by_assigned.assigned_to, :notes => 'an update by assigned to')
+      issue_with_note.init_journal(User.generate, 'an update that triggers the bubble')
+      assert issue_with_note.save
+      issue_with_note_by_assigned.init_journal(issue_with_note_by_assigned.assigned_to, 'an update by assigned to')
+      assert issue_with_note_by_assigned.save
       # Another journal but with no notes, should not trigger the bubble
-      Journal.generate!(:journalized => issue_with_note_by_assigned, :notes => '')
-
+      issue_with_note_by_assigned.reload
+      issue_with_note_by_assigned.init_journal(issue_with_note_by_assigned.author, "")
+      assert issue_with_note_by_assigned.save
+      
       login_as
       get "/kanban"
       

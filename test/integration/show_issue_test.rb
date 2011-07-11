@@ -14,7 +14,9 @@ class ShowIssueTest < ActionController::IntegrationTest
         @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
         @project = Project.generate!
         @issue = Issue.generate_for_project!(@project)
-        @journal = Journal.generate!(:issue => @issue, :user => @user, :notes => 'Test journal')
+        @journal = @issue.init_journal(@user, 'Test journal')
+        @issue.save!
+        @issue.reload && @journal.reload
         @role = Role.generate!(:permissions => [:view_issues, :view_kanban, :add_issues])
         Member.generate!({:principal => @user, :project => @project, :roles => [@role]})
 

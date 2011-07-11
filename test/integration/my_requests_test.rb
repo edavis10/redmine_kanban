@@ -2,6 +2,7 @@ require 'test_helper'
 
 class MyRequestsTest < ActionController::IntegrationTest
   def setup
+    Setting.clear_cache
     configure_plugin
     setup_kanban_issues
   end

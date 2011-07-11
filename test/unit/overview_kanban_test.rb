@@ -26,7 +26,11 @@ class OverviewKanbanTest < ActiveSupport::TestCase
 
     context "with subissues_take_higher_priority set to true" do
       setup do
-        Setting.plugin_redmine_kanban['panels']['overview']['subissues_take_higher_priority'] = '1'
+        Setting.plugin_redmine_kanban = 
+          Setting.plugin_redmine_kanban.deep_merge!({'panels' => {
+                                                        'overview' => {
+                                                          'subissues_take_higher_priority' => '1'
+                                                        }}})
       end
 
       should "pick the highest priority of subissues" do
