@@ -55,6 +55,7 @@ Redmine::Plugin.register :redmine_kanban do
              'user_help' => "_Each list is a Pane of issues.  The issues can be dragged and dropped onto other panes based on Roles and Permissions settings._",
              'project_level' => 0,
              'simple_issue_popup_form' => 0,
+             'reverse_pane_order' => 0,
              'panels' => {
                'overview' => {
                  'subissues_take_higher_priority' => 0
