@@ -19,6 +19,12 @@ class KanbanPane
     pane = self.pane_name
     (settings['panes'] && settings['panes'][pane] && !settings['panes'][pane]['status'].blank?)
   end
+
+  def self.pane_order_reversed?
+    settings.present? &&
+      settings['reverse_pane_order'].present? &&
+      settings['reverse_pane_order'].to_s == "1"
+  end
   
   private
 
