@@ -20,6 +20,14 @@ class KanbanPane
     (settings['panes'] && settings['panes'][pane] && !settings['panes'][pane]['status'].blank?)
   end
 
+  def self.pane_order
+    if pane_order_reversed?
+      [:incoming, :finished, :canceled, :testing, :active, :selected, :quick, :backlog]
+    else
+      [:incoming, :backlog, :quick, :selected, :active, :testing, :finished, :canceled]
+    end
+  end
+
   def self.pane_order_reversed?
     settings.present? &&
       settings['reverse_pane_order'].present? &&

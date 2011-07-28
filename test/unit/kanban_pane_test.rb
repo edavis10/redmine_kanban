@@ -3,7 +3,21 @@ require File.dirname(__FILE__) + '/../test_helper'
 class KanbanPaneTest < ActiveSupport::TestCase
 
   context "#pane_order" do
-should ''
+    context "with standard pane order" do
+      should "list the panes" do
+        reconfigure_plugin({'reverse_pane_order' => '0'})
+        assert_equal [:incoming, :backlog, :quick, :selected, :active, :testing, :finished, :canceled], KanbanPane.pane_order
+      end
+      
+    end
+
+    context "with reversed pane order" do
+      should "list the panes in a semi-reversed order" do
+        reconfigure_plugin({'reverse_pane_order' => '1'})
+        assert_equal [:incoming, :finished, :canceled, :testing, :active, :selected, :quick, :backlog], KanbanPane.pane_order
+      end
+    end
+    
   end
 
   context "#pane_order_reversed?" do
