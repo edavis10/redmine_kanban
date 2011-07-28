@@ -72,6 +72,7 @@ module KanbanTestHelper
     "staff_role"=> make_kanban_role.id,
     "management_group"=> @management_group.id.to_s,  
     "project_level" => "0",
+    "reverse_pane_order" => "0",
     "panels" =>
       {
         "overview" => {

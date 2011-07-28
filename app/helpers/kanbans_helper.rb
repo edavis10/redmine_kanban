@@ -261,6 +261,19 @@ module KanbansHelper
     javascript_tag("Kanban.remoteData('#{url}', '#{dom_id}');") +
       content_tag(:span, l(:label_loading), :class => 'loading')
   end
+
+  # Returns a list of pane names in the configured order.
+  #
+  # @param hash options Method options
+  # @option options Array :only Filter the panes to only include these ones
+  def ordered_panes(options={})
+    only = options[:only] || []
+    if only.present?
+      KanbanPane.pane_order.select {|pane| only.include?(pane) }
+    else
+      KanbanPane.pane_order
+    end
+  end
   
   class UserKanbanDivHelper < BlockHelpers::Base
     include ERB::Util

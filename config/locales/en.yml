@@ -3,7 +3,7 @@ en:
   kanban_title: Kanban
   kanban_text_incoming: Incoming
   kanban_text_backlog: Backlog
-  kanban_text_selected_requests: Selected Requests
+  kanban_text_selected: Selected Requests
   kanban_text_quick_tasks: Quick Tasks
   kanban_text_user: User
   kanban_text_active: Active
@@ -74,4 +74,6 @@ en:
   text_assigned_to_user_kanban_title: "%{user}'s Assignments"
   label_switch_assignee: "Switch Assignee"
   kanban_label_incoming_projects: "Incoming projects"
-
+  kanban_label_reverse_pane_order: "Reverse pane order"
+  field_kanban_reverse_pane_order: "Reverse Kanban pane order"
+  kanban_text_reverse_pane_order_help: "Reverses the workflow so it goes from Right to Left (default is Left to Right)"

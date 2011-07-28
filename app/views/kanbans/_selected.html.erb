@@ -1,4 +1,4 @@
-      <%= content_tag(:h3, l(:kanban_text_selected_requests)) %>
+      <%= content_tag(:h3, l(:kanban_text_selected)) %>
       <ol id="selected-issues" class="<%= allowed_to_assign_staffed_issue_to(nil) -%>">
         <% if @kanban.selected_issues_for({}).empty? %>
         <%= render :partial => 'empty_issue' %>

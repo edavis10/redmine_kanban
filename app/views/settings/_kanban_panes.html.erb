@@ -55,3 +55,9 @@
     <%= text_field_tag("settings[panes][canceled][limit]", canceled_limit ) %>
   </p>
 
+  <p>
+    <%= content_tag(:label, l(:kanban_label_reverse_pane_order)) %>
+    <%= check_box_tag("settings[reverse_pane_order]", "1", @settings['reverse_pane_order'].to_s == "1" ) %>
+    <br />
+    <%= content_tag(:span, l(:kanban_text_reverse_pane_order_help)) %>
+  </p>

@@ -19,8 +19,39 @@ class KanbanPane
     pane = self.pane_name
     (settings['panes'] && settings['panes'][pane] && !settings['panes'][pane]['status'].blank?)
   end
+
+  def self.pane_order
+    if pane_order_reversed?
+      [:incoming, :finished, :canceled, :testing, :active, :selected, :quick, :backlog]
+    else
+      [:incoming, :backlog, :quick, :selected, :active, :testing, :finished, :canceled]
+    end
+  end
+
+  def self.pane_order_reversed?
+    user_preference = check_user_preference_for_pane_order
+
+    if user_preference.nil?
+      settings.present? &&
+        settings['reverse_pane_order'].present? &&
+        settings['reverse_pane_order'].to_s == "1"
+    else
+      # User override
+      return user_preference
+    end
+  end
   
   private
+
+  # Can return:
+  # true - yes, reverse
+  # false - no, do not reverse
+  # nil - no preference
+  def self.check_user_preference_for_pane_order
+    if User.current.logged? && User.current.pref.present?
+      User.current.pref.kanban_reverse_pane_order
+    end
+  end
 
   def missing_settings(pane, options={})
     skip_status = options.delete(:skip_status)
