@@ -75,4 +75,5 @@ en:
   label_switch_assignee: "Switch Assignee"
   kanban_label_incoming_projects: "Incoming projects"
   kanban_label_reverse_pane_order: "Reverse pane order"
+  field_kanban_reverse_pane_order: "Reverse Kanban pane order"
   kanban_text_reverse_pane_order_help: "Reverses the workflow so it goes from Right to Left (default is Left to Right)"

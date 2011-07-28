@@ -21,6 +21,10 @@ class KanbanPaneTest < ActiveSupport::TestCase
   end
 
   context "#pane_order_reversed?" do
+    setup do
+      User.current = nil
+    end
+    
     should 'be false when the pane order reverse setting is not set' do
       reconfigure_plugin({'reverse_pane_order' => '0'})
       assert !KanbanPane.pane_order_reversed?
@@ -37,8 +41,27 @@ class KanbanPaneTest < ActiveSupport::TestCase
     end
 
     context "for users" do
-      should 'be true when a user overrides the system setting'
-      should 'be falue when a user overrides the system setting'
+      setup do
+        @user = User.generate_with_protected!(:login => 'existing', :password => 'existing', :password_confirmation => 'existing')
+        @preference = @user.pref
+        User.current = @user
+      end
+      
+      should 'be true when a user overrides the system setting' do
+        reconfigure_plugin({'reverse_pane_order' => '0'}) # Off
+        @preference.kanban_reverse_pane_order = "1" # On
+        @preference.save
+
+        assert KanbanPane.pane_order_reversed?
+      end
+      
+      should 'be falue when a user overrides the system setting' do
+        reconfigure_plugin({'reverse_pane_order' => '1'}) # On
+        @preference.kanban_reverse_pane_order = "0" # Off
+        @preference.save
+
+        assert !KanbanPane.pane_order_reversed?
+      end
     end
     
   end

@@ -9,6 +9,9 @@ require 'dispatcher'
 
 Dispatcher.to_prepare :redmine_kanban do
 
+  require_dependency 'user_preference'
+  UserPreference.send(:include, RedmineKanban::Patches::UserPreferencePatch)
+
   require_dependency 'principal'
   Principal.send(:include, RedmineKanban::Patches::PrincipalPatch)
   require_dependency 'issue'
@@ -93,3 +96,4 @@ Redmine::Plugin.register :redmine_kanban do
        :require => :loggedin)
 
 end
+require 'redmine_kanban/hooks/view_my_account_hook'
