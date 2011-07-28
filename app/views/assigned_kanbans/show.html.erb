@@ -47,10 +47,9 @@
 <div id="kanban" class="assigned-kanban" style="width: 80%">
   <div class="kanban-headers horizontal-lane">
     <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:project) %>%"><%= content_tag(:h3, l(:label_project)) %></div>
-    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:testing) %>%"><%= content_tag(:h3, l(:kanban_text_testing)) %></div>
-    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:active) %>%"><%= content_tag(:h3, l(:kanban_text_active)) %></div>
-    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:selected) %>%"><%= content_tag(:h3, l(:kanban_text_selected_requests)) %></div>
-    <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(:backlog) %>%"><%= content_tag(:h3, l(:kanban_text_backlog)) %></div>
+    <% ordered_panes(:only => [:backlog, :selected, :active, :testing]).each do |pane_name| %>
+      <div class="kanban-header pane equal-column" style="width: <%= my_kanban_column_width(pane_name.to_sym) %>%"><%= content_tag(:h3, l("kanban_text_#{pane_name}".to_sym)) %></div>
+    <% end %>
   </div>
 
   <% @projects_sorted_by_tree.each do |project| %>
@@ -79,38 +78,16 @@
 
   <div style="clear:left;"> </div>
     </div>
+    <% ordered_panes(:only => [:backlog, :selected, :active, :testing]).each do |pane_name| %>
+      <div id="assigned-kanban-show-<%= pane_name -%>-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(pane_name.to_sym)%>%">
+        <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
+                                                           :project => project.identifier,
+                                                           :column => pane_name.to_sym,
+                                                           :format => 'js'),
+                               "assigned-kanban-show-#{pane_name}-project-#{project.id}") %>
+      </div>
+    <% end %>
 
-    <div id="assigned-kanban-show-testing-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:testing)%>%">
-      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
-                                                         :project => project.identifier,
-                                                         :column => :testing,
-                                                         :format => 'js'),
-                             "assigned-kanban-show-testing-project-#{project.id}") %>
-    </div>
-
-    <div id="assigned-kanban-show-active-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:active)%>%">
-      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
-                                                         :project => project.identifier,
-                                                         :column => :active,
-                                                         :format => 'js'),
-                             "assigned-kanban-show-active-project-#{project.id}") %>
-    </div>
-
-    <div id="assigned-kanban-show-selected-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:selected)%>%">
-      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
-                                                         :project => project.identifier,
-                                                         :column => :selected,
-                                                         :format => 'js'),
-                             "assigned-kanban-show-selected-project-#{project.id}") %>
-    </div>
-
-    <div id="assigned-kanban-show-backlog-project-<%= project.id -%>" class="pane equal-column" style="width: <%= my_kanban_column_width(:backlog)%>%">
-      <%= kanban_remote_data(kanban_assigned_kanban_path(:id => @user.id,
-                                                         :project => project.identifier,
-                                                         :column => :backlog,
-                                                         :format => 'js'),
-                             "assigned-kanban-show-backlog-project-#{project.id}") %>
-    </div>
     <div style="clear:left;"> </div>
   </div>
   <% end %>
