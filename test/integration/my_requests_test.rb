@@ -3,7 +3,7 @@ require 'test_helper'
 class MyRequestsTest < ActionController::IntegrationTest
   def setup
     Setting.clear_cache
-    configure_plugin
+    configure_plugin({'rollup' => "0", 'project_level' => '0'})
     setup_kanban_issues
   end
 
@@ -221,8 +221,97 @@ class MyRequestsTest < ActionController::IntegrationTest
       end
     end
 
+    should "group issues under the all project with a project_level of 0 (one bucket)" do
+      configure_plugin({'rollup' => "1", 'project_level' => '0'})
+      
+      @subproject = Project.generate!
+      assert @subproject.set_parent!(@project)
+      assert_equal @project, @subproject.parent
+      @project.reload
+      @subproject.reload
+      Member.generate!({:principal => @user, :project => @subproject, :roles => [@role]})
+      
+      @new_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @new_status)
+      @testing_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @testing_status)
+      @active_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @active_status)
+      @selected_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @selected_status)
+      @backlog_issue1 = Issue.generate_for_project!(@subproject, :author => @user, :status => @unstaffed_status, :estimated_hours => 5)
+      @finished_issue = Issue.generate_for_project!(@subproject, :author => @user, :status => @finished_status)
+      @canceled_issue = Issue.generate_for_project!(@subproject, :author => @user, :status => @canceled_status)
+
+      login_as
+      visit_my_kanban_requests
+
+      # Don't show any projects
+      assert_select '#kanban' do
+        assert_select '.project-lane h2.project-name', :text => /#{@project.name}/, :count => 0
+        assert_select '.project-lane h2.project-name', :text => /#{@subproject.name}/, :count => 0
+      end
+
+      # New lane
+      assert_select '#new-requests' do
+        assert_select "#user-kanban-show-incoming" do
+            assert_select 'span.loading'
+        end
+      end
+
+      # Testing lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#user-kanban-show-testing-project-" do
+            assert_select 'span.loading'
+          end
+        end
+      end
+      
+      # Active lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#user-kanban-show-active-project-" do
+            assert_select 'span.loading'
+          end
+        end
+      end
+
+      # Selected lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#user-kanban-show-selected-project-" do
+            assert_select 'span.loading'
+          end
+        end
+      end
+
+      # Backlog lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#user-kanban-show-backlog-project-" do
+            assert_select 'span.loading'
+          end
+        end
+      end
+
+      # Finished lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#finished-issues-user-#{@user.id}-project-.finished-issues" do
+            assert_select "li#issue_#{@finished_issue.id}", :count => 1
+          end
+        end
+      end
+
+      # Canceled lane
+      assert_select '#kanban' do
+        assert_select '.project-lane' do
+          assert_select "#canceled-issues-user-#{@user.id}-project-.canceled-issues" do
+            assert_select "li#issue_#{@canceled_issue.id}", :count => 1
+          end
+        end
+      end
+    end
+    
     should "group issues under the parent project with a project_level of 1" do
-      configure_plugin({'project_level' => '1'})
+      configure_plugin({'rollup' => "1", 'project_level' => '1'})
       
       @subproject = Project.generate!
       assert @subproject.set_parent!(@project)
@@ -314,7 +403,7 @@ class MyRequestsTest < ActionController::IntegrationTest
       end
 
     end
-    
+
     should "group each horizontal lane by project" do
       login_as
       Issue.generate_for_project!(@project, :author => @user, :status => @active_status)

@@ -223,6 +223,8 @@ class Kanban
   def has_issues_for_project_and_user?(project, user)
     opts = {:user => user, :project => project}
 
+    return true if opts[:project].respond_to?("fake_root?") && opts[:project].fake_root?
+
     # TODO: should be refactored to use enum#any?
     return true if testing_issues_for(opts).length > 0
     return true if active_issues_for(opts).length > 0
@@ -249,7 +251,8 @@ class Kanban
   end
 
   def roll_up_projects?
-    project_level > 0
+    rollup = Setting.plugin_redmine_kanban['rollup'].to_i if Setting.plugin_redmine_kanban['rollup'].present?
+    rollup == 1
   end
 
   def filter_issues(issues, filters = {})
@@ -377,7 +380,8 @@ class Kanban
   #
   # Recursive
   def roll_up_projects_to_project_level(projects)
-    return projects if project_level == 0
+    return projects unless roll_up_projects?
+    return [root_project] if project_level == 0
     
     projects.inject([]) {|filtered, project|
       if project.level >= project_level
@@ -389,4 +393,24 @@ class Kanban
     }
   end
 
+  # Returns a mock project that acts as the "root" project, where
+  # every other project descends from
+  def root_project
+    # Using a large rgt so this project wraps everything
+    root_project = Project.new(:name => 'Projects',
+                               :lft => 1, :rgt => 2147483647)
+    def root_project.fake_root?
+      true
+    end
+    def root_project.is_descendant_of?(project)
+      false
+    end
+    def root_project.left
+      1
+    end
+    def root_project.right
+      2147483647
+    end
+    root_project
+  end
 end

@@ -77,3 +77,4 @@ en:
   kanban_label_reverse_pane_order: "Reverse pane order"
   field_kanban_reverse_pane_order: "Reverse Kanban pane order"
   kanban_text_reverse_pane_order_help: "Reverses the workflow so it goes from Right to Left (default is Left to Right)"
+  kanban_label_enable_rollup: "Enable project rollup?"
